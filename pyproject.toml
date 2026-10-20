@@ -31,7 +31,7 @@ dependencies = [
     "pillow>=10.0",
     "filetype>=1.2",
     "numpy<2",
-    "matplotlib>=3.7",
+    "matplotlib>=3.10.9",
     "weasyprint>=60.0",
 ]
 
