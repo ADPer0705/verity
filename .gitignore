@@ -1,96 +1,47 @@
-# =============================================================================
-# HACKATHON SUBMISSION — .gitignore
-# =============================================================================
-# IMPORTANT: Never commit secrets, credentials, or large binary files.
-
-# ── Secrets & Environment ─────────────────────────────────────────────────────
+# --- secrets
 .env
-.env.local
-.env.production
-*.key
-*.pem
-*.p12
-secrets/
+.env.*
+!.env.example
 
-# ── Python ────────────────────────────────────────────────────────────────────
+# --- python
 __pycache__/
 *.py[cod]
-*.pyo
-.Python
-venv/
-.venv/
-env/
-pip-log.txt
 *.egg-info/
+.venv/
 dist/
 build/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-*.coverage
-htmlcov/
 
-# ── Node.js ───────────────────────────────────────────────────────────────────
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.npm
-.yarn
-dist/
-.next/
-.nuxt/
-.output/
-.cache/
+# --- node (UI)
+src/verity_ui/node_modules/
+src/verity_ui/dist/
+src/verity_ui/tsconfig.tsbuildinfo
 
-# ── Java / Maven / Gradle ────────────────────────────────────────────────────
-target/
-*.class
-*.jar
-*.war
-.gradle/
-build/
+# --- runtime data: ingested media, per-run artifacts, reports
+workspace/
+workspace-*/
+input/
+output/
 
-# ── Go ────────────────────────────────────────────────────────────────────────
-vendor/
-*.exe
+# --- per-detector uv environments (provisioned on demand, see VERITY_DETECTOR_ENVS)
+.detectorenvs/
 
-# ── Rust ──────────────────────────────────────────────────────────────────────
-target/
-Cargo.lock  # remove this line if you want to commit lock file (recommended for apps)
+# --- model checkpoints (fetched with `verity weights pull`; never committed)
+detectors/*/weights/*
+!detectors/*/weights/README.md
 
-# ── macOS ─────────────────────────────────────────────────────────────────────
-.DS_Store
-.AppleDouble
-.LSOverride
+# --- release artifacts
+dist-bundle/
+dist-weights/
 
-# ── Windows ───────────────────────────────────────────────────────────────────
-Thumbs.db
-desktop.ini
+# --- non-project reference material (vendored DeepfakeBench checkout, sample media)
+misc/
 
-# ── IDEs & Editors ────────────────────────────────────────────────────────────
+# --- editors / OS
 .idea/
 .vscode/
 *.swp
-*.swo
-*.sublime-project
-*.sublime-workspace
-
-# ── Large Media Files (use demo-video-link.txt instead) ───────────────────────
-demo/*.mp4
-demo/*.mov
-demo/*.avi
-demo/*.mkv
-
-# ── Docker volumes / local data ───────────────────────────────────────────────
-data/
-logs/
-*.log
-
-# ── Jupyter Notebooks (optional: remove if you want to commit notebooks) ──────
-# .ipynb_checkpoints/
-
-# ── Terraform ─────────────────────────────────────────────────────────────────
-.terraform/
-*.tfstate
-*.tfstate.backup
+.DS_Store
+Thumbs.db
