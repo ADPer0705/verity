@@ -1,0 +1,55 @@
+# Publishes container images to GHCR when a version tag is pushed.
+#
+# Only the slim image is built on GitHub's hosted runners: the pre-baked
+# `full` images are 10-20 GB and exceed the hosted runner disk. Build those
+# on a machine with the GPU-sized disk and push them by hand (see
+# docs/publishing.md), or point `runs-on` at a self-hosted runner.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  slim:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}},suffix=-slim
+            type=raw,value=slim
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: slim
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv build
+      - run: cd dist && sha256sum * > sha256sums.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
