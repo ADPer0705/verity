@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 title: "Verity: multi-detector deepfake examination pipeline"
 message: "If you use Verity in academic work, please cite this entry together with the upstream detector papers relevant to your panel."
-version: 0.5.0
+version: 0.5.1
 date-released: 2026-10-21
 license: CC-BY-NC-4.0
 repository-code: "https://github.com/ADPer0705/verity"

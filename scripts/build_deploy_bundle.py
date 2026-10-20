@@ -78,14 +78,14 @@ def main() -> None:
     shutil.copy2(archive, stable)
 
     checksums = out / "SHA256SUMS"
-    checksums.write_text(
-        f"{sha256(archive)}  {archive.name}\n"
-        f"{sha256(stable)}  {stable.name}\n"
-    )
+    checksums.write_text(f"{sha256(stable)}  {stable.name}\n")
+    versioned_checksums = out / f"SHA256SUMS-{version}"
+    versioned_checksums.write_text(f"{sha256(archive)}  {archive.name}\n")
 
     print(f"wrote {archive} ({archive.stat().st_size / 1024:.0f} KB)")
     print(f"wrote {stable}")
-    print(f"wrote {checksums}")
+    print(f"wrote {checksums} (stable alias)")
+    print(f"wrote {versioned_checksums} (pinned archive)")
 
 
 if __name__ == "__main__":

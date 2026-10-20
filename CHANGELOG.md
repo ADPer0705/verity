@@ -11,6 +11,15 @@ adheres to [Semantic Versioning](https://semver.org/).
 - More audio detectors and an audio-forensics temporal view.
 - Optional signed evidence bundles (case export with hashes).
 
+## [0.5.1] — 2026-10-21
+
+### Fixed
+- Release checksums are split correctly: `SHA256SUMS` covers the stable
+  `verity-deploy.tar.gz` alias used by the quick start, and
+  `SHA256SUMS-<version>` covers the pinned archive. Previously both names
+  were listed in one file, so verifying only the downloaded alias reported a
+  missing file.
+
 ## [0.5.0] — 2026-10-21
 
 ### Added

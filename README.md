@@ -53,6 +53,8 @@ Download the deploy bundle from the latest release and run the installer:
 
 ```bash
 curl -fsSLO https://github.com/ADPer0705/verity/releases/latest/download/verity-deploy.tar.gz
+curl -fsSLO https://github.com/ADPer0705/verity/releases/latest/download/SHA256SUMS
+sha256sum -c SHA256SUMS
 tar xzf verity-deploy.tar.gz && cd verity-deploy
 ./install.sh
 ```

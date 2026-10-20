@@ -21,6 +21,12 @@ cd verity-deploy
 ./install.sh                    # as a user in the docker group, not root
 ```
 
+If you downloaded from the release page, verify it first:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
 `install.sh` auto-detects GPU vs CPU, then:
 
 1. pulls `ghcr.io/adper0705/verity:<version>-slim`

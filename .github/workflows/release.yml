@@ -64,5 +64,5 @@ jobs:
           files: |
             dist-deploy/verity-deploy-*.tar.gz
             dist-deploy/verity-deploy.tar.gz
-            dist-deploy/SHA256SUMS
+            dist-deploy/SHA256SUMS*
           generate_release_notes: true

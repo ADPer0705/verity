@@ -63,7 +63,8 @@ Every release attaches:
 - `verity-deploy-<version>.tar.gz` — compose files, installer, doctor,
   systemd unit, deployment docs, license/notices, `VERSION`;
 - `verity-deploy.tar.gz` — stable alias for the latest release;
-- `SHA256SUMS`.
+- `SHA256SUMS` — checksum of the stable alias;
+- `SHA256SUMS-<version>` — checksum of the pinned archive.
 
 That is the lab-facing artifact. It contains no secrets, images or weights.
 

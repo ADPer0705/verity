@@ -14,6 +14,12 @@ cd verity-deploy
 # open http://127.0.0.1:8000 (or tunnel from your workstation)
 ```
 
+Verify the download first with the release's `SHA256SUMS`:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
 Everything below explains what that does and how to operate it.
 
 ## 1. What you are deploying
