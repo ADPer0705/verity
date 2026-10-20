@@ -30,7 +30,7 @@ dependencies = [
     "opencv-python>=4.8.0",
     "pillow>=10.0",
     "filetype>=1.2",
-    "numpy<2",
+    "numpy<3",
     "matplotlib>=3.7",
     "weasyprint>=60.0",
 ]
