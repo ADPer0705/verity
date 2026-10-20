@@ -167,9 +167,10 @@ git push origin v0.4.0
 The release workflow builds and pushes:
 
 - `ghcr.io/adper0705/verity:slim`
-- `ghcr.io/adper0705/verity:0.4.0-slim`
+- `ghcr.io/adper0705/verity:0.4.1-slim`
 
-and attaches the wheel to the GitHub release. Make the package public once in
+`latest` is a moving alias for the newest slim image; the full `:cuda` and
+`:cpu` images are built by hand (below). Make the package public once in
 **GitHub → Packages → verity → Package settings** (first publish only).
 
 ### Full images (manual: too large for hosted runners)
@@ -202,13 +203,13 @@ podman run --rm --device nvidia.com/gpu=all \
   -v verity-envs:/envs -v verity-weights:/weights -v verity-cache:/cache \
   -v verity-workspace:/workspace \
   -v /tmp/vt/input:/input:ro -v /tmp/vt/output:/output \
-  ghcr.io/adper0705/verity:cuda run --media /input/001_870.mp4 --format html
+  ghcr.io/adper0705/verity:slim run --media /input/001_870.mp4 --format html
 ls /tmp/vt/output/*/report.html
 ```
 
-On CPU, drop the device flag and use `:cpu`. With Docker:
-`--gpus all`. For `:slim`, the first run provisions the needed detector
-environments (slower).
+This exercises the published image end to end (the first run provisions the
+detector environments it needs). On CPU, drop the device flag; with Docker use
+`--gpus all`. To smoke-test a locally built full image, substitute its tag.
 
 ## 5. Version bumps
 
@@ -219,7 +220,8 @@ Three places carry the version and must agree before tagging:
 - `src/verity_api/main.py` → `FastAPI(version=…)`
 
 `scripts/release.py` refuses to build a wheel whose tag disagrees with
-`pyproject.toml`. For the first public release this repo uses **0.4.0**.
+`pyproject.toml`. The current release line is **0.4.x** (0.4.1 as of this
+writing).
 
 ## 6. Release checklist
 

@@ -50,14 +50,15 @@ Toolkit. A GPU with 8 GB or more is recommended; everything also runs on CPU.
 ```bash
 mkdir verity && cd verity
 curl -LO https://raw.githubusercontent.com/ADPer0705/verity/main/docker-compose.yml
-docker compose up -d           # pulls ghcr.io/adper0705/verity:cuda, http://localhost:8000
+docker compose up -d           # pulls ghcr.io/adper0705/verity:slim, http://localhost:8000
 ```
 
 Open <http://localhost:8000>, drop a photo, video or audio file, and choose
 which detectors run (the recommended set, or exactly the ones you pick). Each
 case opens with a plain-language summary and the full examination record
 underneath. The first start fetches the checkpoints into the `verity-weights`
-volume.
+volume and provisions the detector environments you use into `verity-envs`
+(one-time; needs network). Repeat runs reuse both volumes.
 
 One-off, no web console:
 
@@ -230,13 +231,14 @@ libcairo2`) for PDF reports.
 
 | Tag | Contents | Use |
 |---|---|---|
-| `ghcr.io/adper0705/verity:cuda` | everything + all trained-detector environments pre-baked (CUDA wheels) | servers/workstations with NVIDIA GPUs |
-| `ghcr.io/adper0705/verity:cpu` | everything + trained-detector environments pre-baked (CPU wheels) | CPU hosts, classrooms, air-gapped labs |
-| `ghcr.io/adper0705/verity:slim` | orchestrator, API, web console; detector environments provisioned into a volume on first use | development, custom detector sets |
+| `ghcr.io/adper0705/verity:slim` | orchestrator, API, web console; detector environments are provisioned into a volume on first use | **published default** (also tagged `latest` and `0.4.x-slim`) |
+| `ghcr.io/adper0705/verity:cuda` | everything + all trained-detector environments pre-baked (CUDA wheels) | build locally with `--target full --build-arg VERITY_PROFILE=cuda` |
+| `ghcr.io/adper0705/verity:cpu` | everything + trained-detector environments pre-baked (CPU wheels) | build locally with `--target full --build-arg VERITY_PROFILE=cpu` |
 
-Checkpoints are never inside the image: they live in the `verity-weights`
-volume and are fetched on first start (or seeded for offline use). The full
-images are built manually — see [docs/publishing.md](docs/publishing.md).
+Only the slim image is published by CI: the pre-baked images are 10–20 GB and
+are built and pushed manually from a machine with enough disk (see
+[docs/publishing.md](docs/publishing.md)). The build targets ship in the
+Dockerfile either way.
 
 ## Project layout
 

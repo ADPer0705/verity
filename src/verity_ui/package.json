@@ -1,7 +1,7 @@
 {
   "name": "verity-ui",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "description": "Verity investigation console — React front end for the Verity deepfake examination pipeline (Mantine, Inter).",
   "scripts": {

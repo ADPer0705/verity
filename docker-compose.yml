@@ -12,18 +12,16 @@
 # docker-compose.yml -f docker-compose.cpu.yml up`.
 services:
   verity:
-    image: ghcr.io/adper0705/verity:cuda     # or :slim / :cpu — see README
+    image: ghcr.io/adper0705/verity:slim    # published; detector envs provision on first run
     build:
       context: .
-      target: full
-      args:
-        VERITY_PROFILE: cuda
+      target: slim
     ports:
       - "8000:8000"
     environment:
       VERITY_HW_PROFILE: auto             # auto | cuda | cpu
       VERITY_WEIGHTS_AUTO: "1"            # fetch missing checkpoints on start
-      VERITY_WEIGHTS_HUB: ""              # e.g. ADPer0705/verity-weights
+      VERITY_WEIGHTS_HUB: ""              # empty: use the manifest mirror (ADPer/verity-weights)
       VERITY_OFFLINE: ""                  # "1": never download anything
       VERITY_DETECTOR_TIMEOUT: "3600"
     volumes:

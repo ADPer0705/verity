@@ -11,6 +11,16 @@ adheres to [Semantic Versioning](https://semver.org/).
 - More audio detectors and an audio-forensics temporal view.
 - Optional signed evidence bundles (case export with hashes).
 
+## [0.4.1] — 2026-10-21
+
+### Fixed
+- Compose files and the README quick start now use the **published slim
+  image** (`ghcr.io/adper0705/verity:slim`) instead of an unpublished
+  pre-baked `:cuda` tag, which caused `docker compose up` to attempt a
+  multi-gigabyte local build. The full `:cuda`/`:cpu` targets remain available
+  as documented manual builds.
+- `latest` is documented as an alias for the newest slim image.
+
 ## [0.4.0] — 2026-10-21
 
 First public release.
