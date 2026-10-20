@@ -103,6 +103,10 @@ record, and the exported report still renders no verdict at all.
 
 ## Security posture
 
+- **Loopback by default.** The compose file binds the console to
+  `127.0.0.1`; use an SSH tunnel for remote work. Exposing it on a LAN
+  requires an authenticating reverse proxy — the API has no user model. See
+  [deployment.md](deployment.md#4-exposure-and-access).
 - **File serving is confined.** Artifacts are served by absolute path through
   `GET /api/media/{id}/files?path=…`, which resolves the path and rejects
   anything outside the workspace, output and detector roots (403), plus any

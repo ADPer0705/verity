@@ -282,10 +282,12 @@ def analyze(media: str | None, workspace: str | None, config: str | None, as_jso
               help="Provision only detectors with a trained classification head (the default evidence set)")
 @click.option("--detector", default=None, help="Provision one or more detectors (comma-separated)")
 @click.option("--force", is_flag=True, help="Re-provision even if up to date")
+@click.option("--concurrency", type=int, default=8, show_default=True,
+              help="Number of detector environments to build in parallel")
 @click.option("--workspace", default=None, type=click.Path())
 @click.option("--config", default=None, type=click.Path())
-def setup(all_: bool, trained: bool, detector: str | None, force: bool, workspace: str | None,
-          config: str | None):
+def setup(all_: bool, trained: bool, detector: str | None, force: bool, concurrency: int,
+          workspace: str | None, config: str | None):
     """Provision detector environments with uv (cached under $VERITY_DETECTOR_ENVS)."""
     cfg = _load_config(config)
     if workspace:
@@ -301,7 +303,7 @@ def setup(all_: bool, trained: bool, detector: str | None, force: bool, workspac
         ids = None
     else:
         raise click.ClickException("Use --all, --trained or --detector <id>[,<id>...]")
-    sys.exit(runner.setup(detector_ids=ids, force=force))
+    sys.exit(runner.setup(detector_ids=ids, force=force, concurrency=concurrency))
 
 
 @cli.command()

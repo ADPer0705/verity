@@ -35,6 +35,7 @@ detectors/*/weights/*
 # --- release artifacts
 dist-bundle/
 dist-weights/
+dist-deploy/
 
 # --- non-project reference material (vendored DeepfakeBench checkout, sample media)
 misc/

@@ -44,21 +44,45 @@ alongside the detectors and report observations, never verdicts.
 
 ## Quick start
 
-Prerequisites: Docker (or Podman) and, for GPU hosts, the NVIDIA Container
-Toolkit. A GPU with 8 GB or more is recommended; everything also runs on CPU.
+Prerequisites: Linux x86_64, Docker Engine 24+ with Compose v2 (or Podman with
+a compose provider), and for GPU hosts the NVIDIA Container Toolkit. A GPU
+with 8 GB+ VRAM is recommended; everything also runs on CPU. Budget ~60 GB of
+disk for checkpoints and all detector environments.
+
+Download the deploy bundle from the latest release and run the installer:
 
 ```bash
-mkdir verity && cd verity
-curl -LO https://raw.githubusercontent.com/ADPer0705/verity/main/docker-compose.yml
-docker compose up -d           # pulls ghcr.io/adper0705/verity:slim, http://localhost:8000
+curl -fsSLO https://github.com/ADPer0705/verity/releases/latest/download/verity-deploy.tar.gz
+tar xzf verity-deploy.tar.gz && cd verity-deploy
+./install.sh
 ```
 
-Open <http://localhost:8000>, drop a photo, video or audio file, and choose
-which detectors run (the recommended set, or exactly the ones you pick). Each
-case opens with a plain-language summary and the full examination record
-underneath. The first start fetches the checkpoints into the `verity-weights`
-volume and provisions the detector environments you use into `verity-envs`
-(one-time; needs network). Repeat runs reuse both volumes.
+The installer auto-detects GPU/CPU and then, with visible progress:
+
+1. pulls `ghcr.io/adper0705/verity:<version>-slim`,
+2. downloads and SHA-256-verifies every trained-detector checkpoint,
+3. builds **all** evidence-grade detector environments (one-time),
+4. starts the API + web console and runs `doctor.sh`.
+
+Open <http://127.0.0.1:8000> (on a remote server, tunnel with
+`ssh -L 8000:localhost:8000 user@server`). Drop a photo, video or audio file;
+**every evidence-grade detector that can consume it runs** — there is no
+reduced profile. Each case opens with a plain-language summary and the full
+examination record underneath.
+
+Re-running `./install.sh` is safe and idempotent. Full operator guide:
+[docs/deployment.md](docs/deployment.md).
+
+Manual equivalent (if you prefer compose by hand):
+
+```bash
+git clone https://github.com/ADPer0705/verity.git && cd verity
+mkdir -p input output
+docker compose pull
+docker compose run --rm verity weights pull --trained
+docker compose run --rm verity setup --trained
+docker compose up -d
+```
 
 One-off, no web console:
 
@@ -67,11 +91,8 @@ docker compose run --rm verity run --media /input/suspect.mp4 --format pdf
 # -> ./output/<media_id>/report.pdf, analysis.json, selection.json
 ```
 
-CPU-only host:
-
-```bash
-docker compose -f docker-compose.yml -f docker-compose.cpu.yml up -d
-```
+CPU-only host: run `./install.sh --cpu`, or with compose use
+`-f docker-compose.yml -f docker-compose.cpu.yml`.
 
 ## What it examines
 
@@ -231,14 +252,15 @@ libcairo2`) for PDF reports.
 
 | Tag | Contents | Use |
 |---|---|---|
-| `ghcr.io/adper0705/verity:slim` | orchestrator, API, web console; detector environments are provisioned into a volume on first use | **published default** (also tagged `latest` and `0.4.x-slim`) |
+| `ghcr.io/adper0705/verity:slim` | orchestrator, API, web console; detector environments are provisioned during install | **published default** (also tagged `latest` and `<version>-slim`) |
 | `ghcr.io/adper0705/verity:cuda` | everything + all trained-detector environments pre-baked (CUDA wheels) | build locally with `--target full --build-arg VERITY_PROFILE=cuda` |
 | `ghcr.io/adper0705/verity:cpu` | everything + trained-detector environments pre-baked (CPU wheels) | build locally with `--target full --build-arg VERITY_PROFILE=cpu` |
 
 Only the slim image is published by CI: the pre-baked images are 10–20 GB and
 are built and pushed manually from a machine with enough disk (see
-[docs/publishing.md](docs/publishing.md)). The build targets ship in the
-Dockerfile either way.
+[docs/publishing.md](docs/publishing.md)). The deploy bundle's installer
+pre-builds all environments, so the published image still gives a fully
+provisioned lab install, just with a longer one-time first step.
 
 ## Project layout
 
@@ -256,15 +278,17 @@ src/verity/                   pipeline: ingest, extract, forensics, analyze, det
 src/verity_api/               FastAPI service + background jobs
 src/verity_ui/                React web console
 scripts/verity.py             detector environment runner (uv, hardware-adaptive)
-scripts/                      generators, release and matrix utilities
+scripts/                      generators, deploy-bundle and matrix utilities
+deploy/                       lab installer, doctor and systemd unit
 tests/                        unit suite (pipeline, selection, forensics, weights, API)
-docs/                         technical, detector, forensics, artifact, API, publishing docs
+docs/                         technical, detector, forensics, deployment and API docs
 ```
 
 ## Documentation
 
 | Document | Contents |
 |---|---|
+| [Deployment guide](docs/deployment.md) | lab install, hardware, exposure, weights, envs, offline, upgrades |
 | [Technical overview](docs/technical-overview.md) | pipeline stages, config, environment, determinism |
 | [Detector table](docs/detectors.md) | generated list of all 47 ports with tier/modality/license |
 | [Detector catalog](docs/detector-catalog.md) | what each detector looks for, its artifacts and caveats |
@@ -283,7 +307,7 @@ uv sync                       # orchestrator environment
 uv run pytest                 # tests
 uv run python scripts/gen_detector_table.py        # regenerate docs/detectors.md
 uv run python scripts/gen_third_party_notices.py   # refresh notice tables
-uv run python scripts/release.py v0.4.0            # build release wheel
+uv run python scripts/build_deploy_bundle.py       # assemble the lab deploy bundle
 ```
 
 Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md), the

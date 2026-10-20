@@ -1,0 +1,9 @@
+# Local image build (development / custom builds).
+# The published runtime is pulled from GHCR; use this only when building.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+services:
+  verity:
+    build:
+      context: .
+      target: slim

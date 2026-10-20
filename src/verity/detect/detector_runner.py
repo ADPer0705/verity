@@ -58,7 +58,8 @@ class DetectorRunner:
         finding_path.write_text(finding.model_dump_json(indent=2))
         return finding
 
-    def setup(self, detector_ids: Optional[list[str]] = None, force: bool = False) -> int:
+    def setup(self, detector_ids: Optional[list[str]] = None, force: bool = False,
+              concurrency: Optional[int] = None) -> int:
         """Provision detector environments (shells out to ``verity.py setup``)."""
         args = ["setup"]
         if detector_ids:
@@ -67,6 +68,8 @@ class DetectorRunner:
             args.append("--all")
         if force:
             args.append("--force")
+        if concurrency:
+            args.append(f"--concurrency={int(concurrency)}")
         return self._invoke_verity(args)
 
     # ------------------------------------------------------------------ #

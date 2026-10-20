@@ -65,14 +65,18 @@ wall-clock value is the report's generation timestamp).
 
 ## Quick start (container)
 
-See the [README](../README.md) for the pull-and-run instructions and
-[publishing.md](publishing.md) for how the images and the weights mirror are
-built. In short: `docker compose up -d` starts the web console and API on
-port 8000; `docker compose run --rm verity run --media /input/<file>` runs
-the CLI once. Three images exist: `:cuda` and `:cpu` with every trained
-detector's environment pre-baked, and `:slim` which provisions environments
-into the `/envs` volume on first use. Checkpoints live in the `/weights`
-volume and are fetched on first start (`verity weights pull --trained`).
+For a lab or investigator workstation, use the release deploy bundle:
+download `verity-deploy.tar.gz`, unpack it, run `./install.sh`, and open
+`http://127.0.0.1:8000`. The installer pulls the slim image, verifies and
+downloads all trained checkpoints, builds every detector environment, and
+runs a health check. Full instructions, exposure options and offline setup:
+[deployment.md](deployment.md).
+
+Manual equivalent: `docker compose up -d` starts the web console and API on
+port 8000; `docker compose run --rm verity run --media /input/<file>` runs the
+CLI once. Checkpoints live in the `/weights` volume; environments in `/envs`.
+The published image is `:slim`; the pre-baked `:cuda`/`:cpu` images are
+optional manual builds (see [publishing.md](publishing.md)).
 
 ## CLI
 

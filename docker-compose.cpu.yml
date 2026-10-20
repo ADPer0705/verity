@@ -1,9 +1,7 @@
-# Overlay for CPU-only hosts: `docker compose -f docker-compose.yml -f docker-compose.cpu.yml up -d`
+# CPU-only overlay:
+#   docker compose -f docker-compose.yml -f docker-compose.cpu.yml up -d
 services:
   verity:
-    image: ghcr.io/adper0705/verity:slim
-    build:
-      target: slim
     environment:
       VERITY_HW_PROFILE: cpu
     deploy:
