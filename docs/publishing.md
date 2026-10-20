@@ -1,147 +1,113 @@
 # Publishing Verity
 
-This is the maintainer runbook for taking Verity from a local checkout to a
-public, installable release. It covers **where** each artifact should live and
-**why**, then the exact commands. Nothing here runs automatically except the
-tag-triggered workflows.
+Maintainer runbook for taking Verity from a local checkout to a release that a
+lab can install. It covers where each artifact lives and why, then the exact
+commands.
 
-Current targets for this repository:
+Current targets:
 
 | Artifact | Host | Identifier |
 |---|---|---|
-| Source + docs + releases | GitHub | `ADPer0705/verity` |
-| Container images | GitHub Container Registry | `ghcr.io/adper0705/verity` |
-| Checkpoints | Hugging Face Hub (primary) | `ADPer/verity-weights` |
-| Wheel (optional) | PyPI | `verity` (only if the name is available) |
+| Source + docs + deploy bundle | GitHub | `ADPer0705/verity` releases |
+| Container image | GitHub Container Registry | `ghcr.io/adper0705/verity` |
+| Checkpoints | Hugging Face Hub | `ADPer/verity-weights` |
 
-Nothing in the project hard-codes a host: the manifest accepts any HTTPS URL
-for weights, and the image name is a compose-file field, so you can change
-these later without touching code.
+No Python wheel or sdist is published: the product is the image + checkpoints
++ deploy bundle, and a wheel without `detectors/` or environments cannot run
+an examination.
 
 ---
 
-## 0. Distribution choices (read this before publishing)
+## 0. Distribution choices
 
-### Weights: Hugging Face is the right primary
+### Weights: Hugging Face
 
-The checkpoints are 1 MB–1.4 GB binaries that need licence metadata,
-checksums, immutable revisions and a CDN in front of them. Hugging Face Hub
-wins on every axis that matters here:
+Checkpoints are 1 MB–1.4 GB binaries needing licence metadata, checksums,
+immutable revisions and a CDN. Hugging Face Hub provides:
 
-- **LFS-native** with per-file SHA-256 available, and our own SHA-256 gate on
-  top (`verity weights verify`), so a corrupted or substituted file can never
-  be used;
-- **model cards** carry per-file licence + attribution — exactly the CC
-  BY-NC 4.0 §3 duty of the DeepfakeBench-derived files;
-- **free for public repos**, no egress bill, fast global CDN;
-- **`resolve/<revision>/<path>` URLs**, which is what
-  `detectors/weights_manifest.yaml` already speaks;
-- **revision pinning** (branch, tag or commit) so a report generated in six
-  months can be reproduced with the same bytes;
-- **gated/private repos** if you later need an access-controlled distribution.
+- LFS with per-file hashes, plus Verity's own SHA-256 gate before use;
+- model cards carrying the CC BY-NC attribution duties of the
+  DeepfakeBench-derived files;
+- free public hosting and a global CDN;
+- `resolve/<revision>/<path>` URLs — what the manifest already uses;
+- revision pinning for reproducible re-runs.
 
-Choose these instead only for a specific reason:
+Reasonable alternatives only for a specific need:
 
-| Host | Good for | Trade-offs vs HF |
+| Host | Good for | Trade-offs |
 |---|---|---|
-| **GitHub Releases** | tiny weights (< 2 GB/file), one-off mirrors | no model card, no LFS semantics, release assets are less discoverable; repo LFS has bandwidth quotas |
-| **Cloudflare R2 / S3** | private or air-gapped deployments, custom domain, zero-egress R2 | you own ACLs, lifecycle, TLS, integrity dashboards; manifest still works by putting the object URL in `origin` |
-| **Zenodo** | a citable DOI snapshot at paper/release time | not a package registry; upload limits and slower updates |
-| **Kaggle Datasets** | community visibility | unstable direct-download URLs, not suitable for a manifest |
-| **Git LFS in git** | keeping weights next to code | clone size/bandwidth pain; git history is the wrong versioning model for weights |
+| **Cloudflare R2 / S3** | private or air-gapped mirrors, custom domain | you own ACLs, lifecycle, billing; manifest accepts the object URL |
+| **Zenodo** | a citable DOI snapshot at paper time | not a registry; slower updates |
+| **GitHub Releases** | tiny one-off mirrors | 2 GB/asset, no model card or LFS semantics |
 
-Recommended topology: **HF as canonical mirror for redistributable files**,
-authors' URLs for files we may not re-host (NPR, MLEP, DF40, Effort,
-XLS-R-SLS), and optionally an R2/S3 bucket with the same object layout for
-private/offline installs.
+Non-redistributable files (NPR, MLEP, DF40, Effort, XLS-R-SLS) are never
+mirrored; the manifest points at the authors' URLs only.
 
-### Containers: GHCR is the right primary
+### Containers: GHCR
 
-- **Same identity and permissions as the repo** — the release workflow
-  authenticates with the built-in `GITHUB_TOKEN`, no long-lived secrets;
-- **free for public images**, anonymous pulls, no Docker Hub pull-rate limit;
-- **per-version tags next to the source tag**, which makes provenance easy to
-  explain;
-- **Sigstore provenance/attestations** available from `docker/build-push-action`
-  without extra infrastructure.
+GHCR gives repo-scoped permissions, `GITHUB_TOKEN` signing from CI, free
+public pulls with no Docker Hub rate limit, and version tags next to the
+source tag. Docker Hub is only worth a mirror if discoverability matters more
+than rate limits.
 
-Mirror to **Docker Hub** only if discoverability matters more than rate limits
-(it is still the default `docker pull` namespace for many users). **Quay.io**
-is a reasonable alternative if you want built-in vulnerability scanning and
-Red Hat-style robot accounts. Publish to a cloud registry (ECR/GAR/ACR) only
-for a specific deployment pipeline.
+Only the **slim** image is built in CI. The pre-baked `:cuda` / `:cpu` images
+are 10–20 GB and exceed hosted-runner disk; build and push them manually
+(section 4) or from a self-hosted runner. The deploy installer pre-builds all
+detector environments, so labs still get a fully provisioned install from
+`:slim`; a full image only shortens first install.
 
-GHCR currently hosts the **slim** image from CI. The full `:cuda` and `:cpu`
-images are 10–20 GB and are built manually (below) — or by a self-hosted
-runner.
+### Releases: deploy bundle, not Python artifacts
 
-### The Python package is optional
+Every release attaches:
 
-The wheel is useful for native installs and for a stable `verity` entry
-point, but it does **not** contain detector environments or checkpoints.
-Attach it to the GitHub release (the workflow does) and publish to PyPI only
-if `verity` is available there; `uv publish` is enough. Conda/conda-forge is
-not worth the maintenance burden at this stage.
+- `verity-deploy-<version>.tar.gz` — compose files, installer, doctor,
+  systemd unit, deployment docs, license/notices, `VERSION`;
+- `verity-deploy.tar.gz` — stable alias for the latest release;
+- `SHA256SUMS`.
+
+That is the lab-facing artifact. It contains no secrets, images or weights.
 
 ---
 
 ## 1. One-time setup
 
 ```bash
-gh auth login                     # GitHub CLI
-gh auth status                    # needs repo scope; add write:packages for manual GHCR pushes
-hf auth login                     # Hugging Face CLI
+gh auth login
+gh auth status                    # repo scope; write:packages for manual GHCR pushes
+hf auth login
 hf auth whoami
-podman login ghcr.io -u ADPer0705 # PAT with write:packages (skip if CI-only)
+podman login ghcr.io -u ADPer0705 # PAT with write:packages (only for manual pushes)
 ```
 
 ## 2. Source repository
 
 ```bash
 cd /path/to/verity
-git status                        # weights, workspace, output, .env, node_modules must be ignored
-git log --oneline                 # the history should read as a sequence of real changes
+git status                        # weights, workspace, output, .env, node_modules ignored
+uv run pytest -q
+cd src/verity_ui && npm run typecheck && npm run build && cd -
 git push origin main
 ```
 
-CI (`.github/workflows/ci.yml`) runs on every push: unit tests, the UI
-typecheck/build, a manifest sanity check, and a no-push build of the slim
-image. Fix CI **before** tagging — the release workflow trusts the tag.
+CI runs tests, the UI build, a manifest sanity check and a no-push slim image
+build. Fix CI before tagging.
 
 ## 3. Checkpoints — Hugging Face
 
-Build the upload from the manifest (offline; nothing is pushed here):
-
 ```bash
-uv run verity weights pull --all            # every file present + verified
+uv run verity weights pull --all
 uv run verity weights bundle --repo ADPer/verity-weights --out dist-weights
-# -> dist-weights/verity-weights/
-#      deepfakebench/… backbones/… univfd/… lipforensics/… aasist/…
-#      community_forensics/… safe/…
-#      README.md (model card)  NOTICE.md  LICENSE  manifest.json  sha256sums.txt
-```
-
-Only `redistributable: true` files are included. `bundle` reports missing
-files instead of silently shipping a partial repository.
-
-Create and upload:
-
-```bash
-hf repo create ADPer/verity-weights --type model --public
+hf repo create ADPer/verity-weights --type model --public   # first time only
 hf upload ADPer/verity-weights dist-weights/verity-weights . --repo-type model \
   --commit-message "Verity weights $(date -I)"
 ```
 
-Then point the manifest at the mirror:
+Only `redistributable: true` files are bundled; `bundle` reports missing files
+rather than shipping a partial repo. The manifest already points at
+`ADPer/verity-weights`; bump `hub.revision` if you freeze a release to a
+tag/commit.
 
-```yaml
-# detectors/weights_manifest.yaml
-hub:
-  huggingface_repo: "ADPer/verity-weights"
-  revision: main        # or a tag/commit for a frozen release
-```
-
-Verify from a clean state (a different machine or a cleared weights dir):
+Verify from a clean directory:
 
 ```bash
 VERITY_WEIGHTS_HUB=ADPer/verity-weights \
@@ -149,52 +115,40 @@ VERITY_WEIGHTS_HUB=ADPer/verity-weights \
 VERITY_OFFLINE=1 uv run verity weights verify
 ```
 
-Licence duties: the model card and `NOTICE.md` must keep naming the upstream
-authors, link the original releases, state each licence, and say the files are
-unmodified. DeepfakeBench checkpoints were trained on FaceForensics++ (c23),
-a research-only dataset — say so on the card. Never upload the
-`redistributable: false` files.
+Keep the model card and `NOTICE.md` attribution intact; state that
+DeepfakeBench checkpoints were trained on FaceForensics++ (c23), research-only.
 
-## 4. Containers — GHCR
+## 4. Container images — GHCR
 
-### Slim image (automated)
+### Slim (automated)
 
 ```bash
-git tag v0.4.0
-git push origin v0.4.0
+git tag v0.5.0
+git push origin v0.5.0
 ```
 
-The release workflow builds and pushes:
+The release workflow pushes `ghcr.io/adper0705/verity:slim` and
+`ghcr.io/adper0705/verity:0.5.0-slim`; `latest` follows the newest slim image.
 
-- `ghcr.io/adper0705/verity:slim`
-- `ghcr.io/adper0705/verity:0.4.1-slim`
+### Full images (manual)
 
-`latest` is a moving alias for the newest slim image; the full `:cuda` and
-`:cpu` images are built by hand (below). Make the package public once in
-**GitHub → Packages → verity → Package settings** (first publish only).
-
-### Full images (manual: too large for hosted runners)
-
-Build on a machine with ≥ 60 GB free disk, from a clean checkout of the tag:
+On a machine with ≥ 60 GB free disk:
 
 ```bash
-# CUDA — recommended for investigators with an NVIDIA GPU
 podman build --target full --build-arg VERITY_PROFILE=cuda \
-  -t ghcr.io/adper0705/verity:cuda -t ghcr.io/adper0705/verity:0.4.0-cuda .
+  -t ghcr.io/adper0705/verity:cuda -t ghcr.io/adper0705/verity:0.5.0-cuda .
 podman push ghcr.io/adper0705/verity:cuda
-podman push ghcr.io/adper0705/verity:0.4.0-cuda
+podman push ghcr.io/adper0705/verity:0.5.0-cuda
 
-# CPU — classrooms / air-gapped labs
 podman build --target full --build-arg VERITY_PROFILE=cpu \
-  -t ghcr.io/adper0705/verity:cpu -t ghcr.io/adper0705/verity:0.4.0-cpu .
+  -t ghcr.io/adper0705/verity:cpu -t ghcr.io/adper0705/verity:0.5.0-cpu .
 podman push ghcr.io/adper0705/verity:cpu
-podman push ghcr.io/adper0705/verity:0.4.0-cpu
+podman push ghcr.io/adper0705/verity:0.5.0-cpu
 ```
 
-`docker build`/`docker push` are identical, with `--gpus all` in place of
-Podman's device flag when running.
+Make the package public once (GitHub → Packages → verity → settings).
 
-### Smoke test before announcing
+### Smoke test
 
 ```bash
 mkdir -p /tmp/vt/input /tmp/vt/output
@@ -207,40 +161,55 @@ podman run --rm --device nvidia.com/gpu=all \
 ls /tmp/vt/output/*/report.html
 ```
 
-This exercises the published image end to end (the first run provisions the
-detector environments it needs). On CPU, drop the device flag; with Docker use
-`--gpus all`. To smoke-test a locally built full image, substitute its tag.
+## 5. Deploy bundle
 
-## 5. Version bumps
+Built by CI from the tag; build it locally to check:
 
-Three places carry the version and must agree before tagging:
+```bash
+uv run python scripts/build_deploy_bundle.py --version 0.5.0
+tar tzf dist-deploy/verity-deploy-0.5.0.tar.gz
+```
+
+It must contain `docker-compose.yml`, `docker-compose.cpu.yml`, `.env.example`,
+`install.sh`, `doctor.sh`, `verity.service`, `README.md`, `deployment.md`,
+`VERSION`, `LICENSE`, `THIRD_PARTY_NOTICES.md`.
+
+Test the installer path in a clean directory (or VM):
+
+```bash
+tar xzf dist-deploy/verity-deploy-0.5.0.tar.gz
+cd verity-deploy && ./install.sh --dry-run
+# then a real GPU/CPU install; run ./doctor.sh afterwards
+```
+
+## 6. Version bumps
+
+Carry the same version in:
 
 - `pyproject.toml` → `[project] version`
-- `src/verity_ui/package.json` → `"version"`
+- `src/verity_ui/package.json` (+ `package-lock.json`)
 - `src/verity_api/main.py` → `FastAPI(version=…)`
+- `CITATION.cff` and `CHANGELOG.md`
 
-`scripts/release.py` refuses to build a wheel whose tag disagrees with
-`pyproject.toml`. The current release line is **0.4.x** (0.4.1 as of this
-writing).
+The deploy bundle records the tag in `VERSION`; `install.sh` derives the
+default image tag from it.
 
-## 6. Release checklist
+## 7. Release checklist
 
-- [ ] `uv run pytest -q` green; `uv run verity weights status` clean
-- [ ] `npm run typecheck && npm run build` in `src/verity_ui`
-- [ ] README quickstart works from a clean directory (compose pull path)
-- [ ] HF mirror uploaded; `VERITY_WEIGHTS_HUB` set in the manifest; clean
-      `weights pull --source hub` verified
-- [ ] tag pushed; GitHub release has the wheel + generated notes
-- [ ] slim image public; full images built/pushed if you ship them
-- [ ] `CHANGELOG.md` section for the release
-- [ ] no secrets, checkpoints, `workspace/` or `output/` in the tag
+- [ ] `uv run pytest -q` green; UI typecheck/build green
+- [ ] `uv run verity weights status --verify` clean
+- [ ] HF mirror uploaded; clean `weights pull --source hub` verified
+- [ ] deploy bundle builds; `./install.sh --dry-run` clean
+- [ ] tag pushed; release has the deploy bundle + `SHA256SUMS` only
+- [ ] slim image public, tags verified
+- [ ] `CHANGELOG.md` has the release section
+- [ ] no secrets, checkpoints, workspace/output or personal data in the tag
 
-## 7. Rollback / revocation
+## 8. Rollback
 
-- **Weights** — replace the HF revision or restore the previous commit; pin
-  `hub.revision` back to the last good commit. Verity refuses checksum
-  mismatches, so a bad upload cannot silently become evidence.
-- **Images** — delete the bad tag in GHCR and re-push from the previous
-  source tag. Keep semver tags immutable; consumers pin by tag or digest.
-- **Wheel** — yank the PyPI release and delete the GitHub release asset;
-  attach a fixed build under a new patch version.
+- **Weights** — restore the previous HF commit; pin `hub.revision` back.
+  Checksum verification prevents a bad upload from becoming evidence.
+- **Images** — delete the bad tag and re-push from the previous source tag.
+  Keep semver tags immutable; deploy by tag or digest.
+- **Deploy bundle** — keep the previous tarball; the named volumes persist
+  weights, environments and cases across a rollback.

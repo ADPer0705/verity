@@ -11,6 +11,34 @@ adheres to [Semantic Versioning](https://semver.org/).
 - More audio detectors and an audio-forensics temporal view.
 - Optional signed evidence bundles (case export with hashes).
 
+## [0.5.0] — 2026-10-21
+
+### Added
+- **Lab deploy bundle** (`verity-deploy.tar.gz` release asset): compose files,
+  `install.sh`, `doctor.sh`, systemd unit, deployment guide, license/notices
+  and a `VERSION` marker.
+- **One-command install** that auto-detects GPU/CPU, pulls the image,
+  downloads and verifies every trained checkpoint, builds **all**
+  evidence-grade detector environments ahead of time, starts the stack and
+  waits for `/api/system` before running health checks.
+- **`verity setup --concurrency`** to bound parallel environment builds.
+- **Deployment guide** covering hardware, disk, weights, environments,
+  exposure, upgrades, offline/air-gapped installs and troubleshooting.
+- **Doctor script** for runtime, container, API readiness, checkpoints,
+  environments, disk and GPU.
+
+### Changed
+- Compose binds to **127.0.0.1 by default** (the API has no authentication);
+  LAN exposure requires `--allow-network` and an authenticating proxy.
+- Compose adds `restart: unless-stopped`, an API healthcheck, and a
+  `${VERITY_IMAGE}` selector; local builds moved to a separate overlay.
+- Container logs now show checkpoint downloads instead of hiding them.
+- Releases attach the deploy bundle and `SHA256SUMS` only.
+
+### Removed
+- Wheel/sdist release assets and the release-wheel script: they cannot run an
+  examination and were not a usable deployment path.
+
 ## [0.4.1] — 2026-10-21
 
 ### Fixed

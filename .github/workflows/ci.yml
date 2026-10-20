@@ -19,6 +19,12 @@ jobs:
       - run: uv run pytest -q
       - name: Manifest sanity
         run: uv run verity weights status
+      - name: Deploy bundle sanity
+        run: |
+          bash -n deploy/install.sh
+          bash -n deploy/doctor.sh
+          uv run python scripts/build_deploy_bundle.py --out dist-deploy
+          tar tzf dist-deploy/verity-deploy-*.tar.gz >/dev/null
 
   ui:
     runs-on: ubuntu-latest

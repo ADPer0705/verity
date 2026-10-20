@@ -1,9 +1,9 @@
-# Publishes container images to GHCR when a version tag is pushed.
+# Publishes the slim container image and the lab deploy bundle on a version tag.
 #
 # Only the slim image is built on GitHub's hosted runners: the pre-baked
 # `full` images are 10-20 GB and exceed the hosted runner disk. Build those
-# on a machine with the GPU-sized disk and push them by hand (see
-# docs/publishing.md), or point `runs-on` at a self-hosted runner.
+# on a machine with enough disk and push them by hand (see docs/publishing.md),
+# or point `runs-on` at a self-hosted runner.
 name: Release
 
 on:
@@ -42,14 +42,27 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  wheel:
+  deploy-bundle:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - run: uv build
-      - run: cd dist && sha256sum * > sha256sums.txt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate installer scripts
+        run: |
+          bash -n deploy/install.sh
+          bash -n deploy/doctor.sh
+      - name: Build deploy bundle
+        run: python scripts/build_deploy_bundle.py --version "$GITHUB_REF_NAME" --out dist-deploy
+      - name: Inspect bundle
+        run: |
+          tar tzf "dist-deploy/verity-deploy-${GITHUB_REF_NAME#v}.tar.gz"
+          cat dist-deploy/SHA256SUMS
       - uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: |
+            dist-deploy/verity-deploy-*.tar.gz
+            dist-deploy/verity-deploy.tar.gz
+            dist-deploy/SHA256SUMS
           generate_release_notes: true

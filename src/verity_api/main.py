@@ -61,7 +61,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="Verity API",
         description=DESCRIPTION,
-        version="0.4.1",
+        version="0.5.0",
         docs_url="/api/docs",
         openapi_url="/api/openapi.json",
     )
