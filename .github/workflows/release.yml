@@ -59,7 +59,7 @@ jobs:
         run: |
           tar tzf "dist-deploy/verity-deploy-${GITHUB_REF_NAME#v}.tar.gz"
           cat dist-deploy/SHA256SUMS
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           files: |
             dist-deploy/verity-deploy-*.tar.gz
