@@ -2,6 +2,9 @@ detector_id: recce
 name: RECCE
 version: 1.0.0
 description: 'RECCE: End-to-End Reconstruction-Classification Learning for Face Forgery Detection'
+architecture: ResNet feature extractor + reconstruction decoder + classification head; the reconstruction-error map doubles as the native attention map
+input_mode: face_crop
+region_analysis: true
 artifacts:
   required:
   - type: video
@@ -17,7 +20,7 @@ output:
 weights:
   file: recce_best.pth
   kind: official
-  note: RECCE checkpoint (DeepfakeBench-compatible state dict).
+  note: RECCE checkpoint (DeepfakeBench-compatible state dict). The released decoder is untrained; the port audits it at load and omits reconstruction claims when dead.
 targets:
 - face_swap
 - face_reenactment

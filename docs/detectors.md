@@ -35,7 +35,7 @@ from `detectors/*/detector.yaml` and `detectors/weights_manifest.yaml`.
 | `multi_attention` | Multi-Attention | **random-init** | image/video | Face swap, Face reenactment | EfficientNet-B4 + multi-attentional head | No released trained checkpoint; random initialisation. |
 | `npr` | NPR | **trained** | image/video | AI-generated image, Synthetic face | Truncated ResNet-50 (conv1 + layer1/layer2) with NPR pixel-residual input and 1-logit BCE head | `NPR.pth` (none-stated) |
 | `pcl_xception` | PCL-I2G | **random-init** | image/video | Face swap, Face reenactment | Xception + pair-wise consistency | No released trained checkpoint; random initialisation. |
-| `recce` | RECCE | **trained** | video | Face swap, Face reenactment |  | `recce_best.pth` (CC-BY-NC-4.0) |
+| `recce` | RECCE | **trained** | video | Face swap, Face reenactment | ResNet feature extractor + reconstruction decoder + classification head; the reconstruction-error map doubles as the native attention map | `recce_best.pth` (CC-BY-NC-4.0) |
 | `resnet34` | CNN-Aug (ResNet34) | **trained** | image/video | Face swap, Face reenactment | ResNet-34 + augmentation | `cnnaug_best.pth` (CC-BY-NC-4.0) |
 | `rfm` | RFM | **random-init** | image/video | Face swap, Face reenactment | Xception + representative forgery mining | No released trained checkpoint; random initialisation. |
 | `safe` | SAFE | **trained** | image/video | AI-generated image, Synthetic face | bior1.3 DWT HH sub-band (pytorch_wavelets, symmetric) -> truncated ResNet-50 (3x3 stem, layer1 + layer2) + 2-class head | `checkpoint-best.pth` (Apache-2.0) |
