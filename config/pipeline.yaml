@@ -1,0 +1,11 @@
+# Verity pipeline configuration. Every path can also be overridden by the
+# corresponding environment variable (VERITY_DETECTORS_DIR, VERITY_WORKSPACE,
+# VERITY_OUTPUT_DIR) or a CLI flag.
+detectors_dir: "detectors"
+workspace: "workspace"
+output_dir: "output"
+extractors:
+  - frame
+  - face
+  - metadata
+  - audio

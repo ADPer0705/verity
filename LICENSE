@@ -1,0 +1,31 @@
+Verity — deepfake detection pipeline for investigations and research
+Copyright (c) 2026 ADPer
+
+This work is licensed under the Creative Commons Attribution-NonCommercial 4.0
+International License (CC BY-NC 4.0).
+
+You are free to:
+  - Share: copy and redistribute the material in any medium or format
+  - Adapt: remix, transform, and build upon the material
+
+Under the following terms:
+  - Attribution: you must give appropriate credit, provide a link to the
+    license, and indicate if changes were made.
+  - NonCommercial: you may not use the material for commercial purposes.
+  - No additional restrictions.
+
+Full license text: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+SPDX-License-Identifier: CC-BY-NC-4.0
+
+THIRD-PARTY COMPONENTS
+
+The detector implementations under detectors/ are ports of research code,
+most of them from DeepfakeBench (CUHK-Shenzhen, CC BY-NC 4.0). The model
+checkpoints that Verity downloads are the property of their respective
+authors and are redistributed under the terms stated per file in
+detectors/weights_manifest.yaml and THIRD_PARTY_NOTICES.md. Their licenses
+apply in addition to this one.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. Detector outputs are statistical indicators, not proof; they must be
+interpreted by a qualified examiner.
