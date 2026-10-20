@@ -1,0 +1,52 @@
+name: Feature request
+description: Propose a detector, forensic analyzer, workflow or documentation improvement.
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Verity keeps per-detector findings separate and never adds an aggregate
+        verdict. Requests that collapse findings will be declined. For a new
+        detector, read the contract in CONTRIBUTING.md first.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of request
+      options:
+        - New detector port
+        - New forensic analyzer
+        - Pipeline / CLI
+        - API
+        - Web UI
+        - Weights / distribution
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What investigative or research need does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: For detectors, include paper, license, checkpoint availability and target family.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence / references
+      description: Papers, datasets, upstream repositories, sample results.
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Compatibility
+      options:
+        - label: The proposal keeps findings per-detector (no aggregate verdict).
+          required: true
+        - label: Any checkpoint has a traceable origin and license.
+          required: true

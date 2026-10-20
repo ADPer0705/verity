@@ -1,117 +1,125 @@
-# How to Submit Your Hackathon Entry
+# Contributing to Verity
 
-Follow these steps to set up your submission repository correctly.
-The judges depend on this structure to review your entry — deviations may affect your score.
+Thanks for your interest. Verity is an evidence-oriented tool: correctness,
+provenance and explainability matter more than feature count. Please read the
+scope below before opening a large pull request.
 
----
+## Ways to contribute
 
-## Step 1 — Fork This Template
+- **Bug reports** — reproducible pipeline/API/UI issues, wrong selection
+  decisions, artifact problems, documentation errors.
+- **Detector ports** — new architectures or fixes to existing ones, as long
+  as the artifact and trust-tier contract is respected (below).
+- **Forensics** — new model-free analyzers or improvements to the existing
+  five. Observations must come with the numbers and the limits of the method.
+- **Docs and tests** — always welcome; the docs are part of the product.
 
-1. Click the **"Use this template"** button at the top of this repository
-   (or **Fork** if you prefer)
-2. Name your repository: `bob-ai-hackathon-[your-team-name]`
-   (e.g., `bob-ai-hackathon-orion-squad`)
-3. Set visibility to **Public** so judges can access it
-4. Click **Create repository**
+Security issues: **do not open a public issue** — see [SECURITY.md](SECURITY.md).
 
----
-
-## Step 2 — Clone Your Fork Locally
+## Development setup
 
 ```bash
-git clone https://github.com/[your-org]/bob-ai-hackathon-[your-team-name].git
-cd bob-ai-hackathon-[your-team-name]
+git clone https://github.com/ADPer0705/verity.git
+cd verity
+uv sync --extra api
+cd src/verity_ui && npm ci && cd -
+uv run pytest -q
 ```
 
----
+System packages for PDF reports: `ffmpeg libpango-1.0-0 libpangocairo-1.0-0
+libcairo2`. Detector environments are provisioned on demand:
 
-## Step 3 — Fill in the Required Files
-
-Work through these files in order:
-
-### 3a. `submission.yaml` ← **Start here**
-This is the most important file. Judges use it to get an overview of your entry.
-
-- Open [`submission.yaml`](submission.yaml)
-- Fill in **every field marked `# REQUIRED`**
-- Read the inline comments — they explain what each field expects
-
-### 3b. `README.md`
-- Replace every `[placeholder in brackets]` with your actual content
-
-### 3c. `docs/`
-Fill in all four documentation files:
-| File | What to write |
-|---|---|
-| [`docs/problem-statement.md`](docs/problem-statement.md) | The problem you're solving |
-| [`docs/solution-overview.md`](docs/solution-overview.md) | How your solution works |
-| [`docs/architecture.md`](docs/architecture.md) | Technical architecture diagram |
-| [`docs/setup-guide.md`](docs/setup-guide.md) | Exact steps to run your project |
-
-### 3d. `src/`
-- Put all your source code inside [`src/`](src/)
-- Copy [`src/.env.example`](src/.env.example) and add your environment variables to it
-- **Never commit a real `.env` file** — it is already in `.gitignore`
-
-### 3e. `demo/`
-| File | What to do |
-|---|---|
-| [`demo/demo-video-link.txt`](demo/demo-video-link.txt) | Replace placeholder URL with your real video link |
-| [`demo/live-demo-url.txt`](demo/live-demo-url.txt) | Add your deployed demo URL (or write "NOT DEPLOYED") |
-| [`demo/screenshots/`](demo/screenshots/) | Add 3+ screenshots named `01-*.png`, `02-*.png`, etc. |
-
-### 3f. `presentation/`
-- Add your slide deck as [`presentation/slides.pdf`](presentation/) (preferred) or `.pptx`
-
----
-
-## Step 4 — Verify Your Submission Passes Validation
-
-Every push to your repository triggers the **Validate Submission** GitHub Action automatically.
-
-To check manually:
-1. Go to your repo on GitHub
-2. Click the **Actions** tab
-3. Look for **✅ Validate Submission**
-4. A green checkmark means your submission is structurally complete
-5. A red X means something is missing — click the run to see what
-
-You can also run the validation locally:
 ```bash
-# Install yq first: https://github.com/mikefarah/yq#install
-yq '.' submission.yaml   # checks YAML is valid
+uv run verity weights pull --trained
+uv run verity setup --trained            # or --detector <id>
 ```
 
----
+Never commit checkpoints, `workspace/`, `output/`, `.env`, `.venv/`,
+`.detectorenvs/` or `node_modules/` (all are gitignored).
 
-## Step 5 — Submit Your Repository URL
+## Repository conventions
 
-Once validation passes:
+- Python 3.10+ for the orchestrator; detector projects pin their own Python
+  and dependencies in `detectors/<id>/pyproject.toml`.
+- Keep the pipeline deterministic: sorted iteration, fixed seeds, media ids
+  derived from SHA-256. No wall-clock or random values in findings.
+- Findings must remain explainable: if a signal cannot be produced, state the
+  absence in `confidence_factors` rather than omitting it silently.
+- The exported report must not gain an aggregate real/fake verdict.
+- Public functions and modules get docstrings explaining *why*, not only what.
 
-1. Copy your repository URL:
-   `https://github.com/[your-org]/bob-ai-hackathon-[your-team-name]`
+## Adding a detector
 
-2. Submit it via the **official entry form** at:
-   `[ORGANIZER: INSERT FORM URL HERE]`
+1. Create `detectors/<id>/` with:
+   - `detector.yaml` — id, name, description, architecture, `targets`
+     (families from `src/verity/models/taxonomy.py`), `input_mode`,
+     preprocessing values, `artifacts.required`, `cam`/`region_analysis`, and
+     a `weights` block that honestly states the tier.
+   - `model.py` — architecture + `build_model(weights_path, device)` and a
+     `forward_detailed()` that returns at least `logits` (and `feat` for
+     Grad-CAM, `attention_map` if the model exposes one).
+   - `inference.py` — a thin entrypoint calling
+     `detectors/common/engine.run_detector`.
+   - `output_parser.py` — only if the raw result needs custom handling;
+     otherwise the default parser is used.
+   - `pyproject.toml` — exact pins, only this detector's dependencies.
+   - `weights/README.md` — origin, size, SHA-256, license, citation.
+2. Add the checkpoint to `detectors/weights_manifest.yaml`
+   (`files`, `sources`, `detectors`) if Verity may fetch it; use
+   `runtime_fetched` for models the detector downloads itself, and
+   `no_checkpoint` when no usable weights exist. Record `redistributable`
+   truthfully — when in doubt, `false`.
+3. Verify the tier: a head trained on a deepfake/generation task is
+   `trained`; a pretrained backbone with an untrained head is
+   `backbone-only`; random weights are `random-init`.
+4. Run `uv run python scripts/gen_detector_table.py` and
+   `uv run python scripts/gen_third_party_notices.py`.
+5. Add/extend tests:
+   - registry loads the YAML and derives the expected capability/tier,
+   - output parser maps a representative raw result to a `Finding`,
+   - the detector is selected/excluded for the right media characteristics.
+6. Document the detector in `docs/detector-catalog.md` (what it looks for,
+   artifacts, caveats) and add its citation to `THIRD_PARTY_NOTICES.md`.
 
-3. **Deadline:** `[ORGANIZER: INSERT DEADLINE HERE]`
+A port that only runs on the author's machine, or that hides a missing
+checkpoint behind plausible scores, will not be merged.
 
-> ⚠️ Submissions after the deadline will not be reviewed.
-> Changes after the deadline are not considered — make sure everything is complete before submitting.
+## Tests and checks
 
----
+Before opening a PR:
 
-## Checklist Before You Submit
+```bash
+uv run pytest -q
+uv run python scripts/gen_detector_table.py --help >/dev/null  # imports cleanly
+uv run verity weights status
+cd src/verity_ui && npm run typecheck && npm run build
+```
 
-- [ ] `submission.yaml` — all required fields filled
-- [ ] `README.md` — no `[placeholder]` text remaining
-- [ ] `docs/setup-guide.md` — someone else can run your project using these instructions
-- [ ] `src/` — all source code committed (no `node_modules`, no `.env`)
-- [ ] `demo/demo-video-link.txt` — real video URL (3–5 min showing the app working)
-- [ ] `demo/screenshots/` — at least 3 screenshots of the running application
-- [ ] `presentation/slides.pdf` — slide deck present
-- [ ] GitHub Actions **✅ Validate Submission** is green
-- [ ] Repository is **Public**
-- [ ] Entry form submitted before the deadline
+If your change touches the manifest, run `verity weights verify` where the
+files are present. If it touches the report, attach a sample case (media can
+be synthetic) or describe the generated artifact.
 
----
+## Commit and PR style
+
+- Small, focused commits with a clear subject:
+  `feat(detectors): add X`, `fix(api): …`, `docs: …`, `test: …`,
+  `build: …`, `chore: …`.
+- Reference the affected area (`pipeline`, `detectors`, `api`, `ui`,
+  `weights`, `forensics`, `docs`).
+- Describe **what changed and why**, plus any evidence/verification steps.
+- Keep generated files (`docs/detectors.md`, notice tables) in the same PR as
+  the change that caused them.
+- By contributing you agree your work is licensed under the project's
+  CC BY-NC 4.0 license and that you have the right to submit it.
+
+## Scope and review
+
+Maintainers may decline changes that:
+
+- add an aggregate verdict or otherwise collapse per-detector findings;
+- ship weights without recorded provenance/checksums/licensing;
+- weaken offline behaviour, checksum verification or the artifact contract;
+- introduce network calls at import time or non-deterministic inference.
+
+Be patient and precise in review. "It works on my machine" is not evidence
+for an evidence tool.

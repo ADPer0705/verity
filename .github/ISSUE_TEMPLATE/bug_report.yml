@@ -1,0 +1,70 @@
+name: Bug report
+description: Report a reproducible defect in the pipeline, API, UI, detectors or docs.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **Do not include private investigative media.**
+        Security issues belong in the private advisory flow — see SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Version / deployment
+      description: Release tag or commit, container tag (cuda/cpu/slim), or native install.
+      placeholder: "v0.4.0, ghcr.io/adper0705/verity:slim"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - pipeline / CLI
+        - detector (which one?)
+        - selection
+        - forensics
+        - report generation
+        - API
+        - web UI
+        - weights / manifest
+        - container / compose
+        - documentation
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Behaviour observed, including the exact command or UI action.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Steps, media characteristics (type/duration/resolution — never the media itself), logs with secrets removed.
+      placeholder: |
+        1. verity run --media sample.mp4 --detector recce
+        2. ...
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "Ubuntu 24.04, NVIDIA RTX 4060 8 GB, Podman 5.x, Python 3.12"
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and the documentation.
+          required: true
+        - label: I removed private media, paths and secrets from this report.
+          required: true

@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: "Verity: multi-detector deepfake examination pipeline"
+message: "If you use Verity in academic work, please cite this entry together with the upstream detector papers relevant to your panel."
+version: 0.4.0
+date-released: 2026-10-21
+license: CC-BY-NC-4.0
+repository-code: "https://github.com/ADPer0705/verity"
+url: "https://github.com/ADPer0705/verity"
+keywords:
+  - deepfake detection
+  - media forensics
+  - explainability
+  - image forensics
+  - video forensics
+  - audio anti-spoofing
+  - reproducibility
+abstract: >-
+  Verity is a deterministic, explainable examination pipeline for suspected
+  manipulated images, videos and audio. It characterises the media, selects
+  only the detectors that can consume it, executes each detector in an
+  isolated version-pinned environment, and preserves every per-detector
+  verdict, reasoning and explainability artifact. Model-free forensic
+  analyzers (metadata, compression, noise, temporal, audio) run alongside the
+  detectors. Verity never collapses the panel into a single real/fake score.
+authors:
+  - name: "ADPer"
