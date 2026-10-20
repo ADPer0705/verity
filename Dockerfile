@@ -20,7 +20,7 @@
 # detectors/weights_manifest.yaml.
 
 # ---------------------------------------------------------------- UI build
-FROM node:22-bookworm-slim AS ui
+FROM node:26-bookworm-slim AS ui
 WORKDIR /ui
 COPY src/verity_ui/package.json src/verity_ui/package-lock.json ./
 RUN npm ci --no-audit --no-fund
