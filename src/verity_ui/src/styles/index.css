@@ -1,0 +1,321 @@
+/*
+ * Verity custom layer on top of Mantine.
+ *
+ * Every colour comes from a Mantine CSS variable so the same markup renders
+ * correctly in both colour schemes.
+ * Component-specific layout lives here; everything else is Mantine props.
+ */
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Badges carry short labels; never let a squeezed table cell ellipsise them. */
+.mantine-Badge-root {
+  max-width: none;
+}
+
+code,
+kbd,
+samp,
+pre,
+.vy-mono {
+  font-family: var(--mantine-font-family-monospace);
+}
+
+.vy-break {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page frame                                                          */
+/* ------------------------------------------------------------------ */
+
+.vy-page {
+  max-width: 88rem;
+  margin: 0 auto;
+}
+
+.vy-page--narrow {
+  max-width: 54rem;
+  margin: 0 auto;
+}
+
+.vy-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mantine-color-dimmed);
+  margin: 0 0 0.625rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Key/value lists                                                     */
+/* ------------------------------------------------------------------ */
+
+.vy-kv {
+  display: grid;
+  grid-template-columns: minmax(9rem, 13rem) 1fr;
+  gap: 0;
+  margin: 0;
+  font-size: var(--mantine-font-size-sm);
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.vy-kv dt,
+.vy-kv dd {
+  margin: 0;
+  padding: 0.4375rem 0.625rem 0.4375rem 0;
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  line-height: 1.45;
+}
+
+.vy-kv dt {
+  color: var(--mantine-color-dimmed);
+}
+
+.vy-kv dd {
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ */
+/* Verdict and agreement                                               */
+/* ------------------------------------------------------------------ */
+
+.vy-verdict {
+  --vy-tone: var(--mantine-color-default-border);
+  border-left: 4px solid var(--vy-tone);
+  padding: 1rem 1.25rem 1.125rem;
+  background-color: var(--mantine-color-default);
+  border-top: 1px solid var(--mantine-color-default-border);
+  border-right: 1px solid var(--mantine-color-default-border);
+  border-bottom: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-sm);
+}
+
+.vy-verdict--critical { --vy-tone: var(--mantine-color-red-6); }
+.vy-verdict--caution { --vy-tone: var(--mantine-color-orange-6); }
+.vy-verdict--neutral { --vy-tone: var(--mantine-color-violet-5); }
+.vy-verdict--reassuring { --vy-tone: var(--mantine-color-teal-6); }
+.vy-verdict--unknown { --vy-tone: var(--mantine-color-gray-5); }
+
+.vy-verdict__headline {
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 0.75rem 0 0.375rem;
+}
+
+
+.vy-verdict__body {
+  margin: 0;
+  max-width: 48rem;
+  line-height: 1.55;
+  color: var(--mantine-color-dimmed);
+}
+
+/* ------------------------------------------------------------------ */
+/* Evidence galleries                                                  */
+/* ------------------------------------------------------------------ */
+
+.vy-gallery {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.vy-gallery--faces { grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); }
+.vy-gallery--maps { grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); }
+.vy-gallery--wide { grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+
+.vy-thumb {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-sm);
+  background-color: var(--mantine-color-default);
+  color: inherit;
+  cursor: zoom-in;
+  text-align: start;
+  overflow: hidden;
+}
+
+.vy-thumb:hover { border-color: var(--mantine-primary-color-filled); }
+.vy-thumb:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 1px; }
+
+.vy-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background-color: var(--mantine-color-default-hover);
+}
+
+.vy-thumb__caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.3125rem 0.5rem;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.6875rem;
+  color: var(--mantine-color-dimmed);
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.vy-lightbox img {
+  width: 100%;
+  height: auto;
+  background-color: var(--mantine-color-default-hover);
+}
+
+/* ------------------------------------------------------------------ */
+/* Job console                                                         */
+/* ------------------------------------------------------------------ */
+
+.vy-log {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  max-height: 18rem;
+  overflow: auto;
+  padding: 0.625rem 0.875rem;
+  margin: 0;
+  background-color: var(--mantine-color-default-hover);
+  border-top: 1px solid var(--mantine-color-default-border);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.vy-log__line--warn { color: var(--mantine-color-orange-5); }
+.vy-log__line--error { color: var(--mantine-color-red-5); }
+
+.vy-log__ts {
+  color: var(--mantine-color-dimmed);
+  margin-right: 0.75rem;
+  user-select: none;
+}
+
+.vy-pre {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  max-height: 24rem;
+  overflow: auto;
+  padding: 0.75rem 0.875rem;
+  margin: 0;
+  background-color: var(--mantine-color-default-hover);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ */
+/* Media preview                                                       */
+/* ------------------------------------------------------------------ */
+
+.vy-preview {
+  background-color: var(--mantine-color-default-hover);
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-sm);
+  overflow: hidden;
+}
+
+.vy-preview video,
+.vy-preview img {
+  display: block;
+  width: 100%;
+  max-height: 28rem;
+  object-fit: contain;
+}
+
+.vy-preview audio {
+  width: 100%;
+  padding: 1.25rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Coverage                                                            */
+/* ------------------------------------------------------------------ */
+
+.vy-coverage {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 0.625rem;
+}
+
+.vy-family {
+  position: relative;
+  padding: 0.75rem 0.875rem 0.75rem 1rem;
+  border: 1px solid var(--mantine-color-default-border);
+  border-left-width: 4px;
+  border-radius: var(--mantine-radius-sm);
+  background-color: var(--mantine-color-default);
+}
+
+.vy-family--covered { border-left-color: var(--mantine-color-teal-6); }
+.vy-family--partial { border-left-color: var(--mantine-color-orange-6); }
+.vy-family--none { border-left-color: var(--mantine-color-gray-5); }
+.vy-family--fake { border-left-color: var(--mantine-color-red-6); }
+.vy-family--real { border-left-color: var(--mantine-color-teal-6); }
+.vy-family--uncertain { border-left-color: var(--mantine-color-violet-5); }
+
+.vy-family__desc {
+  font-size: 0.75rem;
+  color: var(--mantine-color-dimmed);
+  line-height: 1.45;
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Reason lists, sticky action bar                                     */
+/* ------------------------------------------------------------------ */
+
+.vy-reason-list {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: var(--mantine-font-size-sm);
+  line-height: 1.5;
+}
+
+.vy-clickable { cursor: pointer; }
+
+.vy-landing {
+  min-height: 100vh;
+  background-color: var(--mantine-color-body);
+}
+
+.vy-role-tile {
+  height: 100%;
+  cursor: pointer;
+  transition: border-color 120ms ease;
+}
+
+.vy-role-tile:hover,
+.vy-role-tile:focus-visible {
+  border-color: var(--mantine-primary-color-filled);
+  outline: none;
+}
+
+.vy-report-frame {
+  width: 100%;
+  height: 70vh;
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-sm);
+  background: #fff;
+}
+
+@media print {
+  .vy-no-print { display: none !important; }
+}
