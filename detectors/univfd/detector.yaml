@@ -1,0 +1,48 @@
+detector_id: univfd
+version: 1.0.0
+name: UnivFD
+description: Universal fake image detector (UnivFD, Ojha et al., CVPR 2023) port.
+architecture: frozen CLIP ViT-L/14 (768-d projected features) + 1-dim linear probe
+parameters: 769
+pretrained: 'openai/clip-vit-large-patch14 (HuggingFace) — fetched by transformers at runtime. Linear
+  probe: pretrained_weights/fc_weights.pth (official).'
+resolution: 224
+mean:
+- 0.48145466
+- 0.4578275
+- 0.40821073
+std:
+- 0.26862954
+- 0.26130258
+- 0.27577711
+input_mode: full_frame
+resize_short: 256
+center_crop: true
+max_frames: 32
+video_mode: false
+clip_size: null
+cam: false
+weights:
+  file: fc_weights.pth
+  kind: official
+  url: https://raw.githubusercontent.com/WisconsinAIVision/UniversalFakeDetect/main/pretrained_weights/fc_weights.pth
+  size: 4083
+  license: MIT
+  trained: true
+  note: Official linear probe (768 -> 1, weight + bias). The frozen CLIP ViT-L/14 backbone is not part
+    of this file; it auto-downloads from HuggingFace at runtime.
+artifacts:
+  required:
+  - type: frame
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- image_synthesis
+- face_synthesis

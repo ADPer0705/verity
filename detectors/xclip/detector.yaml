@@ -1,0 +1,39 @@
+detector_id: xclip
+version: 1.0.0
+name: X-CLIP
+description: X-CLIP deepfake detector (DeepfakeBench port).
+architecture: X-CLIP (microsoft/xclip-base-patch32)
+parameters: 0
+pretrained: microsoft/xclip-base-patch32 (HuggingFace) — fetched by transformers at runtime.
+resolution: 224
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 32
+cam: true
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+weights:
+  kind: external
+  trained: false
+  note: X-CLIP ViT-B/32 video tower (microsoft/xclip-base-patch32, fetched at first run); fc_norm + head
+    randomly initialised. Not evidence-grade.
+  file: ''
+targets:
+- face_swap
+- face_reenactment

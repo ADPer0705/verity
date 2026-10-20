@@ -1,0 +1,39 @@
+detector_id: capsule_net
+version: 1.0.0
+name: Capsule
+description: Capsule deepfake detector (DeepfakeBench port).
+architecture: VGG19 features + Capsule network
+parameters: 0
+pretrained: FF++ c23-trained Capsule network checkpoint.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: capsule_best.pth
+  kind: official
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/capsule_best.pth
+  size: 15694749
+  note: FF++ c23-trained Capsule network checkpoint.
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment

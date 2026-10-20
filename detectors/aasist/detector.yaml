@@ -1,0 +1,50 @@
+detector_id: aasist
+version: 1.0.0
+name: AASIST
+description: AASIST raw-waveform audio anti-spoofing (Jung et al., ICASSP 2022) - sinc-conv front-end, residual encoder,
+  heterogeneous stacking graph attention. ASVspoof2019 LA baseline.
+architecture: SincConv(70) + 6 residual blocks + spectral/temporal graph attention (HS-GAL, MGO) + Linear(160, 2)
+parameters: 297000
+pretrained: clovaai/aasist models/weights/AASIST.pth (ASVspoof2019 LA trained)
+resolution: 0
+mean:
+- 0.0
+- 0.0
+- 0.0
+std:
+- 1.0
+- 1.0
+- 1.0
+video_mode: false
+input_mode: audio
+audio_sample_rate: 16000
+audio_window_seconds: 4.0375
+audio_hop_seconds: 2.0
+cam: false
+region_analysis: false
+weights:
+  file: AASIST.pth
+  kind: official
+  url: https://github.com/clovaai/aasist/raw/main/models/weights/AASIST.pth
+  size: 1281532
+  sha256: 51d2d9cf0738172f61e2a384ec50a54a55363240f67c971ed55a92435bc1a1c0
+  license: MIT
+  trained: true
+  note: 'Official AASIST checkpoint (clovaai/aasist, MIT). Trained only on ASVspoof2019 LA (2019-era TTS/VC);
+    a classic baseline known to generalise poorly to modern in-the-wild audio (Deepfake-Eval-2024 AUC 0.43,
+    i.e. near/below chance) - treat as a baseline, not the headline detector. Upstream logits [spoof, bonafide]
+    are swapped so index 1 = fake. Fixed 64,600-sample input (window 4.0375 s).'
+artifacts:
+  required:
+  - type: audio
+    params:
+      sample_rate: 16000
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- audio_synthesis

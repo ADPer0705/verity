@@ -1,0 +1,39 @@
+detector_id: timesformer
+version: 1.0.0
+name: TimeSformer
+description: TimeSformer deepfake detector (DeepfakeBench port).
+architecture: TimeSformer (facebook/timesformer-base-finetuned-k400)
+parameters: 0
+pretrained: facebook/timesformer-base-finetuned-k400 (HuggingFace) — fetched by transformers at runtime.
+resolution: 224
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 8
+cam: true
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+weights:
+  kind: external
+  trained: false
+  note: TimeSformer K400 encoder (facebook/timesformer-base-finetuned-k400, fetched at first run); head
+    randomly initialised. Not evidence-grade.
+  file: ''
+targets:
+- face_swap
+- face_reenactment

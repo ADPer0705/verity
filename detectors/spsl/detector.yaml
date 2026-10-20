@@ -1,0 +1,39 @@
+detector_id: spsl
+version: 1.0.0
+name: SPSL
+description: SPSL deepfake detector (DeepfakeBench port).
+architecture: Xception backbone + phase spectrum (4ch)
+parameters: 0
+pretrained: FF++ c23-trained SPSL checkpoint.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: spsl_best.pth
+  kind: official
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/spsl_best.pth
+  size: 87764683
+  note: FF++ c23-trained SPSL checkpoint.
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment

@@ -1,0 +1,39 @@
+detector_id: stil
+version: 1.0.0
+name: STIL
+description: STIL deepfake detector (DeepfakeBench port).
+architecture: SCNet50-v1d + spatiotemporal inconsistency head
+parameters: 0
+pretrained: SCNet50-v1d ImageNet weights — fetched from aliyuncs OSS at runtime.
+resolution: 224
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 8
+cam: true
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+weights:
+  kind: random
+  trained: false
+  note: 'No weights are loaded: the whole SCNet50 + head is randomly initialised (the ImageNet SCNet download
+    described upstream is not implemented). Not evidence-grade.'
+  file: ''
+targets:
+- face_swap
+- face_reenactment

@@ -1,0 +1,39 @@
+detector_id: i3d
+version: 1.0.0
+name: I3D
+description: I3D deepfake detector (DeepfakeBench port).
+architecture: I3D 3D-ResNet50 (Kinetics pretrained)
+parameters: 0
+pretrained: Kinetics-pretrained 3D ResNet-50; classification head is untrained (no released detector checkpoint).
+resolution: 224
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 16
+cam: true
+weights:
+  file: I3D_8x8_R50.pth
+  kind: backbone
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth
+  size: 112495617
+  note: Kinetics-pretrained 3D ResNet-50; classification head is untrained (no released detector checkpoint).
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment

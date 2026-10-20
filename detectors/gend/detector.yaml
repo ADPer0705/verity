@@ -1,0 +1,42 @@
+detector_id: gend
+version: 1.0.0
+name: GenD
+description: GenD deepfake detector (WACV 2026, arXiv 2508.06248 port).
+architecture: CLIP ViT-L/14 (LayerNorm fine-tuned) + L2-normalized linear probe
+parameters: 0
+pretrained: yermandy/GenD_CLIP_L_14 (HuggingFace) — fetched by transformers at runtime; backbone openai/clip-vit-large-patch14.
+resolution: 224
+mean:
+- 0.48145466
+- 0.4578275
+- 0.40821073
+std:
+- 0.26862954
+- 0.26130258
+- 0.27577711
+input_mode: face_crop
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: ''
+  kind: external
+  note: 'Released GenD detector (yermandy/GenD_CLIP_L_14: LayerNorm-tuned CLIP-L/14 + LinearNorm probe),
+    fetched from the HF hub at first run.'
+  trained: true
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment
+- face_synthesis
+- image_synthesis

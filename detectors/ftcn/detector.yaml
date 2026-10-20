@@ -1,0 +1,39 @@
+detector_id: ftcn
+version: 1.0.0
+name: FTCN
+description: FTCN deepfake detector (DeepfakeBench port).
+architecture: I3D 3D-ResNet50 + temporal coherence head
+parameters: 0
+pretrained: Shares the I3D R50 backbone weight; head untrained.
+resolution: 224
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 16
+cam: true
+weights:
+  file: I3D_8x8_R50.pth
+  kind: backbone
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth
+  size: 112495617
+  note: Shares the I3D R50 backbone weight; head untrained.
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment

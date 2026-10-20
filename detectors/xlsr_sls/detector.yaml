@@ -1,0 +1,51 @@
+detector_id: xlsr_sls
+version: 1.0.0
+name: XLS-R + SLS
+description: wav2vec 2.0 XLS-R-300M front-end with Sensitive Layer Selection (SLS) classifier for audio deepfake
+  detection (Zhang, Wen, Hu, ACM MM 2024). Official checkpoint, run as ONNX with onnxruntime.
+architecture: XLS-R-300M (24-layer wav2vec 2.0) + per-layer sigmoid gating (SLS) + BN/SELU/max-pool + FC(22847,1024) + FC(1024,2)
+parameters: 340790000
+pretrained: QiShanZhang/SLSforASVspoof-2021-DF model_15 (ASVspoof2019 LA trained), ONNX export re-hosted at HF SpeechAntiSpoofingBenchmarks/XLSR-SLS
+resolution: 0
+mean:
+- 0.0
+- 0.0
+- 0.0
+std:
+- 1.0
+- 1.0
+- 1.0
+video_mode: false
+input_mode: audio
+audio_sample_rate: 16000
+audio_window_seconds: 4.0375
+audio_hop_seconds: 2.0
+cam: false
+region_analysis: false
+weights:
+  file: xlsr-sls.onnx
+  kind: official
+  url: https://huggingface.co/SpeechAntiSpoofingBenchmarks/XLSR-SLS/resolve/main/xlsr-sls.onnx
+  size: 1356274368
+  sha256: 0aa36298a1a893bfb58a8d721dd30d046157f559da1165f95d2a0b69988c1bbd
+  license: 'MIT (HF card); upstream code: none stated'
+  trained: true
+  note: 'Official XLS-R+SLS checkpoint (ACM MM 2024) as ONNX (1.36 GB) from HF SpeechAntiSpoofingBenchmarks/XLSR-SLS;
+    the HF card says MIT but the upstream GitHub repo has no LICENSE file, so redistribution is uncertain.
+    Trained on ASVspoof2019 LA; strong on ASVspoof2021 DF / In-the-Wild (EER 1.9 / 7.5 %), weaker on 2024+
+    generators. Fixed 64,600-sample input (window 4.0375 s). Upstream log-softmax [spoof, bonafide] is swapped
+    so index 1 = fake. Runs with onnxruntime (CUDA EP when available, else CPU).'
+artifacts:
+  required:
+  - type: audio
+    params:
+      sample_rate: 16000
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- audio_synthesis

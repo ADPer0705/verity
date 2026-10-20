@@ -1,0 +1,50 @@
+detector_id: antideepfake_mms
+version: 1.0.0
+name: AntiDeepfake MMS-300M
+description: Post-trained MMS-300M (wav2vec 2.0) speech foundation model for deepfake-speech detection (Ge, Wang, Liu,
+  Yamagishi, ASRU 2025, arXiv 2506.21090). Trained on 56k h real / 18k h fake speech in 100+ languages.
+architecture: wav2vec 2.0 MMS-300M (24-layer, 1024-d) + mean pooling + FC(1024, 2)
+parameters: 315500000
+pretrained: nii-yamagishilab/mms-300m-anti-deepfake (HuggingFace) — fetched by huggingface_hub at first run; base facebook/mms-300m.
+resolution: 0
+mean:
+- 0.0
+- 0.0
+- 0.0
+std:
+- 1.0
+- 1.0
+- 1.0
+video_mode: false
+input_mode: audio
+audio_sample_rate: 16000
+audio_window_seconds: 4.0
+audio_hop_seconds: 2.0
+cam: false
+region_analysis: false
+weights:
+  file: ''
+  kind: external
+  url: https://huggingface.co/nii-yamagishilab/mms-300m-anti-deepfake/resolve/main/model.safetensors
+  size: 1269622944
+  sha256: 9bd5d9785bf72f91dfca8508651354946c4b307921cb358505e1b94035102224
+  license: CC-BY-NC-SA-4.0
+  trained: true
+  note: 'Released AntiDeepfake detector (nii-yamagishilab/mms-300m-anti-deepfake, model.safetensors 1.27 GB,
+    CC BY-NC-SA 4.0; code BSD-3-Clause), fetched from the HF hub at first run. fairseq keys are remapped
+    onto transformers Wav2Vec2Model; upstream logits [fake, real] are swapped so index 1 = fake. Set
+    VERITY_ANTIDEEPFAKE_REPO=nii-yamagishilab/xls-r-1b-anti-deepfake (3.86 GB) for the XLS-R-1B variant.'
+artifacts:
+  required:
+  - type: audio
+    params:
+      sample_rate: 16000
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- audio_synthesis

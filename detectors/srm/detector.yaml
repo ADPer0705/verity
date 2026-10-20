@@ -1,0 +1,39 @@
+detector_id: srm
+version: 1.0.0
+name: SRM
+description: SRM deepfake detector (DeepfakeBench port).
+architecture: Dual Xception + SRM filters + cross-modal attention
+parameters: 0
+pretrained: FF++ c23-trained SRM checkpoint.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: srm_best.pth
+  kind: official
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/srm_best.pth
+  size: 222088575
+  note: FF++ c23-trained SRM checkpoint.
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment

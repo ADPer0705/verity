@@ -1,0 +1,53 @@
+detector_id: safe
+version: 1.0.0
+name: SAFE
+description: Synthetic image detector on wavelet (bior1.3 HH) features with preserved high-frequency
+  evidence (Li et al., KDD 2025, arXiv 2408.06741).
+architecture: bior1.3 DWT HH sub-band (pytorch_wavelets, symmetric) -> truncated ResNet-50 (3x3 stem,
+  layer1 + layer2) + 2-class head
+parameters: 1448410
+pretrained: Official checkpoint/checkpoint-best.pth (Ouxiang-Li/SAFE), trained on ForenSynths (ProGAN,
+  4 classes) with the SAFE augmentation recipe.
+resolution: 256
+mean:
+- 0.0
+- 0.0
+- 0.0
+std:
+- 1.0
+- 1.0
+- 1.0
+input_mode: full_frame
+resize_short: null
+center_crop: true
+max_frames: 32
+video_mode: false
+clip_size: null
+cam: false
+weights:
+  file: checkpoint-best.pth
+  kind: official
+  trained: true
+  url: https://github.com/Ouxiang-Li/SAFE/raw/main/checkpoint/checkpoint-best.pth
+  size: 5840638
+  sha256: b3f5ecfb46a154ed553aaaf4bf3ba59182310726ddb0cbb1fe42bd0e22d2f20e
+  license: Apache-2.0
+  note: 'Official SAFE checkpoint (dict with key "model" holding the state dict, 146 keys). 2-class
+    CrossEntropy head, label 1 = fake; softmax index 1 is P(fake) directly. Input is a raw [0, 1]
+    256x256 center crop at native resolution (no resize, no mean/std): model.preprocess owns this,
+    the yaml mean/std are neutral.'
+artifacts:
+  required:
+  - type: frame
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- image_synthesis
+- face_synthesis

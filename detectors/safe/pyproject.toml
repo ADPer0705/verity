@@ -1,0 +1,23 @@
+# Managed with uv (source of truth for this detector's environment).
+# Python 3.12: newest version with wheels for every pinned dependency
+# (torch/mediapipe/torchvision cap at 3.12); nothing requires <3.12.
+# Upstream SAFE pins torch 2.2.1; 2.2.2 is the same minor release.
+[project]
+name = "verity-safe"
+version = "1.0.0"
+description = "Verity detector environment: safe (SAFE wavelet synthetic-image detector)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.2.2",
+    "numpy<2",
+    "opencv-python==4.10.0.84",
+    "pillow==10.2.0",
+    "matplotlib==3.9.2",
+    "pyyaml",
+    "pytorch_wavelets==1.3.0",
+    "PyWavelets==1.6.0",
+    "setuptools>=68,<81"
+]
+
+[tool.uv]
+package = false

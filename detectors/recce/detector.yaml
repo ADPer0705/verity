@@ -1,0 +1,23 @@
+detector_id: recce
+name: RECCE
+version: 1.0.0
+description: 'RECCE: End-to-End Reconstruction-Classification Learning for Face Forgery Detection'
+artifacts:
+  required:
+  - type: video
+    params: {}
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    num_faces_analyzed: int
+weights:
+  file: recce_best.pth
+  kind: official
+  note: RECCE checkpoint (DeepfakeBench-compatible state dict).
+targets:
+- face_swap
+- face_reenactment

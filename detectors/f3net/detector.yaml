@@ -1,0 +1,39 @@
+detector_id: f3net
+version: 1.0.0
+name: F3Net
+description: F3Net deepfake detector (DeepfakeBench port).
+architecture: Xception backbone + FAD frequency head (12ch)
+parameters: 0
+pretrained: FF++ c23-trained F3Net checkpoint.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: f3net_best.pth
+  kind: official
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/f3net_best.pth
+  size: 90398839
+  note: FF++ c23-trained F3Net checkpoint.
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment

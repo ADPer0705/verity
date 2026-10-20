@@ -1,0 +1,39 @@
+detector_id: resnet34
+version: 1.0.0
+name: CNN-Aug (ResNet34)
+description: CNN-Aug (ResNet34) deepfake detector (DeepfakeBench port).
+architecture: ResNet-34 + augmentation
+parameters: 21300000
+pretrained: FF++ c23-trained CNN-Augmentation (ResNet34) checkpoint.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: cnnaug_best.pth
+  kind: official
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/cnnaug_best.pth
+  size: 85285901
+  note: FF++ c23-trained CNN-Augmentation (ResNet34) checkpoint.
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment

@@ -1,0 +1,41 @@
+detector_id: lipforensics
+version: 1.0.0
+name: LipForensics
+description: LipForensics deepfake detector (Haliassos et al., CVPR 2021, "Lips Don't Lie") - lipreading
+  (ResNet-18 trunk + multiscale multibranch TCN) on 25-frame mouth-crop clips.
+architecture: Conv3d frontend + ResNet-18 (PReLU) + MultiscaleMultibranchTCN
+parameters: 33000000
+pretrained: Official FF++ checkpoint (lipforensics_ff.pth, Google Drive).
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 25
+sample_interval: 1
+cam: false
+weights:
+  file: lipforensics_ff.pth
+  kind: official
+  url: https://drive.usercontent.google.com/download?id=1wfZnxZpyNd5ouJs0LjVls7zU0N_W73L7&export=download&confirm=t
+  note: Official LipForensics FF++ checkpoint (Haliassos et al., CVPR 2021).
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap
+- face_reenactment
+- lip_sync

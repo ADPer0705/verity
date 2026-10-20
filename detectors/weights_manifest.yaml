@@ -1,0 +1,464 @@
+# Verity weights manifest (v2).
+#
+# Single source of truth for every checkpoint Verity can fetch: where it
+# comes from, its SHA-256, its license, and whether Verity is allowed to
+# re-host it on its own Hugging Face repo. `verity weights pull` reads this
+# file; `verity weights bundle` assembles the Hugging Face upload from it.
+#
+# Resolution order for a file: the Verity hub (if `hub.huggingface_repo` is
+# set and the file is `redistributable`), then `origin`. Every download is
+# verified against `sha256` before it is accepted.
+#
+# Licenses were checked against the upstream repositories on 2026-10-20.
+# "redistributable: false" means the upstream grants no redistribution right
+# (no license file at all, or a non-transferable one); those files are only
+# ever fetched from the authors' own URLs.
+version: 2
+
+hub:
+  # Hugging Face model repo that mirrors the redistributable files below.
+  # Leave empty to always fetch from origin. Override with VERITY_WEIGHTS_HUB.
+  huggingface_repo: "ADPer/verity-weights"
+  revision: main
+
+licenses:
+  CC-BY-NC-4.0: https://creativecommons.org/licenses/by-nc/4.0/
+  CC-BY-NC-SA-4.0: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  MIT: https://opensource.org/license/mit
+  BSD-3-Clause: https://opensource.org/license/bsd-3-clause
+  Apache-2.0: https://www.apache.org/licenses/LICENSE-2.0
+
+sources:
+  deepfakebench:
+    name: DeepfakeBench (SCLBD/DeepfakeBench)
+    url: https://github.com/SCLBD/DeepfakeBench
+    license: CC-BY-NC-4.0
+    copyright: "Copyright (c) 2023, The Chinese University of Hong Kong, Shenzhen"
+    citation: >-
+      Yan, Z., Zhang, Y., Yuan, X., Lyu, S., Wu, B. "DeepfakeBench: A Comprehensive
+      Benchmark of Deepfake Detection." NeurIPS 2023 (Datasets & Benchmarks).
+      arXiv:2307.01426
+    note: >-
+      Detector checkpoints were trained on FaceForensics++ (c23), a dataset
+      released for research use. The DeepfakeBench LICENSE text names the
+      source code; the released weights carry no separate statement and are
+      treated as CC BY-NC 4.0 as well.
+  hrnet:
+    name: HRNet-Image-Classification (HRNet/HRNet-Image-Classification)
+    url: https://github.com/HRNet/HRNet-Image-Classification
+    license: MIT
+    copyright: "Copyright (c) Microsoft Corporation"
+    citation: >-
+      Wang, J. et al. "Deep High-Resolution Representation Learning for Visual
+      Recognition." IEEE TPAMI 2020.
+  univfd:
+    name: UniversalFakeDetect (WisconsinAIVision/UniversalFakeDetect)
+    url: https://github.com/WisconsinAIVision/UniversalFakeDetect
+    license: MIT
+    copyright: "Copyright (c) 2025 Wisconsin AI and Vision Lab (WAIV)"
+    citation: >-
+      Ojha, U., Li, Y., Lee, Y. J. "Towards Universal Fake Image Detectors that
+      Generalize Across Generative Models." CVPR 2023.
+  lipforensics:
+    name: LipForensics (ahaliassos/LipForensics)
+    url: https://github.com/ahaliassos/LipForensics
+    license: MIT
+    copyright: "Copyright (c) 2021 Alexandros Haliassos"
+    citation: >-
+      Haliassos, A., Vougioukas, K., Petridis, S., Pantic, M. "Lips Don't Lie: A
+      Generalisable and Robust Approach to Face Forgery Detection." CVPR 2021.
+    note: The checkpoint is linked from the README (Google Drive); the MIT license covers the repository.
+  npr:
+    name: NPR-DeepfakeDetection (chuangchuangtan/NPR-DeepfakeDetection)
+    url: https://github.com/chuangchuangtan/NPR-DeepfakeDetection
+    license: none-stated
+    citation: >-
+      Tan, C. et al. "Rethinking the Up-Sampling Operations in CNN-based Generative
+      Network for Generalizable Deepfake Detection." CVPR 2024. arXiv:2312.10461
+    note: No license file in the repository; all rights reserved by default. Fetched from the authors' repo only.
+  mlep:
+    name: MLEP (fkeufss/MLEP)
+    url: https://github.com/fkeufss/MLEP
+    license: none-stated
+    citation: >-
+      Yuan, L. et al. "MLEP: Multi-granularity Local Entropy Patterns for Generalized
+      AI-generated Image Detection." NeurIPS 2025. arXiv:2504.13726
+    note: No license file in the repository; all rights reserved by default. Fetched from the authors' repo only.
+  aasist:
+    name: AASIST (clovaai/aasist)
+    url: https://github.com/clovaai/aasist
+    license: MIT
+    copyright: "Copyright (c) 2021-present NAVER Corp."
+    citation: >-
+      Jung, J.-W., Heo, H.-S., Tak, H., Shim, H.-J., Chung, J.-S., Lee, B.-J., Yu, H.-J.,
+      Evans, N. "AASIST: Audio Anti-Spoofing using Integrated Spectro-Temporal Graph
+      Attention Networks." ICASSP 2022.
+    note: 2019-era ASVspoof2019 LA baseline; generalises poorly to modern in-the-wild
+      deepfake audio (Deepfake-Eval-2024 AUC 0.43). Shipped as a reference baseline.
+  community_forensics:
+    name: Community Forensics (OwensLab/commfor-model-384)
+    url: https://huggingface.co/OwensLab/commfor-model-384
+    license: MIT
+    copyright: "(c) Jeongsoo Park, Andrew Owens (Harvard Vision Lab)"
+    citation: >-
+      Park, J., Owens, A. "Community Forensics: Using Thousands of Generators to Train
+      Fake Image Detectors." CVPR 2025. arXiv:2411.04125
+  safe:
+    name: SAFE (Ouxiang-Li/SAFE)
+    url: https://github.com/Ouxiang-Li/SAFE
+    license: Apache-2.0
+    citation: >-
+      Li, O., Cai, J., Hao, Y., Jiang, X., Hu, Y., Feng, F. "Improving Synthetic Image
+      Detection Towards Generalization: An Image Transformation Perspective." KDD 2025.
+      arXiv:2408.06741
+  df40:
+    name: DF40 (YZY-stack/DF40)
+    url: https://github.com/YZY-stack/DF40
+    license: CC-BY-NC-4.0
+    citation: >-
+      Yan, Z. et al. "DF40: Toward Next-Generation Deepfake Detection." NeurIPS 2024
+      (Datasets & Benchmarks). arXiv:2406.13495
+    note: Checkpoints live on the authors' Google Drive; upstream asks that they not be re-hosted, so Verity fetches them from Drive only.
+  effort:
+    name: Effort (YZY-stack/Effort-AIGI-Detection)
+    url: https://github.com/YZY-stack/Effort-AIGI-Detection
+    license: CC-BY-NC-4.0
+    citation: >-
+      Yan, Z. et al. "Orthogonal Subspace Decomposition for Generalizable AI-Generated
+      Image Detection." ICML 2025. arXiv:2411.15633
+    note: Checkpoints live on the authors' Google Drive; upstream asks that they not be re-hosted, so Verity fetches them from Drive only.
+  xlsr_sls:
+    name: XLS-R + SLS (QiShanZhang/SLSforASVspoof-2021-DF)
+    url: https://github.com/QiShanZhang/SLSforASVspoof-2021-DF
+    license: none-stated
+    copyright: "(c) Qishan Zhang, Shuangbing Wen, Tao Hu"
+    citation: >-
+      Zhang, Q., Wen, S., Hu, T. "Audio Deepfake Detection with Self-Supervised XLS-R
+      and SLS Classifier." ACM MM 2024. doi:10.1145/3664647.3681345
+    note: >-
+      The ONNX export used here is re-hosted at HF
+      SpeechAntiSpoofingBenchmarks/XLSR-SLS under a card that says MIT, but the upstream
+      repository ships no LICENSE file, so redistribution is treated as uncertain. Verity
+      always fetches from that HF repo directly and does not mirror it.
+  antideepfake:
+    name: AntiDeepfake (nii-yamagishilab/AntiDeepfake)
+    url: https://github.com/nii-yamagishilab/AntiDeepfake
+    license: CC-BY-NC-SA-4.0
+    citation: >-
+      Ge, W., Wang, X., Liu, X., Yamagishi, J. "Post-training for Deepfake Speech
+      Detection." ASRU 2025. arXiv:2506.21090
+    note: Checkpoint CC BY-NC-SA 4.0 (nii-yamagishilab/mms-300m-anti-deepfake on HF);
+      detector code BSD-3-Clause. The detector fetches the model itself via huggingface_hub.
+
+files:
+  xception_best.pth:
+    sha256: dd61186f9ac8e99aae85982cae338b555dfaeef042f6b699e5a55cae3998ba47
+    size: 87763531
+    source: deepfakebench
+    description: Xception (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/xception_best.pth
+    redistributable: true
+    hub_path: deepfakebench/xception_best.pth
+  meso4_best.pth:
+    sha256: a362ebbef2658daa551d808fbfccd57f0b5fd34fda46a05996e807cccddff4e0
+    size: 117943
+    source: deepfakebench
+    description: MesoNet-4 (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/meso4_best.pth
+    redistributable: true
+    hub_path: deepfakebench/meso4_best.pth
+  meso4Incep_best.pth:
+    sha256: 16a2d7cec846e5bcbcb7f4826a1691620b80dcd7c1c63bafe040f1e811991f66
+    size: 126419
+    source: deepfakebench
+    description: MesoInception-4 (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/meso4Incep_best.pth
+    redistributable: true
+    hub_path: deepfakebench/meso4Incep_best.pth
+  cnnaug_best.pth:
+    sha256: 2ffdc665b9bd723a6bcdfbc9b2ca0550fd82ede382f81f6df864dde582a3deb9
+    size: 85285901
+    source: deepfakebench
+    description: CNN-Aug / ResNet-34 (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/cnnaug_best.pth
+    redistributable: true
+    hub_path: deepfakebench/cnnaug_best.pth
+  effnb4_best.pth:
+    sha256: 74cbd82d7be1bf5e6adec717824274a95b4509b02e1e78401608d32b3cbeaf0f
+    size: 70979261
+    source: deepfakebench
+    description: EfficientNet-B4 (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/effnb4_best.pth
+    redistributable: true
+    hub_path: deepfakebench/effnb4_best.pth
+  capsule_best.pth:
+    sha256: 40e96997c2248aeb7958fce5c99f8a81dd3c8dea120c78ed8468a837b2ba51f8
+    size: 15694749
+    source: deepfakebench
+    description: Capsule-Forensics (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/capsule_best.pth
+    redistributable: true
+    hub_path: deepfakebench/capsule_best.pth
+  core_best.pth:
+    sha256: 3d34dca33ab66ee027425e0bc48fb889811ecd4ea53f72f958d83124144d1af7
+    size: 87766765
+    source: deepfakebench
+    description: CORE (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/core_best.pth
+    redistributable: true
+    hub_path: deepfakebench/core_best.pth
+  f3net_best.pth:
+    sha256: deee7d25bfc1b8b5ba83054a664880078de51213b1067f1e472c2bed7cc667f9
+    size: 90398839
+    source: deepfakebench
+    description: F3Net (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/f3net_best.pth
+    redistributable: true
+    hub_path: deepfakebench/f3net_best.pth
+  ffd_best.pth:
+    sha256: 445f5b70f115bf777067a4bc498dd73847964dc23f90e5d516b71d0ebb4f65a7
+    size: 87796541
+    source: deepfakebench
+    description: FFD (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/ffd_best.pth
+    redistributable: true
+    hub_path: deepfakebench/ffd_best.pth
+  spsl_best.pth:
+    sha256: 7305d660c68aa6ac138f8d59c068832a43244f390fa6e54355f211d81bc246bd
+    size: 87764683
+    source: deepfakebench
+    description: SPSL (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/spsl_best.pth
+    redistributable: true
+    hub_path: deepfakebench/spsl_best.pth
+  srm_best.pth:
+    sha256: 666e8fc7f9938f541a7f5cea7b11d975cc749ec1c8ba6b350ae3eb3d2d34a1e8
+    size: 222088575
+    source: deepfakebench
+    description: SRM (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/srm_best.pth
+    redistributable: true
+    hub_path: deepfakebench/srm_best.pth
+  ucf_best.pth:
+    sha256: 4afa2517feeb473024e1b73049bfa61ce446eb4da14d17c864f2e2a76b3223e5
+    size: 188006161
+    source: deepfakebench
+    description: UCF (FF++ c23)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/ucf_best.pth
+    redistributable: true
+    hub_path: deepfakebench/ucf_best.pth
+  recce_best.pth:
+    sha256: 1349fd80d75cdb2d212f2dc4035529140b147b80ae87ad227242fa0451586ceb
+    size: 191466941
+    source: deepfakebench
+    description: RECCE (FF++ c23); reconstruction decoder untrained in this release
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.1/recce_best.pth
+    redistributable: true
+    hub_path: deepfakebench/recce_best.pth
+  I3D_8x8_R50.pth:
+    sha256: c9e4e6c8e86ce23176da6426d5e33b2fc6c653e29e672ac67c62c5761254e728
+    size: 112495617
+    source: deepfakebench
+    description: Kinetics-pretrained I3D 3D-ResNet-50 backbone (no detector head)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth
+    redistributable: true
+    hub_path: deepfakebench/I3D_8x8_R50.pth
+  hrnetv2_w48_imagenet_pretrained.pth:
+    sha256: 0efec102d97f2ef58f0e258b2c3076b3704b93ffc2b73f64c8da5462c0037ef8
+    size: 310643500
+    source: hrnet
+    license: MIT
+    description: HRNet-W48 ImageNet backbone (Face X-ray; no detector head)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/pretrained.zip
+    archive:
+      sha256: 84ec20e2c79a7900a2e4f08217b9aa4bb748613c9bd13dc71a05c80c20309630
+      size: 454561867
+      member: pretrained/hrnetv2_w48_imagenet_pretrained.pth
+    redistributable: true
+    hub_path: backbones/hrnetv2_w48_imagenet_pretrained.pth
+  xception-b5690688.pth:
+    sha256: b56906886cbaf573fc8819216d2dcc753fb564fa81a7733a0f2620b2a1973f7a
+    size: 91674713
+    source: deepfakebench
+    license: BSD-3-Clause
+    description: ImageNet Xception backbone (Cadene port, BSD-3-Clause; used by IID; no detector head)
+    origin: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/pretrained.zip
+    archive:
+      sha256: 84ec20e2c79a7900a2e4f08217b9aa4bb748613c9bd13dc71a05c80c20309630
+      size: 454561867
+      member: pretrained/xception-b5690688.pth
+    redistributable: true
+    hub_path: backbones/xception-b5690688.pth
+  fc_weights.pth:
+    sha256: 477100745713bcc957beb2b40859536859b6483fd6301b3b9293151b194c7847
+    size: 4083
+    source: univfd
+    description: UnivFD linear probe on frozen CLIP ViT-L/14 features (768 -> 1)
+    origin: https://raw.githubusercontent.com/WisconsinAIVision/UniversalFakeDetect/main/pretrained_weights/fc_weights.pth
+    redistributable: true
+    hub_path: univfd/fc_weights.pth
+  lipforensics_ff.pth:
+    sha256: 4b7790bc8e02d0c25ecfa0d8d6a2907123c2206cc32e2bad6044e50f013c253d
+    size: 144124225
+    source: lipforensics
+    description: LipForensics (FF++-trained) mouth-motion detector
+    origin: https://drive.usercontent.google.com/download?id=1wfZnxZpyNd5ouJs0LjVls7zU0N_W73L7&export=download&confirm=t
+    redistributable: true
+    hub_path: lipforensics/lipforensics_ff.pth
+  NPR.pth:
+    sha256: 3939297e9399e0b992f87211610769d87d899de50d56da0204d6cbda2d483a53
+    size: 17393733
+    source: npr
+    description: NPR official checkpoint (CVPR 2024)
+    origin: https://raw.githubusercontent.com/chuangchuangtan/NPR-DeepfakeDetection/main/NPR.pth
+    redistributable: false
+  model_epoch_best.pth:
+    sha256: 09a6b934001c43de8748163923ad3659237c3fec17a2dbd476f57f0bf55bd85c
+    size: 5853801
+    source: mlep
+    description: MLEP official checkpoint (NeurIPS 2025)
+    origin: https://raw.githubusercontent.com/fkeufss/MLEP/main/pretrained/model_epoch_best.pth
+    redistributable: false
+  AASIST.pth:
+    sha256: 51d2d9cf0738172f61e2a384ec50a54a55363240f67c971ed55a92435bc1a1c0
+    size: 1281532
+    source: aasist
+    description: AASIST audio anti-spoofing checkpoint (ASVspoof2019 LA)
+    origin: https://github.com/clovaai/aasist/raw/main/models/weights/AASIST.pth
+    redistributable: true
+    hub_path: aasist/AASIST.pth
+  model.safetensors:
+    sha256: b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387
+    size: 87262324
+    source: community_forensics
+    description: Community Forensics ViT-S/16-384 detector (~4,800 generators, CVPR 2025)
+    origin: https://huggingface.co/OwensLab/commfor-model-384/resolve/main/model.safetensors
+    redistributable: true
+    hub_path: community_forensics/model.safetensors
+  checkpoint-best.pth:
+    sha256: b3f5ecfb46a154ed553aaaf4bf3ba59182310726ddb0cbb1fe42bd0e22d2f20e
+    size: 5840638
+    source: safe
+    description: SAFE wavelet-HH synthetic-image detector (KDD 2025)
+    origin: https://github.com/Ouxiang-Li/SAFE/raw/main/checkpoint/checkpoint-best.pth
+    redistributable: true
+    hub_path: safe/checkpoint-best.pth
+  xlsr-sls.onnx:
+    sha256: 0aa36298a1a893bfb58a8d721dd30d046157f559da1165f95d2a0b69988c1bbd
+    size: 1356274368
+    source: xlsr_sls
+    license: MIT per the HF card; upstream repository ships no LICENSE (none stated)
+    description: XLS-R-300M + SLS audio deepfake detector, ONNX export (ACM MM 2024)
+    origin: https://huggingface.co/SpeechAntiSpoofingBenchmarks/XLSR-SLS/resolve/main/xlsr-sls.onnx
+    redistributable: false
+  effort_clip_L14_trainOn_FaceForensic.pth:
+    sha256: 8d86711f098d16b49c048962fc3e16a906380f7bb17b8a0e89bd545b926943ee
+    size: 1213769519
+    source: effort
+    description: Effort CLIP ViT-L/14 head (FaceForensics++ c23; ICML 2025)
+    origin: https://drive.usercontent.google.com/download?id=1m4fyJecABU-Yk3bJ4b1WhUwQa0xCkMLI&export=download&confirm=t
+    redistributable: false
+  df40_train_on_df40_clip_large.pth:
+    sha256: a033da18fb0152e69e47b4e2338867f62c05d51656639c745402bf7c07dd7259
+    size: 1212881455
+    source: df40
+    description: DF40 CLIP ViT-L/14 trained on all DF40 families (NeurIPS 2024 D&B)
+    origin: https://drive.usercontent.google.com/download?id=1MzvaQSE-SpH9a5mgCXxan_J_PTZbNaPa&export=download&confirm=t
+    redistributable: false
+
+# Which manifest files each detector needs, and where they land under
+# detectors/<id>/weights/ (string = same name; mapping = {file, dest}).
+detectors:
+  xception:
+  - xception_best.pth
+  meso4:
+  - meso4_best.pth
+  meso4Inception:
+  - meso4Incep_best.pth
+  resnet34:
+  - cnnaug_best.pth
+  efficientnetb4:
+  - effnb4_best.pth
+  capsule_net:
+  - capsule_best.pth
+  core:
+  - core_best.pth
+  f3net:
+  - f3net_best.pth
+  ffd:
+  - ffd_best.pth
+  spsl:
+  - spsl_best.pth
+  srm:
+  - srm_best.pth
+  ucf:
+  - ucf_best.pth
+  recce:
+  - recce_best.pth
+  i3d:
+  - I3D_8x8_R50.pth
+  ftcn:
+  - I3D_8x8_R50.pth
+  altfreezing:
+  - I3D_8x8_R50.pth
+  facexray:
+  - file: hrnetv2_w48_imagenet_pretrained.pth
+    dest: pretrained/hrnetv2_w48_imagenet_pretrained.pth
+  iid:
+  - file: xception-b5690688.pth
+    dest: pretrained/xception-b5690688.pth
+  univfd:
+  - fc_weights.pth
+  lipforensics:
+  - lipforensics_ff.pth
+  npr:
+  - NPR.pth
+  mlep:
+  - model_epoch_best.pth
+  aasist:
+  - AASIST.pth
+  community_forensics:
+  - model.safetensors
+  safe:
+  - checkpoint-best.pth
+  xlsr_sls:
+  - xlsr-sls.onnx
+  effort:
+  - effort_clip_L14_trainOn_FaceForensic.pth
+  df40_clip:
+  - df40_train_on_df40_clip_large.pth
+
+# Weights fetched by the detector itself at first run (HF hub / torch hub);
+# listed for license tracking only, never re-hosted by Verity.
+runtime_fetched:
+  clip: openai/clip-vit-base-patch16 (HF, MIT)
+  univfd: openai/clip-vit-large-patch14 (HF, MIT) backbone
+  gend: "yermandy/GenD_CLIP_L_14 (HF, MIT) \u2014 released detector"
+  effort: openai/clip-vit-large-patch14 (HF, MIT) backbone, used to instantiate the
+    architecture; the trained Effort head itself comes from the weights manifest
+  df40_clip: openai/clip-vit-large-patch14 (HF, MIT) backbone, used to instantiate the
+    architecture; the trained DF40 head itself comes from the weights manifest
+  antideepfake_mms: nii-yamagishilab/mms-300m-anti-deepfake (HF, CC BY-NC-SA 4.0
+    checkpoint; BSD-3-Clause detector code) — fetched intact by huggingface_hub
+    at first run; XLS-R-1B variant via VERITY_ANTIDEEPFAKE_REPO
+  videomae: MCG-NJU/videomae-base (HF, CC BY-NC 4.0)
+  xclip: microsoft/xclip-base-patch32 (HF, MIT)
+  timesformer: facebook/timesformer-base-finetuned-k400 (HF, CC BY-NC 4.0)
+  uia_vit: nothing is fetched today (random init); upstream uses timm jx_vit_base_p16_224 (Apache-2.0)
+  stil: nothing is fetched today (random init); upstream uses SCNet50-v1d ImageNet (backseason/SCNet, MIT)
+  aeroblade: "CompVis/stable-diffusion-v1-1 (OpenRAIL-M), stabilityai/stable-diffusion-2-1-base (OpenRAIL++;\
+    \ gated on HF), kandinsky-community/kandinsky-2-1 (Apache-2.0), LPIPS VGG (BSD-2) \u2014 training-free"
+
+# Detectors with no trained checkpoint anywhere Verity may use.
+no_checkpoint:
+  sbi: No released trained checkpoint; random initialisation. Upstream SBI weights exist but their license
+    forbids redistribution.
+  sladd: No released trained checkpoint; random initialisation.
+  pcl_xception: No released trained checkpoint; random initialisation.
+  lrl: No released trained checkpoint; random initialisation.
+  lsda: No released trained checkpoint; random initialisation.
+  multi_attention: No released trained checkpoint; random initialisation.
+  sia: No released trained checkpoint; random initialisation.
+  rfm: No released trained checkpoint; random initialisation.
+  fwa: No released trained checkpoint; random initialisation.
+  tall: No released trained checkpoint; random initialisation.

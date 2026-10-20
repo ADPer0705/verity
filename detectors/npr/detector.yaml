@@ -1,0 +1,49 @@
+detector_id: npr
+version: 1.0.0
+name: NPR
+description: NPR deepfake detector (Tan et al., CVPR 2024) - no-reference pixel-level representation,
+  trained on ForenSynths (ProGAN).
+architecture: Truncated ResNet-50 (conv1 + layer1/layer2) with NPR pixel-residual input and 1-logit BCE
+  head
+parameters: 1437761
+pretrained: Official NPR.pth checkpoint (chuangchuangtan/NPR-DeepfakeDetection)
+resolution: 256
+mean:
+- 0.485
+- 0.456
+- 0.406
+std:
+- 0.229
+- 0.224
+- 0.225
+input_mode: full_frame
+resize_short: null
+center_crop: false
+max_frames: 32
+video_mode: false
+cam: true
+weights:
+  file: NPR.pth
+  kind: official
+  url: https://raw.githubusercontent.com/chuangchuangtan/NPR-DeepfakeDetection/main/NPR.pth
+  size: 17393733
+  license: none stated
+  trained: true
+  note: Official NPR checkpoint (model + optimizer state dict wrapped under 'model'). Input is
+    the whole frame at native resolution (model.preprocess; no resize, ImageNet mean/std inside).
+artifacts:
+  required:
+  - type: frame
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+targets:
+- image_synthesis
+- face_synthesis

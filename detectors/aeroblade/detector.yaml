@@ -1,0 +1,46 @@
+detector_id: aeroblade
+version: 1.0.0
+name: AEROBLADE
+description: Training-free detection of latent-diffusion images via autoencoder reconstruction error (Ricker
+  et al., CVPR 2024).
+architecture: 3 LDM autoencoders (SD1.1, SD2.1, Kandinsky 2.1) + LPIPS VGG layer-2 distance, minimum-error
+  aggregation
+parameters: null
+pretrained: HuggingFace hub (auto-downloaded at first run)
+resolution: 512
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+input_mode: full_frame
+resize_short: null
+center_crop: true
+max_frames: 8
+video_mode: false
+cam: false
+weights:
+  kind: external
+  note: 'Training-free: three latent-diffusion autoencoders + LPIPS reconstruction error, all fetched
+    from the HF hub at first run (stabilityai SD2.1-base falls back to a verified mirror).'
+  trained: true
+  file: ''
+artifacts:
+  required:
+  - type: frame
+    params:
+      resolution: 512
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+targets:
+- image_synthesis
+- face_synthesis

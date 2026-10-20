@@ -1,0 +1,40 @@
+detector_id: iid
+version: 1.0.0
+name: IID
+description: IID deepfake detector (DeepfakeBench port).
+architecture: Xception + iresnet50 implicit-identity branch
+parameters: 0
+pretrained: iresnet50 face-recognition backbone for IID. Download pretrained.zip and extract this file.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: pretrained/xception-b5690688.pth
+  kind: backbone
+  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.0/pretrained.zip
+  size: null
+  note: ImageNet-pretrained Xception backbone for IID (DeepfakeBench iid.yaml pretrained:). The iresnet50
+    identity extractor additionally uses backbone.pth when present (InsightFace MS1MV3-ArcFace); without
+    it the identity branch is randomly initialized.
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+targets:
+- face_swap

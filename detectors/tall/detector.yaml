@@ -1,0 +1,36 @@
+detector_id: tall
+version: 1.0.0
+name: TALL
+description: TALL deepfake detector (DeepfakeBench port).
+architecture: Swin thumbnail-layout transformer
+parameters: 0
+pretrained: No released trained checkpoint (config has no pretrained URL); Swin randomly initialized.
+resolution: 224
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 4
+cam: true
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+weights:
+  kind: random
+  note: Randomly initialized model; no checkpoint required.
+targets:
+- face_swap
+- face_reenactment

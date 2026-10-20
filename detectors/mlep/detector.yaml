@@ -1,0 +1,49 @@
+detector_id: mlep
+version: 1.0.0
+name: MLEP
+description: MLEP deepfake detector (NeurIPS 2025), multi-granularity local entropy patterns for universal
+  AI-generated image detection.
+architecture: Truncated ResNet50 classifier over 9-channel multi-scale local entropy maps
+parameters: 1317185
+pretrained: Official MLEP checkpoint (model_epoch_best.pth, fkeufss/MLEP)
+resolution: 256
+mean:
+- 0.0
+- 0.0
+- 0.0
+std:
+- 1.0
+- 1.0
+- 1.0
+input_mode: full_frame
+resize_short: null
+center_crop: false
+max_frames: 32
+video_mode: false
+cam: true
+weights:
+  file: model_epoch_best.pth
+  kind: official
+  url: https://raw.githubusercontent.com/fkeufss/MLEP/main/pretrained/model_epoch_best.pth
+  size: 5853801
+  license: none stated
+  trained: true
+  note: Official MLEP checkpoint; 2-class BCE head, label 1 = fake. The model applies its own ImageNet
+    normalization inside forward_detailed, so the yaml mean/std are neutral. Input is the whole
+    frame at native resolution (model.preprocess; no resize).
+artifacts:
+  required:
+  - type: frame
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+targets:
+- image_synthesis
+- face_synthesis

@@ -1,0 +1,36 @@
+detector_id: sladd
+version: 1.0.0
+name: SLADD
+description: SLADD deepfake detector (DeepfakeBench port).
+architecture: Xception + adversarial synthesizer
+parameters: 0
+pretrained: No released trained checkpoint; model randomly initialized.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+weights:
+  kind: random
+  note: Randomly initialized model; no checkpoint required.
+targets:
+- face_swap
+- face_reenactment

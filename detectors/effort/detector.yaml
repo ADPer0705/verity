@@ -1,0 +1,55 @@
+detector_id: effort
+version: 1.1.0
+name: Effort
+description: Effort deepfake detector (Yan et al., ICML 2025, arXiv 2411.15633) - CLIP ViT-L/14 with
+  orthogonal subspace decomposition (SVD residual) in the self-attention projections, trained on FaceForensics++ (c23).
+architecture: CLIP ViT-L/14 vision tower with SVD-residual self-attention linears (r=1023) + Linear(1024, 2) head
+parameters: 303378530
+pretrained: 'Official Effort checkpoint effort_clip_L14_trainOn_FaceForensic.pth (trained on FF++ c23; Google Drive,
+  YZY-stack/Effort-AIGI-Detection). The architecture is instantiated from openai/clip-vit-large-patch14 (fetched by
+  transformers at first run, HF cache) and every tensor is then overwritten by the checkpoint.'
+resolution: 224
+mean:
+- 0.48145466
+- 0.4578275
+- 0.40821073
+std:
+- 0.26862954
+- 0.26130258
+- 0.27577711
+video_mode: false
+clip_size: null
+input_mode: face_crop
+min_face: 30
+# No Grad-CAM through the ViT; the model returns the last-layer CLS attention over the 16x16 patch grid as attention_map.
+cam: false
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+weights:
+  # Alternates (same architecture, drop-in via this field; see weights/README.md):
+  #   effort_clip_L14_trainOn_GenImage_sdv14.pth  (Google Drive id 1UXf1hC9FC1yV93uKwXSkdtepsgpIAU9d) -> targets image_synthesis, face_synthesis
+  #   effort_clip_L14_trainOn_Chameleon.pth       (Google Drive id 1GlJ1y4xmTdqV0FfIcyBwNNU6cQird9DR) -> targets image_synthesis, face_synthesis
+  file: effort_clip_L14_trainOn_FaceForensic.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1m4fyJecABU-Yk3bJ4b1WhUwQa0xCkMLI/view
+  size: 1213769519
+  sha256: 8d86711f098d16b49c048962fc3e16a906380f7bb17b8a0e89bd545b926943ee
+  license: CC-BY-NC-4.0
+  note: Official Effort (CLIP-L/14 + SVD residual) checkpoint trained on FaceForensics++ c23; contains the full vision
+    tower and head (strict key match). The openai/clip-vit-large-patch14 backbone is fetched from HuggingFace at first
+    run only to instantiate the architecture (shared HF cache with univfd/gend).
+targets:
+- face_swap
+- face_reenactment

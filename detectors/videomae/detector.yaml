@@ -1,0 +1,39 @@
+detector_id: videomae
+version: 1.0.0
+name: VideoMAE
+description: VideoMAE deepfake detector (DeepfakeBench port).
+architecture: VideoMAE (MCG-NJU/videomae-base)
+parameters: 0
+pretrained: MCG-NJU/videomae-base (HuggingFace) — fetched by transformers at runtime.
+resolution: 224
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: true
+clip_size: 16
+cam: true
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+weights:
+  kind: external
+  trained: false
+  note: VideoMAE-base video encoder (MCG-NJU/videomae-base, fetched at first run); fc_norm + head randomly
+    initialised. Not evidence-grade.
+  file: ''
+targets:
+- face_swap
+- face_reenactment

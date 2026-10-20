@@ -1,0 +1,51 @@
+detector_id: community_forensics
+version: 1.0.0
+name: Community Forensics
+description: AI-generated image detector trained on the Community Forensics dataset of thousands of
+  generators (Park & Owens, CVPR 2025, arXiv 2411.04125).
+architecture: ViT-S/16 at 384 px (timm vit_small_patch16_384) fine-tuned end-to-end + 1-logit BCE head
+parameters: 21811969
+pretrained: OwensLab/commfor-model-384 (HuggingFace, MIT) — the official PyTorchModelHubMixin export of
+  the trained ViTClassifier; the timm augreg_in21k_ft_in1k init it started from is fully overwritten.
+resolution: 384
+mean:
+- 0.485
+- 0.456
+- 0.406
+std:
+- 0.229
+- 0.224
+- 0.225
+input_mode: full_frame
+resize_short: 440
+center_crop: true
+max_frames: 32
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: model.safetensors
+  kind: official
+  trained: true
+  url: https://huggingface.co/OwensLab/commfor-model-384/resolve/main/model.safetensors
+  size: 87262324
+  sha256: b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387
+  license: MIT
+  note: Official 384-input Community Forensics checkpoint (safetensors, 152 tensors, all keys prefixed
+    "vit."). Single BCE logit, label 1 = fake; the port emits [0, z] so softmax[:, 1] == sigmoid(z).
+artifacts:
+  required:
+  - type: frame
+    params:
+      resolution: 384
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+targets:
+- image_synthesis
+- face_synthesis

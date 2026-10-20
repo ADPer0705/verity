@@ -1,0 +1,24 @@
+# Managed with uv (source of truth for this detector's environment).
+# Python 3.12: newest version with wheels for every pinned dependency
+# (torch/mediapipe/torchvision cap at 3.12); nothing requires <3.12.
+[project]
+name = "verity-clip"
+version = "1.0.0"
+description = "Verity detector environment: clip (CLIP)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.8.0",
+    "numpy<2",
+    "opencv-python==4.10.0.84",
+    "pillow==10.2.0",
+    "matplotlib==3.9.2",
+    "facenet-pytorch==2.5.1",
+    "mediapipe==0.10.18",
+    "pyyaml",
+    "transformers>=4.36",
+    "accelerate",
+    "safetensors"
+]
+
+[tool.uv]
+package = false
