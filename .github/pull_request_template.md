@@ -22,7 +22,7 @@
 - [ ] `uv run pytest -q`
 - [ ] `uv run verity weights status`
 - [ ] `cd src/verity_ui && npm run typecheck && npm run build` (UI changes)
-- [ ] regenerated `docs/detectors.md` / notice tables (manifest changes)
+- [ ] regenerated `THIRD_PARTY_NOTICES.md` and refreshed OpenWiki if behavior/manifest changed
 
 ## Checklist
 

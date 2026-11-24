@@ -9,7 +9,7 @@
  */
 
 import { useMemo } from 'react'
-import { Anchor, Badge, CopyButton, Button, Group, Stack, Tabs, Text } from '@mantine/core'
+import { Anchor, Badge, Button, CopyButton, Group, Paper, Stack, Tabs, Text } from '@mantine/core'
 import { IconCopy, IconExternalLink } from '@tabler/icons-react'
 
 import { api, fileUrl } from '@/api/client'
@@ -17,7 +17,12 @@ import { useAsync } from '@/api/hooks'
 import type { CoverageFamily, Finding } from '@/api/types'
 import { ImageGallery } from '@/components/ImageGallery'
 import type { GalleryImage } from '@/components/ImageGallery'
-import { PerFaceTable } from '@/components/FindingTables'
+import {
+  AuxSignalsTable,
+  PerFaceTable,
+  RegionEnergyTable,
+  unitLabels,
+} from '@/components/FindingTables'
 import { FamilyChips, SectionTitle, TierBadge } from '@/components/Primitives'
 import { CLASSIFICATION_TAG } from '@/lib/verdict'
 
@@ -26,6 +31,7 @@ export function ExplainabilityPanel({ mediaId, finding }: { mediaId: string; fin
     () => api.detectorAssets(mediaId, finding.detector_id),
     [mediaId, finding.detector_id],
   )
+  const labels = unitLabels(finding.unit)
 
   const probabilityByFace = useMemo(() => {
     const map = new Map<string, number>()
@@ -35,21 +41,24 @@ export function ExplainabilityPanel({ mediaId, finding }: { mediaId: string; fin
     return map
   }, [finding.per_face])
 
-  const decorate = (files: { name: string; path: string }[], suffix?: string): GalleryImage[] =>
-    files.map((file) => {
-      const stem = file.name.replace(/\.[^.]+$/, '').replace(suffix ?? '', '')
-      const probability = probabilityByFace.get(stem)
-      return {
-        ...(file as GalleryImage),
-        caption: stem,
-        badge: probability != null ? probability.toFixed(3) : undefined,
-      }
-    })
+  const decorate = (files: { name: string; path: string }[] = [], suffix?: string): GalleryImage[] =>
+    [...files]
+      .map((file) => {
+        const stem = file.name.replace(/\.[^.]+$/, '').replace(suffix ?? '', '')
+        const probability = probabilityByFace.get(stem)
+        return {
+          ...(file as GalleryImage),
+          caption: stem,
+          badge: probability != null ? `P=${probability.toFixed(3)}` : undefined,
+          _prob: probability ?? -1,
+        }
+      })
+      .sort((a, b) => b._prob - a._prob || a.name.localeCompare(b.name))
 
   if (assets.loading) {
     return (
       <Text c="dimmed" fz="sm">
-        Loading artifacts…
+        Loading explainability artifacts…
       </Text>
     )
   }
@@ -74,31 +83,61 @@ export function ExplainabilityPanel({ mediaId, finding }: { mediaId: string; fin
     )
   }
 
+  const fullFrames = decorate(assets.data.full_frames, '_frame')
   const faces = decorate(assets.data.faces)
+  const frames = decorate(assets.data.frames)
   const attention = decorate(assets.data.attention_maps, '_attention')
   const reconstructions = decorate(assets.data.reconstructions, '_recon')
-  const nothing = !assets.data.timeline && !faces.length && !attention.length && !reconstructions.length
+  const hasAux = Object.keys(finding.aux_aggregate ?? {}).length > 0
+  const hasRegions = Object.keys(finding.region_aggregate ?? {}).length > 0
+
+  const nothing =
+    !assets.data.timeline &&
+    !fullFrames.length &&
+    !faces.length &&
+    !frames.length &&
+    !attention.length &&
+    !reconstructions.length &&
+    !hasAux &&
+    !hasRegions
+
+  const threshold = finding.stats?.threshold ?? 0.5
 
   return (
     <Stack gap="lg">
       {assets.data.output_dir ? (
-        <Text fz="xs" c="dimmed" ff="monospace" className="vy-break">
-          {assets.data.output_dir}
-        </Text>
+        <Group justify="space-between" wrap="wrap">
+          <Text fz="xs" c="dimmed" ff="monospace" className="vy-break">
+            {assets.data.output_dir}
+          </Text>
+          {finding.model?.architecture ? (
+            <Badge variant="outline" color="gray" size="xs">
+              {finding.model.architecture}
+            </Badge>
+          ) : null}
+        </Group>
       ) : null}
 
       {nothing ? (
         <Text c="dimmed" fz="sm">
-          The output directory exists but holds no timeline, face crops, attention maps or
-          reconstructions.
+          The output directory exists but holds no visual explainability artifacts for this run.
         </Text>
       ) : null}
 
+      {hasAux ? <AuxSignalsTable finding={finding} /> : null}
+
+      {hasRegions ? <RegionEnergyTable finding={finding} /> : null}
+
       {assets.data.timeline ? (
         <div>
-          <SectionTitle>Prediction timeline</SectionTitle>
+          <SectionTitle>
+            {finding.unit === 'window'
+              ? 'Audio / AV window prediction timeline'
+              : 'Temporal prediction timeline'}
+          </SectionTitle>
           <Text fz="xs" c="dimmed" mb="xs">
-            Per-face fake probability across sampled frames. Red above 0.7, green below 0.3.
+            Per-{labels.singular} fake probability across the media (model decision midpoint{' '}
+            {threshold.toFixed(2)}; high-confidence manipulation &gt; 0.70, authentic &lt; 0.30).
           </Text>
           <Anchor href={fileUrl(mediaId, assets.data.timeline.path)} target="_blank" rel="noreferrer">
             <img
@@ -115,22 +154,23 @@ export function ExplainabilityPanel({ mediaId, finding }: { mediaId: string; fin
         </div>
       ) : null}
 
-      {faces.length ? (
+      {fullFrames.length ? (
         <div>
-          <SectionTitle>Faces ({faces.length})</SectionTitle>
+          <SectionTitle>Top suspicious video frames ({fullFrames.length})</SectionTitle>
           <Text fz="xs" c="dimmed" mb="xs">
-            Crops the detector actually scored, badged with their fake probability.
+            Highest-scoring full video frames annotated with the detected face bounding box and fake
+            probability.
           </Text>
-          <ImageGallery mediaId={mediaId} images={faces} layout="faces" />
+          <ImageGallery mediaId={mediaId} images={fullFrames} layout="wide" />
         </div>
       ) : null}
 
       {attention.length ? (
         <div>
-          <SectionTitle>Attention maps ({attention.length})</SectionTitle>
+          <SectionTitle>Spatial activation & attention maps ({attention.length})</SectionTitle>
           <Text fz="xs" c="dimmed" mb="xs">
-            Gradient-weighted activation — the regions that drove the classification. Check these
-            against the region energy table before quoting a localisation claim.
+            Original crop → spatial activation heatmap → overlay showing the exact regions that
+            drove the detector's score.
           </Text>
           <ImageGallery mediaId={mediaId} images={attention} layout="maps" />
         </div>
@@ -138,11 +178,35 @@ export function ExplainabilityPanel({ mediaId, finding }: { mediaId: string; fin
 
       {reconstructions.length ? (
         <div>
-          <SectionTitle>Reconstructions ({reconstructions.length})</SectionTitle>
+          <SectionTitle>Autoencoder reconstructions & residuals ({reconstructions.length})</SectionTitle>
           <Text fz="xs" c="dimmed" mb="xs">
-            Original → reconstruction → residual difference.
+            Original → reconstruction → pixel residual |Δ|.
           </Text>
           <ImageGallery mediaId={mediaId} images={reconstructions} layout="wide" />
+        </div>
+      ) : null}
+
+      {faces.length ? (
+        <div>
+          <SectionTitle>Scored face crops ({faces.length})</SectionTitle>
+          <Text fz="xs" c="dimmed" mb="xs">
+            Aligned face crops evaluated by the detector, sorted by fake probability (highest first).
+          </Text>
+          <ImageGallery mediaId={mediaId} images={faces} layout="faces" />
+        </div>
+      ) : null}
+
+      {frames.length ? (
+        <div>
+          <SectionTitle>
+            {finding.unit === 'window'
+              ? `Scored AV window keyframes (${frames.length})`
+              : `Scored full frames (${frames.length})`}
+          </SectionTitle>
+          <Text fz="xs" c="dimmed" mb="xs">
+            Whole-frame thumbnails evaluated by the detector, sorted by fake probability.
+          </Text>
+          <ImageGallery mediaId={mediaId} images={frames} layout="maps" />
         </div>
       ) : null}
     </Stack>
@@ -235,20 +299,31 @@ export function DetectorEvidence({
   families?: CoverageFamily[] | null
   onOpenFinding?: () => void
 }) {
+  const labels = unitLabels(finding.unit)
+
   return (
     <div>
       <Group justify="space-between" align="flex-start" mb="sm" wrap="wrap">
         <div>
           <Group gap="xs" wrap="wrap">
-            <Text fw={500}>{finding.detector_name}</Text>
+            <Text fw={600} fz="md">
+              {finding.detector_name}
+            </Text>
             <Badge color={CLASSIFICATION_TAG[finding.classification]} size="sm">
               {finding.classification}
             </Badge>
             {!finding.trained ? <TierBadge tier={finding.tier} /> : null}
+            {finding.input_mode ? (
+              <Badge variant="outline" color="gray" size="xs" ff="monospace">
+                {finding.input_mode}
+              </Badge>
+            ) : null}
           </Group>
           <Text fz="xs" c="dimmed" ff="monospace" mt={2}>
-            {finding.detector_id} v{finding.detector_version} · mean{' '}
+            {finding.detector_id} v{finding.detector_version} · mean P(fake){' '}
             {finding.mean_fake_probability.toFixed(4)} · confidence {finding.confidence.toFixed(4)}
+            {finding.device ? ` · ${finding.device}` : ''}
+            {finding.timing_seconds?.total != null ? ` · ${finding.timing_seconds.total}s` : ''}
           </Text>
           <div style={{ marginTop: 6 }}>
             <FamilyChips targets={finding.targets} families={families} />
@@ -266,11 +341,21 @@ export function DetectorEvidence({
         ) : null}
       </Group>
 
+      {finding.reasoning.summary ? (
+        <Paper withBorder p="xs" mb="sm" bg="var(--mantine-color-default-hover)">
+          <Text fz="xs" lh={1.5}>
+            {finding.reasoning.summary}
+          </Text>
+        </Paper>
+      ) : null}
+
       <Tabs defaultValue="explainability" keepMounted={false} variant="outline">
         <Tabs.List>
-          <Tabs.Tab value="explainability">Explainability</Tabs.Tab>
-          <Tabs.Tab value="faces">Per-face ({finding.per_face.length})</Tabs.Tab>
-          <Tabs.Tab value="raw">Raw output</Tabs.Tab>
+          <Tabs.Tab value="explainability">Explainability & visuals</Tabs.Tab>
+          <Tabs.Tab value="faces">
+            Per-{labels.singular} ({finding.per_face.length})
+          </Tabs.Tab>
+          <Tabs.Tab value="raw">Raw JSON</Tabs.Tab>
           <Tabs.Tab value="logs" disabled={!finding.has_logs && !finding.output_dir}>
             Logs
           </Tabs.Tab>
@@ -279,7 +364,11 @@ export function DetectorEvidence({
           <ExplainabilityPanel mediaId={mediaId} finding={finding} />
         </Tabs.Panel>
         <Tabs.Panel value="faces" pt="md">
-          <PerFaceTable rows={finding.per_face} />
+          <PerFaceTable
+            rows={finding.per_face}
+            unit={finding.unit}
+            inputMode={finding.input_mode}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="raw" pt="md">
           <RawPanel mediaId={mediaId} finding={finding} />

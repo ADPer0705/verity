@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:5942e6ea2cffd1096e0e36518e01b9baf438f41bb28a218d8c4316d0ad74bdf9",
+  "claims": [
+    {
+      "id": "claim_26d6115fd8d54517bf719e008da35878",
+      "statement": "The examination order is ingest, extract, forensics, analyze, select, run detectors, compile, report, with detector outputs under workspace/output and analysis/selection/reports under the configured output_dir.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L130-L222",
+          "version": "repo-lines-v1:sha256:75b77dbe0c911cbec668327f502ad3fd52f7790e7ba41f01dd6268db9c1aee1a:eyJzZWxlY3RlZExpbmVDb3VudCI6OTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzE0YTFiZmIyZDEyZTQyMDU0Njg4MjgyMmY4OWY0MGNkYjBjOTEyYzFiMjI4OGY3YmEwMWViNDBiMmFjYjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwYmIyZDcxY2U4YjU1MjMxM2E4Y2I4ZjYzODVmODQ1Mzc1YmQ1ODk2ZTM2ODkyN2FkOWI3MzY5ZjlmMDE3YWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyY2FmODA2MDM3NDAyNWJjMmViZmEwNDljZWZjZjRmNTM2OGM4YzhmMmY5NzAzODYyMGM0NDg2NDk3ZDExMzgifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L777-L861",
+          "version": "repo-lines-v1:sha256:617b34f52bcb83148feda6d035f4b7b4b4de6c611f6d5fbb33a1d4a0e6d5741a:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1ODU2NDA0NTRkZWJiOGEwN2UxM2IyNjI5MWFjZmJhNGMwMDYxMDQwMjkwN2FmN2M0NjZlM2RhNjkwNGViZjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlMTcyMjc5MjFkNWU0ZTE4ZmY5ZDkwZGQzNWNjZDZmOWJlMzhmNjAxYWUxYWEwZDNlMTc3MjYwMWQyZWM1ZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNlNmRiYmU1ZWM0MTY4Yzc4NTQ0M2MxZmY0NzNjMjY4ZjQ3NWM4YzQzM2U2YjEzNDBkZjMxNjQzYjZjNjA3MGMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_56f7211dcd884233bfb26fc451d4b2c7",
+      "statement": "The CLI run command iterates sorted media files, ingests each, runs the configured extractors in order, optionally runs forensics, analyzes and selects, then runs detectors sequentially and writes analysis.json, selection.json and report.html/pdf.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L158-L222",
+          "version": "repo-lines-v1:sha256:eca30102043c1efebdb203b367ef62db86250619d8bd47b958897314e93e2452:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZjgxZDQ0YzM4MmE2NjYzM2IzOTc3NzAwYzlmM2ZiZjViNjkyMTAxNjAxMzlmZWU1ODBkOWJjYjVhMGYzMjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg5ZDIwOGIzMzJmN2QyZTJlYzY3M2FjOWEyYzY5YzYwMTZjMmE2OGFhMTE0MDZlNThkZThkOWVmNzJkYTY4M2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyY2FmODA2MDM3NDAyNWJjMmViZmEwNDljZWZjZjRmNTM2OGM4YzhmMmY5NzAzODYyMGM0NDg2NDk3ZDExMzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_db088cb2a76e4c2d8ab9591cc394c5a6",
+      "statement": "With an explicit --detector override the CLI intersects the request with the registry, rewrites the saved selection's included flags to match what ran, reports unknown ids, and forces include_untrained on.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L176-L197",
+          "version": "repo-lines-v1:sha256:c0d13c7454573a1ad487d97f9eaba6d7ceed691f466a1572a87a0f8e5abd06ad:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0ZTg5NDljZjFkZmZkYzk4MTYxOWM5NGViOWFkZDFkOGQ4Y2ZhYzI1NDY3NTFmNzZlYjAwYTQxYzljNTQ4MDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlMDA5NTdjZDJhM2VjOTI2NTY5NTJiYzFlMGUwOTlmOGI3MGNhYzhhMmM2MzVmM2QxMDE0ZmQxOGE1MWU5YTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4YzhmNTVhNGFjNmEyMWY0MGE3YWYzYWIwMGZkMzkxNGRiMDg4ZGY4NWU3MmZjNjhhOWE2ZDI0ZTkzMDE2OWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJlYTU1YzliZDM2ZGU5Y2I5ZTE1ODhhZmJjMmFkMmUzN2FlMTNlNDljNmUwNjFjZmI5MzBmMzAyM2RhYzg5NjEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b09bc1d295f24de5b9dccc92490529d6",
+      "statement": "run_full_pipeline declares extract, forensics, analyze, select, compile and report steps, and each detector run opens its own detect:<id> step labelled Run <name> (n/N).",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/service.py#L703-L736",
+          "version": "repo-lines-v1:sha256:19474816365d26fdd542e7ce3ecd93dd07a5c3f570737f4507d2508ab87dd6ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4YTlkOThmMzYzYTg0MGEwMDdhNTkwYTAwOTZkOWI0Mjk4YjJmMzg2NGVhZGMxNmUwZTRiMDg0YzczMjA3ZDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZTRmYjRkNDIzZWMzZTYwYTFkMDNkYjA4OGU1N2U4YjM1MjIxZDkxMzg0OTM2YTg4ZmQ5Mzg5NzllZDlkOTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMzYjZjNDgzYzA0YjNjMTY5NTk0N2FhNzg1ODQzOWQ5NzZiODliNTg5ZmFlYzBiNDBlNDFlMmVlOTJjNjZlOTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxM2NmMGM2NGEzZTk2MjcxMDNlZjZiM2ExNDExMzNhNjdjNjU4MWUxNzdkODg1ZWFhOGIyY2JmMGI4YmQ3NzQifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L792-L802",
+          "version": "repo-lines-v1:sha256:c7e40eb67f98c14edaf26714ca1d2f2ea4061c07fa4e8dda26c32d4735faf867:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxNmQzYmUzMjdkYmY5NGM0OTM4YjljOTRhNWU1ZjE1NDU5NmU5MWZkMzk2YWJkOGU0MTczM2ZmN2EzYjQ2NDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwMDljMDA5YTIwZDA3MjhlMGYyNjg0MzdlNzg1NjQ4NGQzNTZhNDkxODZiZDVmYWYzN2I2MjM2NmM3ODNkZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA5ZTkxMDhlNmQ0NGQ3NTJiZWE2ODFjOGQzN2E5NDllOTY2MjQwMzk2ZTkwOWE1MjFlYjVmZWMzMmEyNGY4ZmYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ba0ef9b52f0d4226a91bc187dd267e70",
+      "statement": "The API extraction stage isolates each extractor failure in failed_extractors and the API detector loop catches per-detector exceptions, marks the step failed and continues with remaining detectors.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/service.py#L595-L629",
+          "version": "repo-lines-v1:sha256:97042c79da7b135acd443341c44368189c66649108cab2f78ea032eaf4ac674c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhYWFiYjVlYWIxMGE3YjJhODIxZGQxMWZmMmQxNmUyZTg0NTFlNzJkZDA3YzYwYzAzYjVkNjk0OTA1MTM3ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwYWRmNjZlZjZiZDUyNWM4OWUxYjg3N2RhNDVlNzg3MTBjNDhmMTg1N2Q0ZjM0ZWNmOWE3M2VkYjljNjg1YjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1ZjIzODMxZTFlZjkyNWEyOTg5NDU2ZWJiODRiODVmNjZmNzFkODgyNmY1NGY2NTkxNzM3NzYzZjUwMTcyNzcifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L709-L720",
+          "version": "repo-lines-v1:sha256:9a51b63abba47e0c10f3cf214f72d05d8691ef5e58390c7196b84b902d8b40ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkZTE1M2EwMTNjZjljOGY2M2RmMDJkYzBhNTJmZmI0MDVkYzZhOTI3YTExNTFmNDI5MDY0YmVmNzNhNDdmNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2YWQwNTJjNDRiOTUzZjBkODMyODZhMmRkZGVjMjE4NWU3ZjE4OWRiMGU0ZjUwMmM2ZjA2ZjM0NzU4NDU0YTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkYjI2NDgyMjA3YWVmZDE1ZTMxNjU4ODk4NGMzYWMzYWU5ZWQ0MzIxMGU1NTQ3NTZjZDk3NDFmZWJjMGQ0YWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiZWQ5ZWVkYWYyYzg3NjgyMWZmODUyNzY5YTAzNGEwZTFkMjA4ZTI3MDNiYTRlM2NlNjliNGYwNmY5NTlhM2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7922e765610c43c3a1cc46be657bedf8",
+      "statement": "When no detector is eligible the API run warns and continues, still producing forensics and a report and recording that nothing was examined.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/service.py#L831-L837",
+          "version": "repo-lines-v1:sha256:b9b28dbb39a5d338de68643b7997e5d29adbc5000d53196dfa659c98b7b8fcff:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGRlMDY5NjA4ZDZlYzlmNTAwMjBlNTU1ZjFiYWE3ZWJjMTg5NTE5NjBiMWE3YTBiZjNlZjIxZmI1MTcwNmU5MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODI0ZmNmMzAyNWM5ZWYwNDgxZWZhNDM2OTYxMTI4ODBkNDhmMDhiOGI4MGFiYzVmZjkyMzM3YmQxODgwOGJmOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWI5OTEzODk5ZjFmMWJlZTA4NDA1ZTc1MzNmZGEyMTQ0NTI5NWMxNDIzNDE3MGFkOGRiZTMzZTNjOWM5NDhiZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2JlYmEwN2FmMTY5NTUzMjMxMTZkOTVlNjdmODc1MjgxZDE4NmRiYzMyYjQ2OGU0Zjg0YmI0YzdkNWM1YzM2MiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_9c146170e2da45d7aae6ca78c996918d",
+      "statement": "The CLI analyze command stops before detector execution and prints per-family coverage, selected detectors and every exclusion reason.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L232-L287",
+          "version": "repo-lines-v1:sha256:c2974c9f0256b908dc286f0e39cc6c63ccb3e1d81b3e16e974db5329aa712c44:eyJzZWxlY3RlZExpbmVDb3VudCI6NTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyMWZkMjgyNTdlYTc3NzFhZDM2NmZiMmM1YTQ1YWMzODc2ZDQxYjcyMWJjNjliMjcyNmI2Njc2OTIyZTQ4MzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkZGVhNzhlOGFhZTIzZmI3YzliNTczODg2MjkzMDk0MWZlNDQ3M2ZiOTY4N2I5NTI2ZTllYWYxZTlmYjY1NTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgxM2VhNjQ2MTMwODNiZDA0M2QzZjEyOGZkY2QzNjZmODhkN2NlNGEzOTVkNGM0OGFjY2NhNDM3ZjY0OTJhNGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYwNGQwMThmYWZjMjVhY2I0YThkZThjMWNkYTNiMDA1ZDFhZDRkNTQ5MjIxMjQ5NjBjZDg2NGExNGVmMjE2MGEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5308ff85de87431aa8b16fda12d6ed5b",
+      "statement": "verity forensics and POST /api/forensics allow running the model-free analyzers independently, while verity export and GET /api/media/{id}/export package a case's artifacts into a checksum-verified zip with MANIFEST.json and SHA256SUMS.txt.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L443-L476",
+          "version": "repo-lines-v1:sha256:9291341deaf1a499680eb318f0c6748a86db0d22b955cf33bc0f5b26a7a5bf63:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzNDEzZjUzYzljYWNlMGNlMjY3MzNmNTAxYTgyNzdlMmI4OTFmYTE2NzRhZTlkM2FiM2Y0YThkZTJmZjM1ZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImExODcyMWM3MzlkYzU2ZTA0NWFiZjhkNDE0MzQ4MDU5ODZhNjFjNDY1YTU5MzM5MGY4NjBkYmFkNWJjOGU4YTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdhYWE4MTllZjQ2YzYyNzQxODgzZTI0NjhiYjk0NmI1M2NjOTYyOTFhNGI5YmJjYjU1MGE5NmZiYTc1MTY3ZjYifQ"
+        },
+        {
+          "resource": "repo://src/verity/cli.py#L675-L700",
+          "version": "repo-lines-v1:sha256:9898700dc13b9b83421a3c6c2609a9d51f6b5c06458279e892e3004fc218d59d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwYzUzNzRkM2I4NDU1Yzk0NTBmZjRmZDY3ZDY0NzQwOGY2MzA2ODljOGYyYjY4ZmUyN2U4MzA1Yzg5MWMwMWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlZTFhZGFhZWI0ZGFhOWM2NWU3NzQ4MTNlYjcxYWQyODU5YjhmYTIyZTc5YWY4ZTRhMjliMmYxNTdkYTkwNjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3NjlhZmZlMjk3YWZiYmQzNmY0NzNmNWFjYjBkZWUwMGU1ZTc0NGFlMmY0NzEwYzA0MTFmY2Q0NGQzZWY2NDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQyMDlhY2VkOWJjYmQ0ZTNmMmI4MzM3M2VmYjlkNDAyZjBjNTlkNGQ1ZDlhODJlNzIyM2QzZTIwODk1MzY4N2UifQ"
+        },
+        {
+          "resource": "repo://src/verity/export.py#L65-L189",
+          "version": "repo-lines-v1:sha256:c8a74e67f0faf0aed018d1203bd5bb841c29d40c0370abf1a943a2286639002b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI0MzM4NDAxYWU2NmIyZTFkOWZiZDc2ODA4ODcyZTVmNjExNTZkNzVkYzY0MTRjYWVmNzJiNGM1Njg0Y2Y3MmNlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0ODkzZjQwZTM3ODFlYjg5NmM4MmQwNDZhMDgwNjdhMTFlMzVjZGYyZjFkZmFmMjZmZWE5MGI4ZGI2Njc2NDEzIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkNzAxNDllMDY5YWQ2N2VjY2Y0NzM2NDZmZjFjNzUwMDUwZDMyOWQxMTAwMThkYzU3NjY4NzhlYWZhMWQ2MDdkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0YTliYjRiMjNlMWNmZTdjMmVmMGYwMmYxNTVjODcyNjg2NGQzZTA1MTU0MmZkMzU3Yzc4ZGY2YTEwYTRjM2FmIn0"
+        },
+        {
+          "resource": "repo://src/verity_api/routers/media.py#L289-L304",
+          "version": "repo-lines-v1:sha256:b4e76b365b4a3df95cc2cb2a1ba1c6ef5f33ebcf51f5306d70dbc7c0993f7567:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3YjRiNjdmNjg5ZDEwN2MyYTg3ZjY5MWVjNjE0ZTQ0YmVmNGEyM2YzYTc3ZWM0YTQ3MDZjYTY4MTE4ODYwNDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMwZDJiMmMwZDYxNGEwNTEwMjM3ZTA4YjkwNmQ2OTY3ZTlmZjYxNWY0NmVmMDMxYWZmMGY2Mzg3ZmE4NmRiYTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

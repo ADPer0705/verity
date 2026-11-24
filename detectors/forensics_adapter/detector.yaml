@@ -1,0 +1,51 @@
+detector_id: forensics_adapter
+version: 1.0.0
+name: Forensics Adapter
+description: Forensics Adapter (Cui et al., CVPR 2025) - frozen CLIP ViT-L/14 steered by a lightweight ViT-tiny adapter
+  that learns blending-boundary queries and biases CLIP's attention towards forgery traces; trained on
+  FaceForensics++ c23, state of the art on CDF/DFDC/DFDCP/DFD cross-dataset benchmarks at publication.
+architecture: CLIP ViT-L/14 (frozen, OpenAI layout) + ViT-tiny adapter with 128 queries and CLIP feature fusion + RecAttn CLIP re-read + Conv1d/MLP head
+parameters: 435000000
+pretrained: Official Forensics Adapter checkpoint (OUC-VAS/ForensicsAdapter, Google Drive) incl. the frozen CLIP tower; trained on FF++ c23.
+resolution: 256
+mean:
+- 0.48145466
+- 0.4578275
+- 0.40821073
+std:
+- 0.26862954
+- 0.26130258
+- 0.27577711
+input_mode: face_crop
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: forensics_adapter.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1UlaAUTtsX87ofIibf38TtfAKIsnA7WVm/view
+  size: 962621690
+  sha256: 3d87f9bfabb2a4ab3ad5fa0c2bf43bd0b41377b7546fdad0a9b61a1d4adfbddb
+  license: CC-BY-NC-4.0
+  note: 'Official DS state dict (1,253 tensors incl. the fp16 CLIP ViT-L/14 tower, loaded strictly and run in
+    fp32). CC BY-NC 4.0 (academic research only): fetched from the authors'' Google Drive, not mirrored. Face
+    crops are 256x256 with CLIP mean/std as in config/test.yaml. The adapter''s CLIP-feature fusion uses
+    randomly initialised projections at every forward upstream; the port seeds them for reproducible scores.
+    The predicted blending-boundary map is the attention map.'
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+targets:
+- face_swap
+- face_reenactment

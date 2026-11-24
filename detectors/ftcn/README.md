@@ -22,7 +22,10 @@ maps, timeline, top frames, `result.json`) are written to `OUTPUT_DIR`.
 
 ## Weights
 
-Place `I3D_8x8_R50.pth` in `weights/` (backbone init only; no detector-trained checkpoint is released, so scores are unreliable).
+Official FTCN+TT checkpoint `weights/ftcn_tt.pth` (yinglinzheng/FTCN GitHub
+release, FF++ c23, no license stated; fetched from the authors' release
+only). See `weights/README.md`. With the Kinetics I3D backbone instead, the
+head is untrained (research only).
 
 ## Explainability
 

@@ -1,10 +1,11 @@
 # Verity
 
-**Multi-detector deepfake examination for investigators, students and researchers.**
+**Multi-detector deepfake examination for investigators, labs and researchers.**
 
 [![CI](https://github.com/ADPer0705/verity/actions/workflows/ci.yml/badge.svg)](https://github.com/ADPer0705/verity/actions/workflows/ci.yml)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![Release](https://img.shields.io/github/v/release/ADPer0705/verity?label=release)](https://github.com/ADPer0705/verity/releases/latest)
 [![Container](https://img.shields.io/badge/container-ghcr.io%2Fadper0705%2Fverity-blue)](https://github.com/ADPer0705/verity/pkgs/container/verity)
 [![Weights](https://img.shields.io/badge/weights-Hugging%20Face-yellow)](https://huggingface.co/ADPer/verity-weights)
 
@@ -16,93 +17,67 @@ attention maps, timelines) are preserved separately. **It never collapses the
 panel into a single real/fake score — disagreement between methods is the
 finding.**
 
-It ships as one container with a web console, an HTTP API and a CLI, plus a
-checksummed, license-tracked set of pretrained checkpoints. Model-free
-forensic analyzers (metadata, compression, noise, temporal, audio) run
-alongside the detectors and report observations, never verdicts.
+It ships as a **standalone single Linux executable** (built for single-investigator,
+air-gapped forensic workstations — no Docker or system Python required), with an
+embedded web console, HTTP API, CLI, chain-of-custody evidence bundle exporter,
+and a checksummed, license-tracked checkpoint mirror. Model-free forensic
+analyzers (metadata, compression, noise, temporal, audio) run alongside the
+detectors and report observations, never verdicts.
 
 > Detector outputs are statistical indicators, not proof. They must be read
 > by a qualified examiner together with the artifacts Verity produces.
 
-## Contents
+## Quick start (single command, air-gap ready)
 
-- [Quick start](#quick-start)
-- [What it examines](#what-it-examines)
-- [How it works](#how-it-works)
-- [Detectors and trust tiers](#detectors-and-trust-tiers)
-- [Forensics and explainability](#forensics-and-explainability)
-- [CLI](#cli)
-- [HTTP API and web console](#http-api-and-web-console)
-- [Checkpoints](#checkpoints)
-- [Native install](#native-install-development)
-- [Containers](#containers)
-- [Project layout](#project-layout)
-- [Documentation](#documentation)
-- [Development](#development)
-- [Limitations and ethics](#limitations-and-ethics)
-- [License and citation](#license-and-citation)
-
-## Quick start
-
-Prerequisites: Linux x86_64, Docker Engine 24+ with Compose v2 (or Podman with
-a compose provider), and for GPU hosts the NVIDIA Container Toolkit. A GPU
-with 8 GB+ VRAM is recommended; everything also runs on CPU. Budget ~60 GB of
-disk for checkpoints and all detector environments.
-
-Download the deploy bundle from the latest release and run the installer:
+Install the standalone `verity` binary on Linux x86_64 (verifies SHA-256
+automatically and installs to `~/.local/bin/verity`):
 
 ```bash
-curl -fsSLO https://github.com/ADPer0705/verity/releases/latest/download/verity-deploy.tar.gz
-curl -fsSLO https://github.com/ADPer0705/verity/releases/latest/download/SHA256SUMS
-sha256sum -c SHA256SUMS
-tar xzf verity-deploy.tar.gz && cd verity-deploy
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/ADPer0705/verity/main/install.sh | bash
 ```
 
-The installer auto-detects GPU/CPU and then, with visible progress:
-
-1. pulls `ghcr.io/adper0705/verity:<version>-slim`,
-2. downloads and SHA-256-verifies every trained-detector checkpoint,
-3. builds **all** evidence-grade detector environments (one-time),
-4. starts the API + web console and runs `doctor.sh`.
-
-Open <http://127.0.0.1:8000> (on a remote server, tunnel with
-`ssh -L 8000:localhost:8000 user@server`). Drop a photo, video or audio file;
-**every evidence-grade detector that can consume it runs** — there is no
-reduced profile. Each case opens with a plain-language summary and the full
-examination record underneath.
-
-Re-running `./install.sh` is safe and idempotent. Full operator guide:
-[docs/deployment.md](docs/deployment.md).
-
-Manual equivalent (if you prefer compose by hand):
+Then let `verity` provision everything once while online (self-bootstrapped
+`uv` + managed Python runtimes, all 39 evidence-grade detector environments,
+SHA-256-verified checkpoints, and Hugging Face / Torch Hub foundation caches
+stored cleanly via `platformdirs`):
 
 ```bash
-git clone https://github.com/ADPer0705/verity.git && cd verity
-mkdir -p input output
-docker compose pull
-docker compose run --rm verity weights pull --trained
-docker compose run --rm verity setup --trained
-docker compose up -d
+verity setup --trained --airgap-ready
 ```
 
-One-off, no web console:
+Now disconnect the workstation from the network permanently, verify integrity,
+and launch the forensic Web Console:
 
 ```bash
-docker compose run --rm verity run --media /input/suspect.mp4 --format pdf
-# -> ./output/<media_id>/report.pdf, analysis.json, selection.json
+verity doctor --verify
+verity serve                 # Web Console at http://127.0.0.1:8000
 ```
 
-CPU-only host: run `./install.sh --cpu`, or with compose use
-`-f docker-compose.yml -f docker-compose.cpu.yml`.
+Need to deploy to a machine that **never** touches the internet? Export a
+self-contained USB kit on an online staging host and import it offline:
+
+```bash
+# On online staging workstation:
+verity airgap export --out /mnt/usb/verity-kit
+
+# On air-gapped forensic workstation:
+/mnt/usb/verity-kit/verity airgap import --from /mnt/usb/verity-kit
+verity doctor --verify && verity serve
+```
+
+> Host prerequisites for video/audio extraction & PDF reports: `ffmpeg` and
+> WeasyPrint's Pango/Cairo libraries (`sudo apt-get install -y ffmpeg
+> libpango-1.0-0 libpangocairo-1.0-0 libcairo2` on Ubuntu/Debian). An NVIDIA GPU
+> with 8 GB+ VRAM is recommended; everything also runs on CPU. Budget ~60 GB of
+> disk for checkpoints and all 39 detector environments.
 
 ## What it examines
 
 | Input | Analyzed by |
 |---|---|
 | Images (JPEG/PNG/WebP/TIFF/…) | whole-image and face-crop detectors, metadata/EXIF, compression, noise/spectrum |
-| Videos (MP4/MOV/MKV/WebM/…) | face-crop, face-clip/temporal and whole-frame detectors, all image forensics on sampled frames, temporal structure, audio track |
-| Audio (WAV/MP3/M4A/FLAC/…) | voice-clone detectors, audio spectrum/noise-floor/spectrogram forensics |
+| Videos (MP4/MOV/MKV/WebM/…) | face-crop, face-clip/temporal, audio-visual lip-sync and whole-frame detectors, image forensics on sampled frames, temporal structure, audio track |
+| Audio (WAV/MP3/M4A/FLAC/…) | voice-clone anti-spoofing detectors, audio spectrum/noise-floor/spectrogram forensics |
 
 Manipulation families tracked: face swap, face reenactment, lip sync,
 synthetic face, AI-generated image, local image editing, AI-generated video,
@@ -110,36 +85,33 @@ synthetic/cloned voice (`src/verity/models/taxonomy.py`).
 
 ## How it works
 
-```
-media ─► ingest ─► extract ─► analyze ─► select ─► detect ─► compile ─► report
-         sha256    frames,    ffprobe +  per-      one uv     sorted     HTML / PDF
-         copy      faces,     face scan  detector  env each,  findings   + UI / API
-                   metadata,             rules     tier-aware
-                   audio
-                   └─ model-free forensics (metadata, compression, noise, temporal, audio)
+```text
+media ─► ingest ─► extract ─► forensics ─► analyze ─► select ─► detect ─► compile ─► report ─► export
+         sha256    frames,    5 model-free ffprobe +  rule-based 58 uv     sorted     HTML/PDF  chain-of-custody
+         r/o copy  faces,     analyzers    face scan  tier-aware envs,     findings   + Web UI  .zip + SHA256SUMS
+                   meta/audio                         selection  isolated
 ```
 
-- **Deterministic.** Media ids are SHA-256 checksums, inference uses fixed
+- **Deterministic.** Media IDs are SHA-256 checksums, inference uses fixed
   seeds, every list is explicitly sorted: the same media and detector set
-  always yield the same report (the only wall-clock value is the report's
-  generation timestamp).
-- **Isolated.** Each detector is its own uv project
-  (`detectors/<id>/pyproject.toml`) with exact pins. Incompatible torch
+  always yield the same report.
+- **Isolated.** Each detector is its own `uv` project
+  (`detectors/<id>/pyproject.toml`) with exact pins. Incompatible PyTorch
   versions coexist; a broken detector cannot poison another.
 - **Explained.** The selector records why each detector was included or
-  excluded; each finding carries its reasoning, confidence factors, faces,
-  attention maps and a prediction timeline. Forensics carries its numbers and
-  figures.
-- **No single score.** Per-detector verdicts stay separate; the UI shows a
-  consensus panel with the agreement bar and downgrades weak agreement to
-  `inconclusive`. The exported report renders no aggregated verdict at all.
-
-Details: [technical overview](docs/technical-overview.md) ·
-[architecture of the UI/API](docs/web-ui.md).
+  excluded; each finding carries its reasoning, confidence factors, face/frame
+  crops, attention/Grad-CAM maps, auxiliary sub-scores, and prediction timelines.
+- **No single score.** Per-detector verdicts stay separate; the UI shows an
+  agreement bar and downgrades weak or split panels to `inconclusive`. The
+  exported report renders no aggregated verdict at all.
+- **Evidence preservation.** `verity export --media-id <id>` (and the UI's
+  **Export evidence bundle** button) writes a deterministic `.zip` containing
+  `MANIFEST.json`, `SHA256SUMS.txt`, the read-only working copy, HTML/PDF
+  dossier, model-free forensic figures, and all detector findings & exhibits.
 
 ## Detectors and trust tiers
 
-47 detector architectures are ported. **26 are evidence-grade** — released
+58 detector architectures are ported. **39 are evidence-grade** — released
 checkpoints with trained classification heads (or training-free methods) —
 and are the only ones auto-selected:
 
@@ -150,198 +122,115 @@ and are the only ones auto-selected:
 | `random-init` | no released checkpoint at all; weights are random | excluded |
 | `untrained` | foundation model fetched at first run, detector head untrained | excluded |
 
-The rest can be run with `--include-untrained` (or by naming them explicitly).
-Their findings are flagged in the report and the UI, and they never count
-toward consensus or the aggregate. They exist for researchers who want to plug
-in their own checkpoint or study an architecture.
+Untrained scaffolds run only on explicit request (`--include-untrained` or by
+name), are visually flagged, and never count toward consensus.
 
-Coverage includes Xception, EfficientNet-B4, MesoNet, F3Net, SPSL, SRM,
-RECCE, LipForensics, CLIP-based detectors (UnivFD, GenD, DF40, Effort),
-Community Forensics, NPR, MLEP, SAFE, AEROBLADE, I3D/FTCN/AltFreezing,
-TimeSformer, VideoMAE, X-CLIP, and audio anti-spoofing (AASIST,
-AntiDeepfake-MMS, XLS-R+SLS).
-
-- Machine-generated table: [docs/detectors.md](docs/detectors.md)
-- Per-detector field guide, artifacts, caveats:
-  [docs/detector-catalog.md](docs/detector-catalog.md)
-- `verity weights status` prints the full table with licenses and provenance.
-
-## Forensics and explainability
-
-Verity's **five model-free analyzers** produce observations with evidence
-numbers, never verdicts:
-
-| Analyzer | Checks |
-|---|---|
-| `metadata` | container/encoder tags, pixel format, GOP structure, EXIF consistency |
-| `compression` | error-level analysis, JPEG quantization tables, double-JPEG periodicity, block grid |
-| `noise` | sensor-noise uniformity per cell, Fourier spectrum peaks |
-| `video_temporal` | scene cuts, frozen/duplicated frames, flicker, face-size jitter |
-| `audio` | high-band energy, noise floor, DC/clipping, mel spectrogram |
-
-Every detector additionally writes explainability artifacts: the exact face
-crops or frames it scored, attention/Grad-CAM overlays, per-face region
-energy, per-frame timelines, and — for RECCE — reconstruction maps when the
-decoder is alive (the port audits liveness and honestly omits dead-channel
-claims). Audio detectors produce per-window probability timelines over a
-spectrogram.
-
-- [Forensics reference](docs/forensics.md)
-- [Explainability artifact catalog](docs/explainability-artifacts.md)
-
-## CLI
+## CLI reference
 
 ```bash
-verity run      --media <file|dir> [--detector a,b,c] [--include-untrained] [--format pdf|html]
-verity analyze  --media <file|dir> [--json]      # characteristics + why each detector was (not) selected
-verity setup    --trained | --all | --detector <id>[,<id>]   # provision detector environments
-verity weights  pull --trained | status [--verify] | verify | bundle --repo <hf-repo>
-verity ingest | extract | compile | report       # individual stages
-verity-server                                    # API + web console
+verity setup    --trained [--airgap-ready] [--all] [--detector a,b]
+verity doctor   [--verify] [--json]
+verity serve    [--host 127.0.0.1] [--port 8000]
+verity run      --media <file|dir> [--detector a,b] [--include-untrained] [--format pdf|html]
+verity analyze  --media <file|dir> [--json]
+verity forensics --media-id <id>
+verity export   --media-id <id> [--out case.zip]
+verity weights  pull --trained | warmup --trained | status [--verify] | verify | bundle --repo <hf-repo>
+verity airgap   export --out <dir> | import --from <dir>
+verity ingest | extract | compile | report
 ```
 
-All commands read `config/pipeline.yaml` and the `VERITY_*` environment
-variables (see `.env.example`). Reports land in
-`$VERITY_OUTPUT_DIR/<media_id>/` (`report.html`, `report.pdf`,
-`analysis.json`, `selection.json`).
+All paths resolve through `platformdirs` (`~/.local/share/verity`,
+`~/.cache/verity`, `~/.config/verity`) when installed as a binary, or relative
+to the repository in development, and can be overridden via `VERITY_HOME` or
+`VERITY_*` environment variables (see `.env.example`).
 
-## HTTP API and web console
+## Checkpoints & attribution
 
-- **API** — FastAPI; interactive docs at `/api/docs`. Long operations return
-  a job id and stream logs; read endpoints expose cases, findings, artifacts,
-  reports and system readiness.
-- **Web console** — React/Mantine; case list, run panel, detector evidence
-  panels, consensus view, forensic observations, system screen.
+Weights are **never committed** to git and **never authored by Verity**. Every
+checkpoint belongs to its original academic/open-source authors and is governed
+by its upstream license — tracked per file in
+`detectors/weights_manifest.yaml` and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-See [docs/web-ui.md](docs/web-ui.md) for the endpoint map, job model, security
-posture and known gaps.
+- Redistributable checkpoints (28 files, 6.3 GB) are mirrored with full author
+  attribution on Hugging Face at
+  [`ADPer/verity-weights`](https://huggingface.co/ADPer/verity-weights) for
+  reproducible, reliable downloads.
+- Files whose authors granted no redistribution right or requested origin-only
+  downloads (NPR, MLEP, DF40, Effort, XLS-R-SLS, FTCN, D³, ProDet, LipFD, SBI,
+  LAA-Net) are **never mirrored** and are fetched strictly from the authors'
+  official release URLs.
+- Every downloaded file is SHA-256 verified before use; `VERITY_OFFLINE=1` (or
+  `offline: true` in `~/.config/verity/config.yaml`) forbids all network calls.
 
-## Checkpoints
+## Alternative installs (Docker Compose & development)
 
-Weights are **never committed**. `detectors/weights_manifest.yaml` is the
-single source of truth: SHA-256, size, origin, license, and whether Verity may
-mirror the file. Everything is verified before use, and `VERITY_OFFLINE=1`
-forbids downloads entirely.
+### Docker / Podman Compose
+
+Each GitHub Release also attaches `verity-deploy.tar.gz` + `SHA256SUMS` and
+publishes `ghcr.io/adper0705/verity:slim`:
 
 ```bash
-verity weights pull --trained     # fetch + verify what the trained panel needs
-verity weights status --verify    # hashes on disk vs. manifest
+curl -fsSLO https://github.com/ADPer0705/verity/releases/latest/download/verity-deploy.tar.gz
+curl -fsSLO https://github.com/ADPer0705/verity/releases/latest/download/SHA256SUMS
+sha256sum -c SHA256SUMS
+tar xzf verity-deploy.tar.gz && cd verity-deploy
+./install.sh
 ```
 
-Redistributable checkpoints are mirrored on Hugging Face
-(`ADPer/verity-weights`). Files whose authors granted no redistribution right
-(NPR, MLEP, DF40, Effort, XLS-R-SLS) are fetched only from the authors' own
-releases. See [docs/weights.md](docs/weights.md) and
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-## Native install (development)
+### From source (development)
 
 ```bash
-uv sync --extra api                  # orchestrator + API
-cd src/verity_ui && npm ci && npm run build && cd -   # web console
+uv sync --extra api
+cd src/verity_ui && npm ci && npm run build && cd -
 uv run verity weights pull --trained
-uv run verity setup --trained        # one uv environment per detector (GPU auto-detected)
-uv run verity run --media sample.mp4 --format html
-uv run verity-server                 # http://127.0.0.1:8000
-uv run pytest
+uv run verity setup --trained
+uv run verity serve
+uv run pytest -q
 ```
 
-Requirements: Linux, [`uv`](https://docs.astral.sh/uv/) ≥ 0.5, `ffmpeg`, and
-the WeasyPrint system libraries (`libpango-1.0-0 libpangocairo-1.0-0
-libcairo2`) for PDF reports.
+## Documentation (OpenWiki)
 
-## Containers
+Verity's complete architecture, engineering rationale, detector catalog,
+forensics reference, explainability catalog, deployment/air-gap guide, and
+release runbook live in **`openwiki/`**:
 
-| Tag | Contents | Use |
-|---|---|---|
-| `ghcr.io/adper0705/verity:slim` | orchestrator, API, web console; detector environments are provisioned during install | **published default** (also tagged `latest` and `<version>-slim`) |
-| `ghcr.io/adper0705/verity:cuda` | everything + all trained-detector environments pre-baked (CUDA wheels) | build locally with `--target full --build-arg VERITY_PROFILE=cuda` |
-| `ghcr.io/adper0705/verity:cpu` | everything + trained-detector environments pre-baked (CPU wheels) | build locally with `--target full --build-arg VERITY_PROFILE=cpu` |
-
-Only the slim image is published by CI: the pre-baked images are 10–20 GB and
-are built and pushed manually from a machine with enough disk (see
-[docs/publishing.md](docs/publishing.md)). The deploy bundle's installer
-pre-builds all environments, so the published image still gives a fully
-provisioned lab install, just with a longer one-time first step.
-
-## Project layout
-
-```text
-config/pipeline.yaml          pipeline paths + enabled extractors
-detectors/<id>/               one isolated uv project per detector
-  detector.yaml               capabilities, input mode, trust tier, artifact contract
-  model.py / inference.py     architecture + entrypoint
-  output_parser.py            raw result -> Finding
-  pyproject.toml              exact pins for this detector alone
-detectors/common/             shared engine (face detection, sampling, CAM, viz, reasoning)
-detectors/weights_manifest.yaml
-src/verity/                   pipeline: ingest, extract, forensics, analyze, detect,
-                              compile, report, weights, CLI
-src/verity_api/               FastAPI service + background jobs
-src/verity_ui/                React web console
-scripts/verity.py             detector environment runner (uv, hardware-adaptive)
-scripts/                      generators, deploy-bundle and matrix utilities
-deploy/                       lab installer, doctor and systemd unit
-tests/                        unit suite (pipeline, selection, forensics, weights, API)
-docs/                         technical, detector, forensics, deployment and API docs
-```
-
-## Documentation
-
-| Document | Contents |
-|---|---|
-| [Deployment guide](docs/deployment.md) | lab install, hardware, exposure, weights, envs, offline, upgrades |
-| [Technical overview](docs/technical-overview.md) | pipeline stages, config, environment, determinism |
-| [Detector table](docs/detectors.md) | generated list of all 47 ports with tier/modality/license |
-| [Detector catalog](docs/detector-catalog.md) | what each detector looks for, its artifacts and caveats |
-| [Explainability artifacts](docs/explainability-artifacts.md) | every artifact written, where, and its evidence value |
-| [Forensics](docs/forensics.md) | the five model-free analyzers, methods, limits |
-| [Web UI and API](docs/web-ui.md) | jobs, endpoints, consensus, security posture |
-| [Weights system](docs/weights.md) | manifest, verification, offline use, mirroring |
-| [Publishing](docs/publishing.md) | distribution choices, release runbook |
-| [Third-party notices](THIRD_PARTY_NOTICES.md) | code and checkpoint provenance/licenses |
-| [Changelog](CHANGELOG.md) | release history |
-
-## Development
-
-```bash
-uv sync                       # orchestrator environment
-uv run pytest                 # tests
-uv run python scripts/gen_detector_table.py        # regenerate docs/detectors.md
-uv run python scripts/gen_third_party_notices.py   # refresh notice tables
-uv run python scripts/build_deploy_bundle.py       # assemble the lab deploy bundle
-```
-
-Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md), the
-[Code of Conduct](CODE_OF_CONDUCT.md), and [SECURITY.md](SECURITY.md) for
-vulnerability reports. Detector ports follow the contract documented in
-[docs/detector-catalog.md](docs/detector-catalog.md); every port must declare
-its capabilities, trust tier and artifact contract in `detector.yaml`.
+- **[Quickstart & documentation map](openwiki/quickstart.md)** — start here
+- **[Architecture & design rationale](openwiki/architecture/overview.md)** — package boundaries, determinism, isolation, no-verdict principle
+- **[Detector catalog (all 58 ports)](openwiki/reference/detector-catalog.md)** — modality groups, trust tiers, caveats, panel selection
+- **[Explainability & evidence artifacts](openwiki/reference/explainability-artifacts.md)** — artifact contracts, Grad-CAM/attention, chain-of-custody bundles
+- **[Model-free forensics](openwiki/architecture/forensics.md)** — the 5 signal-processing/metadata analyzers and their limits
+- **[Weights & checkpoint provenance](openwiki/architecture/weights-and-checkpoints.md)** — manifest v2, SHA-256 gate, redistribution policy
+- **[Web API & console](openwiki/architecture/web-api-and-console.md)** — FastAPI job model, confined file serving, React UX
+- **[Deployment & air-gap operations](openwiki/operations/deployment-and-airgap.md)** — standalone binary, `platformdirs`, USB air-gap kit, Docker Compose
+- **[Releasing & publishing](openwiki/operations/releasing-and-publishing.md)** — PyInstaller glibc baseline, Hugging Face mirror, GHCR, testing
+- **[Third-party notices](THIRD_PARTY_NOTICES.md)** · **[Changelog](CHANGELOG.md)** · **[Contributing](CONTRIBUTING.md)** · **[Security](SECURITY.md)**
 
 ## Limitations and ethics
 
 - **No detector is proof.** Every model has failure modes (new generators,
-  heavy recompression, low resolution, adversarial input). The report is
-  built for a human examiner to weigh, not for automated accusation.
+  heavy recompression, low resolution, adversarial input). The report is built
+  for a human examiner to weigh, not for automated accusation.
 - **Consensus is orientation, not authority.** A divided panel resolves to
-  inconclusive; weak agreement is downgraded. The exported report deliberately
+  `inconclusive`; weak agreement is downgraded. The exported report deliberately
   contains no aggregate verdict.
 - **Licenses restrict use.** Verity is CC BY-NC 4.0; most checkpoints are
-  non-commercial and several derive from research-only datasets. Do not use
-  the output for commercial or carceral purposes.
-- **Privacy and consent.** Media examined here may contain personal data.
-  Handle the workspace, exports and logs under your jurisdiction's evidence
-  rules; Verity does not provide chain-of-custody or authentication.
+  non-commercial and several derive from research-only datasets (such as
+  FaceForensics++). Do not use Verity for commercial or automated carceral
+  decisions.
+- **Privacy and custody.** Verity computes SHA-256 working-copy hashes and
+  exports verifiable evidence bundles (`MANIFEST.json` + `SHA256SUMS.txt`),
+  but legal admissibility and access control depend on your lab's chain-of-custody
+  procedures and workstation security.
 
 ## License and citation
 
-Verity is released under **CC BY-NC 4.0** (non-commercial, attribution). The
-detector implementations are inference-only ports of research code — most
-from [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench) (CC BY-NC 4.0) —
-and the checkpoints belong to their authors under their own licenses, listed
-per file in `detectors/weights_manifest.yaml` and
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Verity is released under **CC BY-NC 4.0** (non-commercial, attribution).
+Detector implementations are inference-only ports of upstream research code —
+many from [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench) (CC BY-NC 4.0)
+— and checkpoints remain the intellectual property of their respective authors
+under their upstream licenses, listed per file in
+`detectors/weights_manifest.yaml` and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-If you use Verity in academic work, cite it together with the upstream
-detector papers relevant to your panel; see `CITATION.cff` for the project
-entry.
+If you use Verity in academic work, cite Verity (`CITATION.cff`) together with
+the upstream detector papers relevant to your panel.

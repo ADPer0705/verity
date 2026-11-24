@@ -33,6 +33,9 @@ class DetectorSpec:
     weights_md5: str | None = None
     weights_kind: str = "official"  # official | backbone | external | random
     weight_note: str = ""
+    # Known limitation of the port or checkpoint that every report must carry
+    # (e.g. a sub-module the released weights do not cover).
+    caveat: str = ""
     cam: bool = True
     min_face: int = 30
     region_analysis: bool = True
@@ -42,13 +45,23 @@ class DetectorSpec:
     #   full_frame the whole image / sampled frame (AI-generated-image detectors)
     #   full_clip  clip_size consecutive whole frames (generated-video detectors)
     #   audio      mono 16 kHz waveform windows (voice-clone detectors)
+    #   av_clip    clip_size consecutive whole frames *and* the audio of the
+    #              same time span (audio-visual lip-sync detectors)
     input_mode: str = "face_crop"
+    # face_crop / face_clip: expand the detected face box by this fraction of
+    # its size (0.25 = 12.5 % margin on every side) before cropping; several
+    # upstream detectors were trained on crops with such a margin.
+    face_margin: float = 0.0
     # full_frame / full_clip preprocessing: resize the shorter side to
     # ``resize_short`` (None = resize to resolution x resolution directly),
     # then center-crop ``resolution`` when ``center_crop`` is true.
     resize_short: int | None = None
     center_crop: bool = False
-    max_frames: int = 32          # frame budget for full_frame/full_clip modes
+    max_frames: int = 32          # frames scored per video (evenly spaced); VERITY_MAX_FRAMES overrides
+    # av_clip: hop between consecutive windows in frames (None = clip_size,
+    # i.e. non-overlapping) and the maximum number of windows scored.
+    clip_hop: int | None = None
+    max_windows: int = 10
     # audio mode: window length / hop in seconds (None = whole signal at once)
     audio_window_seconds: float | None = 4.0
     audio_hop_seconds: float | None = 2.0
@@ -79,18 +92,25 @@ class DetectorSpec:
             },
             "cam": self.cam,
             "input_mode": self.input_mode,
+            "face_margin": self.face_margin,
         }
         return d
 
 
 def load_spec(yaml_path: Path) -> DetectorSpec:
     """Load a spec from a ``detector.yaml``-shaped JSON dict or YAML file."""
+    import os
     import yaml
 
     with open(yaml_path) as f:
         data = yaml.safe_load(f)
 
     weights = data.get("weights", {})
+    input_mode = data.get("input_mode", "face_clip" if data.get("video_mode") else "face_crop")
+    cam_enabled = bool(data.get("cam", True))
+    default_region_analysis = input_mode in ("face_crop", "face_clip") and cam_enabled
+    env_max_frames = os.environ.get("VERITY_MAX_FRAMES")
+    max_frames = int(env_max_frames) if env_max_frames else int(data.get("max_frames", 32))
     return DetectorSpec(
         detector_id=data["detector_id"],
         version=data.get("version", "1.0.0"),
@@ -111,13 +131,17 @@ def load_spec(yaml_path: Path) -> DetectorSpec:
         weights_md5=weights.get("md5"),
         weights_kind=weights.get("kind", "official"),
         weight_note=weights.get("note", ""),
-        cam=data.get("cam", True),
+        caveat=str(data.get("caveat", "") or ""),
+        cam=cam_enabled,
         min_face=data.get("min_face", 30),
-        region_analysis=data.get("region_analysis", True),
-        input_mode=data.get("input_mode", "face_clip" if data.get("video_mode") else "face_crop"),
+        region_analysis=data.get("region_analysis", default_region_analysis),
+        input_mode=input_mode,
+        face_margin=float(data.get("face_margin", 0.0) or 0.0),
+        clip_hop=data.get("clip_hop"),
+        max_windows=int(data.get("max_windows", 10)),
         resize_short=data.get("resize_short"),
         center_crop=bool(data.get("center_crop", False)),
-        max_frames=int(data.get("max_frames", 32)),
+        max_frames=max_frames,
         audio_window_seconds=data.get("audio_window_seconds", 4.0),
         audio_hop_seconds=data.get("audio_hop_seconds", 2.0),
         audio_sample_rate=int(data.get("audio_sample_rate", 16000)),

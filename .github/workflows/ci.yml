@@ -19,8 +19,9 @@ jobs:
       - run: uv run pytest -q
       - name: Manifest sanity
         run: uv run verity weights status
-      - name: Deploy bundle sanity
+      - name: Deploy bundle and installer sanity
         run: |
+          bash -n install.sh
           bash -n deploy/install.sh
           bash -n deploy/doctor.sh
           uv run python scripts/build_deploy_bundle.py --out dist-deploy

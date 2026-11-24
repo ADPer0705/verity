@@ -60,17 +60,28 @@ class DetectorRunner:
 
     def setup(self, detector_ids: Optional[list[str]] = None, force: bool = False,
               concurrency: Optional[int] = None) -> int:
-        """Provision detector environments (shells out to ``verity.py setup``)."""
-        args = ["setup"]
-        if detector_ids:
-            args.append(f"--detector={','.join(detector_ids)}")
-        else:
-            args.append("--all")
-        if force:
-            args.append("--force")
-        if concurrency:
-            args.append(f"--concurrency={int(concurrency)}")
-        return self._invoke_verity(args)
+        """Provision detector environments via the in-process uv env manager."""
+        if os.environ.get("VERITY_RUNNER"):
+            args = ["setup"]
+            if detector_ids:
+                args.append(f"--detector={','.join(detector_ids)}")
+            else:
+                args.append("--all")
+            if force:
+                args.append("--force")
+            if concurrency:
+                args.append(f"--concurrency={int(concurrency)}")
+            return self._invoke_verity(args).returncode
+
+        from verity.runtime.env_manager import setup_detectors
+
+        return setup_detectors(
+            detector_ids_list=detector_ids,
+            all_detectors=not bool(detector_ids),
+            force=force,
+            concurrency=int(concurrency or 4),
+            detectors_dir=self.registry.detectors_dir,
+        )
 
     # ------------------------------------------------------------------ #
     #  Execution                                                          #
@@ -80,11 +91,28 @@ class DetectorRunner:
         self, definition: DetectorDefinition,
         input_dir: Path, output_path: Path,
     ) -> dict:
-        args = [
-            "run", definition.detector_id,
-            str(input_dir.resolve()), str(output_path.resolve()),
-        ]
-        result = self._invoke_verity(args, capture=True, cwd=str(self.registry.detectors_dir))
+        if os.environ.get("VERITY_RUNNER"):
+            args = [
+                "run", definition.detector_id,
+                str(input_dir.resolve()), str(output_path.resolve()),
+            ]
+            result = self._invoke_verity(args, capture=True, cwd=str(self.registry.detectors_dir))
+        else:
+            from verity.runtime.env_manager import run_detector_process
+
+            try:
+                result = run_detector_process(
+                    definition.detector_id,
+                    input_dir.resolve(),
+                    output_path.resolve(),
+                    timeout=self._timeout,
+                    capture=True,
+                    detectors_dir=self.registry.detectors_dir,
+                )
+            except subprocess.TimeoutExpired:
+                raise RuntimeError(
+                    f"Detector '{definition.detector_id}' timed out after {self._timeout}s"
+                )
 
         (output_path / "stdout.log").write_text(result.stdout[-20000:] if result.stdout else "")
         (output_path / "stderr.log").write_text(result.stderr[-20000:] if result.stderr else "")
@@ -167,6 +195,8 @@ class DetectorRunner:
         self, definition: DetectorDefinition,
         raw: dict, output_path: Path,
     ) -> Finding:
+        from verity.detect.output_parser import discover_evidence_paths, parse as default_parse
+
         parser_path = self.registry.detectors_dir / definition.detector_id / "output_parser.py"
         if parser_path.exists():
             spec = importlib.util.spec_from_file_location(
@@ -174,7 +204,9 @@ class DetectorRunner:
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             if hasattr(module, "parse"):
-                return module.parse(raw, output_path, definition.version)
+                finding = module.parse(raw, output_path, definition.version)
+                if not finding.reasoning.evidence:
+                    finding.reasoning.evidence = discover_evidence_paths(output_path, raw)
+                return finding
 
-        from verity.detect.output_parser import parse as default_parse
         return default_parse(raw, output_path, definition.version, definition.detector_id)

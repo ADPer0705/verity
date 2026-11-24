@@ -1,12 +1,21 @@
-"""FTCN detector (DeepfakeBench port): I3D R50 backbone with temporal-only
-convs and a TimeTransformer head.
+"""FTCN detector (Zheng, Bao, Chen, Zeng, Wen, ICCV 2021, "Exploring Temporal
+Coherence for More General Video Face Forgery Detection"): I3D R50 backbone
+with temporal-only convs (spatial kernels reduced to 1) and a TimeTransformer
+head.
 
 Ported from DeepfakeBench ``training/detectors/ftcn_detector.py`` and
-``networks/time_transformer.py``; the checkpoint (``I3D_8x8_R50.pth``) is the
-Kinetics-pretrained backbone. Only the inference path is reproduced (the
+``networks/time_transformer.py`` (themselves copied from the official
+yinglinzheng/FTCN).  Only the inference path is reproduced (the
 ``temporal_only_conv`` rewire and the stop_point=5 head swap are kept; the
-original loss/optimizer are dropped). The raw network output is a single
+original loss/optimizer are dropped).  The raw network output is a single
 sigmoid value, converted to 2-class logits.
+
+Weights: the **official FTCN+TT checkpoint** ``ftcn_tt.pth`` (GitHub release
+of yinglinzheng/FTCN, trained on FaceForensics++ c23) is a ``resnet.*`` state
+dict of the rewired network (275 tensors) and loads strictly after the
+rewire; this is the evidence-grade configuration.  If instead the
+Kinetics I3D backbone ``I3D_8x8_R50.pth`` is supplied, it is loaded *before*
+the rewire as in DeepfakeBench and the head stays untrained (backbone-only).
 """
 from __future__ import annotations
 
@@ -237,7 +246,8 @@ class TransformerHead(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        feat = self.pool(x[0])
+        spatial_feat = x[0]
+        feat = self.pool(spatial_feat)
         x = feat.reshape(-1, self.in_channels, self.num_patches)
         x = x.permute(0, 2, 1)
         if self.dim != self.in_channels:
@@ -245,7 +255,7 @@ class TransformerHead(nn.Module):
             x = x.reshape(-1, self.num_patches, self.dim)
         x = self.time_T(x)
         x = self.sigmoid(x)
-        return x, feat
+        return x, spatial_feat
 
 
 parameters = [parameter for parameter in signature(nn.Conv3d).parameters]
@@ -346,14 +356,22 @@ class FTCNDetector(nn.Module):
         return {"logits": logits, "probs": torch.softmax(logits, dim=1), "feat": feat}
 
 
+def _is_official_ftcn(state: dict) -> bool:
+    return any(k.startswith("resnet.head.time_T.") for k in state)
+
+
 def build_model(weights_path, device, clip_size=16):
     model = FTCNDetector(clip_size=clip_size)
+    official_state = None
     if weights_path is not None:
-        pretrained_weights = torch.load(weights_path, map_location="cpu", encoding="latin1")
-        modified_weights = {k.replace("resnet.", ""): v for k, v in pretrained_weights.items()}
-        modified_weights["head.projection.weight"] = modified_weights["head.projection.weight"][:1, :]
-        modified_weights["head.projection.bias"] = modified_weights["head.projection.bias"][:1]
-        model.resnet.load_state_dict(modified_weights, strict=True)
+        pretrained_weights = torch.load(weights_path, map_location="cpu", encoding="latin1", weights_only=False)
+        if _is_official_ftcn(pretrained_weights):
+            official_state = {k[len("resnet."):]: v for k, v in pretrained_weights.items()}
+        else:
+            modified_weights = {k.replace("resnet.", ""): v for k, v in pretrained_weights.items()}
+            modified_weights["head.projection.weight"] = modified_weights["head.projection.weight"][:1, :]
+            modified_weights["head.projection.bias"] = modified_weights["head.projection.bias"][:1]
+            model.resnet.load_state_dict(modified_weights, strict=True)
 
     temporal_only_conv(model.resnet, "model", 0)
 
@@ -372,6 +390,9 @@ def build_model(weights_path, device, clip_size=16):
     }[stop_point]
 
     model.resnet.head = TransformerHead(**params)
+
+    if official_state is not None:
+        model.resnet.load_state_dict(official_state, strict=True)
 
     model.to(device)
     model.eval()

@@ -1,0 +1,53 @@
+detector_id: d3
+version: 1.0.0
+name: "D³"
+description: "D³ discrepancy deepfake detector (Yang et al., CVPR 2025, arXiv 2404.04584) - frozen CLIP ViT-L/14\
+  \ features of the image and of its patch-shuffled copy fused by an attention head; trained on a\
+  \ multi-generator pool (ProGAN/UFD + GenImage) for generalisable AI-generated-image detection."
+architecture: Frozen CLIP ViT-L/14 (penultimate CLS, 1024-d) x {original, 14px-patch-shuffled} + single-head attention + Linear(2048, 1)
+parameters: 3149825
+pretrained: Official ckpt/classifier.pth (BigAandSmallq/D3) attention head; CLIP tower openai/clip-vit-large-patch14 fetched from HuggingFace at first run.
+resolution: 224
+mean:
+- 0.48145466
+- 0.4578275
+- 0.40821073
+std:
+- 0.26862954
+- 0.26130258
+- 0.27577711
+input_mode: full_frame
+resize_short: null
+center_crop: false
+max_frames: 32
+video_mode: false
+clip_size: null
+cam: false
+weights:
+  file: classifier.pth
+  kind: official
+  trained: true
+  url: https://raw.githubusercontent.com/BigAandSmallq/D3/main/ckpt/classifier.pth
+  size: 12606728
+  sha256: c0bb66e0de538b0330613da1865da025756c1dc7a7290990d5343c35290ab63b
+  license: none stated
+  trained_note: ''
+  note: 'Official D³ attention head (q/k/v 1024x1024 + fc 2048->1, 8 tensors) committed in the authors''
+    repository, which ships no LICENSE file; fetched from GitHub only, never mirrored. The frozen CLIP ViT-L/14
+    tower comes from HuggingFace (MIT). Whole frames are resized to 224x224 (no crop) with CLIP mean/std, as in
+    upstream validate_for_robustness.py; the patch shuffle is seeded for reproducible scores.'
+artifacts:
+  required:
+  - type: frame
+    params:
+      resolution: 224
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- image_synthesis
+- face_synthesis

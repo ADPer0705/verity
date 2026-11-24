@@ -45,7 +45,7 @@ Usage: ./install.sh [options]
   --allow-network     Required to bind to anything other than loopback
   --skip-weights      Do not pre-download checkpoints
   --skip-envs         Do not pre-build detector environments
-  --all-envs          Also build the research-scaffold environments (all 47)
+  --all-envs          Also build the research-scaffold environments (all 58)
   --concurrency N     Parallel environment builds (default: 4)
   --dry-run           Print commands without executing them
   -h, --help          This text
@@ -139,7 +139,7 @@ case "$BIND" in
     fi
     warn "binding to $BIND. The API has no built-in authentication; anyone who can
   reach this port can read every case in the workspace. Use a firewall and an
-  authenticating reverse proxy (see docs/deployment.md)."
+  authenticating reverse proxy (see README.md or openwiki/operations/deployment-and-airgap.md)."
     ;;
 esac
 

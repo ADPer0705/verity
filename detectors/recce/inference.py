@@ -270,7 +270,7 @@ def _tensor_stats(t: torch.Tensor) -> dict:
 
 
 def compute_region_energy(face_pil, residual_tensor, attention_tensor, face_mesh):
-    if face_mesh is None:
+    if face_mesh is None or attention_tensor is None:
         return None
     rgb = np.array(face_pil.convert("RGB"))
     h_orig, w_orig = rgb.shape[:2]
@@ -280,24 +280,26 @@ def compute_region_energy(face_pil, residual_tensor, attention_tensor, face_mesh
     lm = results.multi_face_landmarks[0]
     pts = np.array([(p.x * w_orig, p.y * h_orig) for p in lm.landmark])
 
-    residual_np = tensor_to_np(residual_tensor)
-    if residual_np.ndim == 3:
-        residual_energy = residual_np.mean(axis=0)
-    elif residual_np.ndim == 2:
-        residual_energy = residual_np
-    else:
-        return None
+    def _resize(arr, tw, th):
+        arr_clamped = np.clip(arr, 0, 1)
+        return np.array(Image.fromarray((arr_clamped * 255).astype("uint8")).resize((tw, th), Image.BILINEAR)) / 255.0
+
+    residual_energy = None
+    total_res = None
+    if residual_tensor is not None:
+        residual_np = tensor_to_np(residual_tensor)
+        if residual_np.ndim == 3:
+            residual_energy = residual_np.mean(axis=0)
+        elif residual_np.ndim == 2:
+            residual_energy = residual_np
+        if residual_energy is not None:
+            residual_energy = _resize(residual_energy, w_orig, h_orig)
+            total_res = residual_energy.sum() + 1e-8
+
     attn_np = tensor_to_np(attention_tensor)
     if attn_np.ndim != 2:
         return None
-
-    def _resize(arr, tw, th):
-        return np.array(Image.fromarray((arr * 255).astype("uint8")).resize((tw, th), Image.BILINEAR)) / 255.0
-
-    residual_energy = _resize(residual_energy, w_orig, h_orig)
     attn_np = _resize(attn_np, w_orig, h_orig)
-
-    total_res = residual_energy.sum() + 1e-8
     total_att = attn_np.sum() + 1e-8
 
     result = {}
@@ -310,10 +312,12 @@ def compute_region_energy(face_pil, residual_tensor, attention_tensor, face_mesh
         cv2.fillPoly(mask, [hull], 1)
         if mask.sum() == 0:
             continue
-        result[name] = {
-            "residual_pct": round(float((residual_energy * mask).sum() / total_res * 100), 1),
+        entry = {
             "attention_pct": round(float((attn_np * mask).sum() / total_att * 100), 1),
         }
+        if residual_energy is not None and total_res is not None:
+            entry["residual_pct"] = round(float((residual_energy * mask).sum() / total_res * 100), 1)
+        result[name] = entry
     return result
 
 
@@ -386,11 +390,15 @@ def process_video_detailed(model, video_path, mtcnn, output_dir, face_mesh=None,
                         "bbox": list(face_box),
                         "fake_prob": round(prob, 4),
                     }
-                    if recon_available:
-                        region_energy = compute_region_energy(
-                            face, out["residual"], out["attention_map"], face_mesh
-                        )
+                    region_energy = compute_region_energy(
+                        face,
+                        out["residual"] if recon_available else None,
+                        out["attention_map"],
+                        face_mesh,
+                    )
+                    if region_energy:
                         face_record["region_energy"] = region_energy
+                    if recon_available:
                         recon_stats = _tensor_stats(out["reconstruction"])
                         face_record["reconstruction"] = recon_stats
                     per_face.append(face_record)
@@ -466,7 +474,7 @@ def build_reasoning(mean_p, stats, timing, device_name, per_face=None, recon_ava
     if region_agg:
         sorted_regions = sorted(
             region_agg.items(),
-            key=lambda kv: kv[1].get("residual_pct", 0),
+            key=lambda kv: (kv[1].get("residual_pct", -1), kv[1].get("attention_pct", 0)),
             reverse=True,
         )
         if sorted_regions:
@@ -480,11 +488,17 @@ def build_reasoning(mean_p, stats, timing, device_name, per_face=None, recon_ava
             f"faces with synthesis artifacts",
             "Feature-level anomalies detected via graph reasoning across multi-scale representations",
         ]
-        if recon_available and top_region:
+        if recon_available and top_region and "residual_pct" in top_region[1]:
             region_name, region_data = top_region
             factors.append(
                 f"Reconstruction residual energy concentrated in {region_name} region "
                 f"({region_data['residual_pct']}% of total) across {region_data.get('face_count', stats['count'])} faces"
+            )
+        elif top_region:
+            region_name, region_data = top_region
+            factors.append(
+                f"Guided attention energy concentrated in {region_name} region "
+                f"({region_data['attention_pct']}% of total) across {region_data.get('face_count', stats['count'])} faces"
             )
         summary_parts = [
             f"RECCE FAKE: Media detected as manipulated. "
@@ -492,7 +506,7 @@ def build_reasoning(mean_p, stats, timing, device_name, per_face=None, recon_ava
             f"(confidence: {1.0 - min(stats['std']*2, 0.9):.4f}). "
             f"{stats['above_threshold']}/{stats['count']} faces exceed the FAKE threshold (0.7)."
         ]
-        if recon_available and top_region:
+        if recon_available and top_region and "residual_pct" in top_region[1]:
             region_name, region_data = top_region
             summary_parts.append(
                 f"Most-implicated region: {region_name} ({region_data['residual_pct']}% of "
@@ -500,6 +514,12 @@ def build_reasoning(mean_p, stats, timing, device_name, per_face=None, recon_ava
                 f"identified inconsistencies in facial regions indicative of generative synthesis."
             )
         elif not recon_available:
+            if top_region:
+                region_name, region_data = top_region
+                summary_parts.append(
+                    f"Most-implicated region: {region_name} ({region_data['attention_pct']}% of "
+                    f"guided attention energy)."
+                )
             summary_parts.append(
                 "The reconstruction branch of this checkpoint is untrained and contributes "
                 "no evidence; the classification rests on the classifier logits and attention maps."
@@ -508,12 +528,17 @@ def build_reasoning(mean_p, stats, timing, device_name, per_face=None, recon_ava
     elif mean_p < 0.3:
         factors = [
             "Consistent natural image statistics across all detected faces",
-            "Reconstruction error within expected range for authentic media",
+            "Feature activations within expected range for authentic media",
         ]
-        if recon_available and top_region:
+        if recon_available and top_region and "residual_pct" in top_region[1]:
             factors.append(
                 f"Residual energy distribution across regions (peak: {top_region[0]}) "
                 f"consistent with authentic facial structure"
+            )
+        elif top_region:
+            factors.append(
+                f"Guided attention distribution across regions (peak: {top_region[0]} "
+                f"{top_region[1].get('attention_pct', 0)}%) consistent with authentic facial structure"
             )
         elif not recon_available:
             factors.append(
@@ -529,10 +554,11 @@ def build_reasoning(mean_p, stats, timing, device_name, per_face=None, recon_ava
         factors = [
             f"Inconclusive: average fake probability {mean_p:.4f} near decision boundary",
         ]
-        if recon_available and top_region:
+        if top_region:
+            metric = top_region[1].get("residual_pct", top_region[1].get("attention_pct", 0))
             factors.append(
-                f"Residual energy distribution does not clearly favor any region (peak: "
-                f"{top_region[0]} {top_region[1].get('residual_pct', 0)}%)"
+                f"Region energy distribution does not clearly favor manipulation (peak: "
+                f"{top_region[0]} {metric}%)"
             )
         summary = (
             f"RECCE UNCERTAIN: Unable to reach conclusive classification. "
@@ -567,18 +593,22 @@ def _aggregate_regions(per_face):
             continue
         for k in region_keys:
             if k in re:
-                agg[k]["residual_pct"].append(re[k]["residual_pct"])
-                agg[k]["attention_pct"].append(re[k]["attention_pct"])
+                if "residual_pct" in re[k]:
+                    agg[k]["residual_pct"].append(re[k]["residual_pct"])
+                if "attention_pct" in re[k]:
+                    agg[k]["attention_pct"].append(re[k]["attention_pct"])
                 agg[k]["face_count"] += 1
     result = {}
     for k, v in agg.items():
-        if not v["residual_pct"]:
+        if not v["attention_pct"] and not v["residual_pct"]:
             continue
-        result[k] = {
-            "residual_pct": round(float(np.mean(v["residual_pct"])), 1),
-            "attention_pct": round(float(np.mean(v["attention_pct"])), 1),
+        entry = {
+            "attention_pct": round(float(np.mean(v["attention_pct"])), 1) if v["attention_pct"] else 0.0,
             "face_count": v["face_count"],
         }
+        if v["residual_pct"]:
+            entry["residual_pct"] = round(float(np.mean(v["residual_pct"])), 1)
+        result[k] = entry
     return result
 
 
@@ -647,10 +677,15 @@ def main():
                         "bbox": [x1, y1, x2 - x1, y2 - y1],
                         "fake_prob": round(prob, 4),
                     }
+                    region_energy = compute_region_energy(
+                        face,
+                        out["residual"] if recon_available else None,
+                        out["attention_map"],
+                        face_mesh,
+                    )
+                    if region_energy:
+                        face_record["region_energy"] = region_energy
                     if recon_available:
-                        face_record["region_energy"] = compute_region_energy(
-                            face, out["residual"], out["attention_map"], face_mesh
-                        )
                         face_record["reconstruction"] = _tensor_stats(out["reconstruction"])
                     all_per_face.append(face_record)
                     (OUTPUT_DIR / "faces").mkdir(exist_ok=True)
@@ -702,6 +737,8 @@ def main():
             "parameters": 47800000,
             "pretrained": "DeepfakeBench v1.0.1 (FF++ trained)",
         },
+        "unit": "face",
+        "input_mode": "face_crop",
         "per_face": all_per_face,
         "total_video_frames": grand_total_frames,
         "sampling": {

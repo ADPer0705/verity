@@ -14,7 +14,12 @@ set -euo pipefail
 
 auto_weights() {
   case "${VERITY_WEIGHTS_AUTO:-1}" in 0|false|no) return 0;; esac
-  case "${VERITY_OFFLINE:-}" in 1|true|yes) return 0;; esac
+  case "${VERITY_OFFLINE:-}" in 1|true|yes)
+    export HF_HUB_OFFLINE=1
+    export TRANSFORMERS_OFFLINE=1
+    export DIFFUSERS_OFFLINE=1
+    return 0;;
+  esac
   echo "[verity] checking trained checkpoints in /weights (manifest: detectors/weights_manifest.yaml)" >&2
   if ! verity weights pull --trained; then
     echo "[verity] some checkpoints could not be fetched; affected detectors will be skipped" >&2
@@ -23,7 +28,7 @@ auto_weights() {
 
 cmd="${1:-run}"
 case "$cmd" in
-  server)
+  server|serve)
     shift
     auto_weights
     exec verity-server "$@"
@@ -31,7 +36,7 @@ case "$cmd" in
   bash|sh)
     exec "$@"
     ;;
-  run|analyze|ingest|extract|compile|report)
+  run|analyze|ingest|extract|forensics|compile|report|export)
     auto_weights
     exec verity "$@"
     ;;

@@ -41,13 +41,13 @@ import { presentBand } from '@/lib/verdict'
 type SortKey = 'file_name' | 'media_type' | 'assessment' | 'detectors' | 'size' | 'ingested' | 'report'
 
 const COLUMNS: { key: SortKey; label: string }[] = [
-  { key: 'file_name', label: 'File' },
-  { key: 'media_type', label: 'Type' },
+  { key: 'file_name', label: 'Case / File' },
+  { key: 'media_type', label: 'Modality' },
   { key: 'assessment', label: 'Assessment' },
-  { key: 'detectors', label: 'Detectors' },
+  { key: 'detectors', label: 'Coverage & Forensics' },
   { key: 'size', label: 'Size' },
   { key: 'ingested', label: 'Ingested' },
-  { key: 'report', label: 'Report' },
+  { key: 'report', label: 'Dossier' },
 ]
 
 function sortValue(item: CaseSummary, key: SortKey): string | number {
@@ -252,28 +252,62 @@ export default function Cases() {
                       onClick={() => navigate(`/case/${item.media_id}`)}
                     >
                       <Table.Td>
-                        <Text fz="sm">{item.file_name}</Text>
+                        <Text fz="sm" fw={500}>
+                          {item.file_name}
+                        </Text>
                         <Text fz="xs" c="dimmed" ff="monospace">
                           {item.media_id} · {shortHash(item.checksum, 10, 6)}
                         </Text>
                       </Table.Td>
-                      <Table.Td>{item.media_type}</Table.Td>
+                      <Table.Td>
+                        <Badge variant="outline" color="gray" size="xs">
+                          {item.media_type}
+                        </Badge>
+                      </Table.Td>
                       <Table.Td>
                         <Badge color={band.tagType} size="sm">
                           {band.label}
                         </Badge>
                       </Table.Td>
                       <Table.Td>
-                        {item.findings_count
-                          ? `${item.findings_count} ran · ${item.detectors_excluded} skipped`
-                          : item.has_selection
-                            ? `0 ran · ${item.detectors_excluded} skipped`
-                            : 'not analysed'}
+                        <Group gap={6} wrap="wrap">
+                          <Text fz="xs">
+                            {item.findings_count
+                              ? `${item.findings_count} detector${item.findings_count === 1 ? '' : 's'} ran`
+                              : item.has_selection
+                                ? `0 ran · ${item.detectors_excluded} skipped`
+                                : 'not analysed'}
+                          </Text>
+                          {item.forensics_counts?.warning ? (
+                            <Badge color="red" size="xs">
+                              {item.forensics_counts.warning}W
+                            </Badge>
+                          ) : null}
+                          {item.forensics_counts?.notice ? (
+                            <Badge color="orange" size="xs">
+                              {item.forensics_counts.notice}N
+                            </Badge>
+                          ) : null}
+                        </Group>
                       </Table.Td>
-                      <Table.Td>{formatBytes(item.size_bytes)}</Table.Td>
-                      <Table.Td>{formatRelative(item.ingested_at)}</Table.Td>
+                      <Table.Td ff="monospace" fz="xs">
+                        {formatBytes(item.size_bytes)}
+                      </Table.Td>
+                      <Table.Td fz="xs">{formatRelative(item.ingested_at)}</Table.Td>
                       <Table.Td>
-                        {item.reports.pdf ? 'PDF' : item.reports.html ? 'HTML' : '—'}
+                        {item.reports.pdf ? (
+                          <Badge color="pink" size="xs">
+                            PDF
+                          </Badge>
+                        ) : item.reports.html ? (
+                          <Badge color="indigo" size="xs">
+                            HTML
+                          </Badge>
+                        ) : (
+                          <Text c="dimmed" fz="xs">
+                            —
+                          </Text>
+                        )}
                       </Table.Td>
                     </Table.Tr>
                   )

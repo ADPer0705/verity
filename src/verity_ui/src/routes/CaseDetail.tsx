@@ -31,6 +31,7 @@ import {
   IconDotsVertical,
   IconFileText,
   IconFilter,
+  IconMicroscope,
   IconPlayerPlay,
   IconRefresh,
   IconTrash,
@@ -48,11 +49,21 @@ import { ActivityPanel } from './Activity'
 import { AnalysisTab } from './tabs/AnalysisTab'
 import { EvidenceTab } from './tabs/EvidenceTab'
 import { FindingsTab } from './tabs/FindingsTab'
+import { ForensicsTab } from './tabs/ForensicsTab'
 import { OverviewTab } from './tabs/OverviewTab'
 import { ReportTab } from './tabs/ReportTab'
 import { SelectionTab } from './tabs/SelectionTab'
 
-const TABS = ['overview', 'analysis', 'selection', 'findings', 'evidence', 'report', 'activity']
+const TABS = [
+  'overview',
+  'forensics',
+  'findings',
+  'evidence',
+  'analysis',
+  'selection',
+  'report',
+  'activity',
+]
 
 export default function CaseDetail() {
   const { mediaId = '' } = useParams()
@@ -192,6 +203,9 @@ export default function CaseDetail() {
   const pdfBlocker = readiness?.blockers.find((b) => b.capability === 'report-pdf')?.message
   const active = jobId !== null && !stream.finished
   const untrainedCount = data.findings.filter((finding) => !finding.trained).length
+  const forensicWarnings = data.forensics?.counts?.warning ?? 0
+  const forensicNotices = data.forensics?.counts?.notice ?? 0
+  const forensicAlerts = forensicWarnings + forensicNotices
 
   return (
     <div className="vy-page">
@@ -251,6 +265,13 @@ export default function CaseDetail() {
                 onClick={() => void launch(() => api.extract(mediaId))}
               >
                 Extract artifacts
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<IconMicroscope size={14} />}
+                disabled={busy || active}
+                onClick={() => void launch(() => api.forensics(mediaId))}
+              >
+                Run forensic analyses
               </Menu.Item>
               <Menu.Item
                 leftSection={<IconChartBar size={14} />}
@@ -317,8 +338,23 @@ export default function CaseDetail() {
       <Tabs value={tab} onChange={(value) => setTab(value)} keepMounted={false}>
         <Tabs.List>
           <Tabs.Tab value="overview">Overview</Tabs.Tab>
-          <Tabs.Tab value="analysis">Analysis</Tabs.Tab>
-          <Tabs.Tab value="selection">Selection ({data.selection?.decisions.length ?? 0})</Tabs.Tab>
+          <Tabs.Tab
+            value="forensics"
+            rightSection={
+              forensicAlerts > 0 ? (
+                <Badge
+                  color={forensicWarnings > 0 ? 'red' : 'orange'}
+                  variant="filled"
+                  size="xs"
+                  title={`${forensicWarnings} warning(s), ${forensicNotices} notice(s)`}
+                >
+                  {forensicAlerts}
+                </Badge>
+              ) : undefined
+            }
+          >
+            Forensics
+          </Tabs.Tab>
           <Tabs.Tab
             value="findings"
             rightSection={
@@ -331,19 +367,25 @@ export default function CaseDetail() {
           >
             Findings ({data.findings.length})
           </Tabs.Tab>
-          <Tabs.Tab value="evidence">Evidence</Tabs.Tab>
+          <Tabs.Tab value="evidence">Evidence Lab</Tabs.Tab>
+          <Tabs.Tab value="analysis">Media Profile</Tabs.Tab>
+          <Tabs.Tab value="selection">Selection ({data.selection?.decisions.length ?? 0})</Tabs.Tab>
           <Tabs.Tab value="report">Report</Tabs.Tab>
           <Tabs.Tab value="activity">Activity</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="overview" pt="lg">
-          <OverviewTab detail={data} />
+          <OverviewTab
+            detail={data}
+            onOpenTab={(nextTab, detectorId) => setTab(nextTab, detectorId)}
+          />
         </Tabs.Panel>
-        <Tabs.Panel value="analysis" pt="lg">
-          <AnalysisTab detail={data} />
-        </Tabs.Panel>
-        <Tabs.Panel value="selection" pt="lg">
-          <SelectionTab detail={data} />
+        <Tabs.Panel value="forensics" pt="lg">
+          <ForensicsTab
+            detail={data}
+            busy={busy || active}
+            onRunForensics={() => void launch(() => api.forensics(mediaId))}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="findings" pt="lg">
           <FindingsTab
@@ -358,6 +400,12 @@ export default function CaseDetail() {
             onSelectDetector={(detectorId) => setTab('evidence', detectorId)}
             onOpenFinding={() => setTab('findings')}
           />
+        </Tabs.Panel>
+        <Tabs.Panel value="analysis" pt="lg">
+          <AnalysisTab detail={data} />
+        </Tabs.Panel>
+        <Tabs.Panel value="selection" pt="lg">
+          <SelectionTab detail={data} />
         </Tabs.Panel>
         <Tabs.Panel value="report" pt="lg">
           <ReportTab

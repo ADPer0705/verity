@@ -21,6 +21,7 @@ from verity_api.service import (
     detector_assets,
     detector_logs,
     detector_raw,
+    export_case_evidence,
     finding_to_dict,
     ingest_file,
     list_cases,
@@ -282,6 +283,23 @@ def get_report(media_id: str, format: str = Query("html", pattern="^(pdf|html)$"
         Path(entry["path"]),
         download_name=f"verity-{stem}-{media_id}.{format}",
         inline=not download,
+    )
+
+
+@router.get("/{media_id}/export")
+def export_case(media_id: str):
+    """Export a self-contained forensic evidence preservation bundle (.zip) with
+    MANIFEST.json and SHA256SUMS.txt for offline verification and archiving."""
+    settings, _ = _require_case(media_id)
+    try:
+        result = export_case_evidence(settings, media_id)
+    except PipelineError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    bundle_path = Path(result["bundle_path"])
+    return file_response(
+        bundle_path,
+        download_name=bundle_path.name,
+        inline=False,
     )
 
 

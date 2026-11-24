@@ -1,19 +1,21 @@
 detector_id: sbi
-version: 1.0.0
+version: 2.0.0
 name: SBI
-description: SBI deepfake detector (DeepfakeBench port).
-architecture: EfficientNet-B4 + self-blended images
-parameters: 0
-pretrained: No released trained checkpoint; model randomly initialized.
-resolution: 256
+description: Self-Blended Images deepfake detector (Shiohara & Yamasaki, CVPR 2022) - EfficientNet-B4 trained on
+  FaceForensics++ c23 real faces plus self-blended pseudo-fakes only; generalises to unseen face swaps.
+architecture: EfficientNet-B4 (AdvProp init) + Linear(1792, 2)
+parameters: 17677498
+pretrained: Official FFc23.tar checkpoint (mapooon/SelfBlendedImages, Google Drive), trained on FF++ c23 self-blended images.
+resolution: 380
 mean:
-- 0.5
-- 0.5
-- 0.5
+- 0.0
+- 0.0
+- 0.0
 std:
-- 0.5
-- 0.5
-- 0.5
+- 1.0
+- 1.0
+- 1.0
+face_margin: 0.25
 video_mode: false
 clip_size: null
 cam: true
@@ -21,16 +23,28 @@ artifacts:
   required:
   - type: face_crop
     params:
-      resolution: 256
+      resolution: 380
 output:
   format: json
   schema:
     prediction: float
     confidence: float
     reasoning: str
+    confidence_factors: list
+    attention_maps: str
 weights:
-  kind: random
-  note: Randomly initialized model; no checkpoint required.
+  # Alternate (drop-in via this field): FFraw.tar, Google Drive id 12sLyqBp0VFwdpA-oZLdIOkOTkz_ZnIhV
+  file: FFc23.tar
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1X0-NYT8KPursLZZdxduRQju6E52hauV0/view
+  size: 141290933
+  sha256: 2b05c2ba36ccb9e9f4f9e1aae9acd443ae2e6400ce725f56104fdb175d3c3267
+  license: SBI academic / non-commercial research license (no redistribution)
+  note: 'Official SBI checkpoint trained on FF++ c23 (dict with "model" state dict, keys net.*, loaded strict).
+    Input is a 380x380 face crop with a 25 % box margin in raw [0, 1] RGB (no normalisation), exactly as
+    upstream inference_image.py. The license permits research use only and forbids redistribution, so the
+    file is fetched from the authors'' Google Drive only.'
 targets:
 - face_swap
 - face_reenactment

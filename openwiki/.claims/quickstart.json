@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:0b184f06bd9e783a7fe71c63fb743e93502c4310eefb5204bae076158290da38",
+  "claims": [
+    {
+      "id": "claim_393f9432538b466399d85482d99071ce",
+      "statement": "Labs install the standalone Linux x86_64 binary via install.sh and run verity setup --trained --airgap-ready to bootstrap uv/Python, build 39 detector virtualenvs, verify checkpoints, warm runtime caches, and seal offline mode.",
+      "evidence": [
+        {
+          "resource": "repo://install.sh#L57-L145",
+          "version": "repo-lines-v1:sha256:2a5e64b403aa78aee30402726648fb0d4d0ef4c336e9eab818aec7576c8781b3:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlYjYxNTk4YTVmMjVmNzczYWU3MjgwYTZlYTRmNmQ1YmMzOTczYmM4Y2EwZWY3ZGI0YjlhNWVjZTMwZmJiMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3NjlkMjM3Y2Q0MjBiOWQzOGI5ODFhMGE0ZjY3NzAxOTBhNGE4M2RjYTFmZTU2YzRmNWJhMWUyY2JjMGVmNzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjZTk1ZjgyOWUyMmY2NzJhOWJiODY2NDUyZTc1ZTA2ZTEyNmNhMzUwYzk3MTExNDFlMzMwZjM1ZmNkMzJjMzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY5OGFhY2I2MDVlYWRmZGYzZjQ5MGZiODQ5NzQxODU3ZDMzODI3NzgwYWRhZTg2MDEyZWYxYjFmNmQ0ZDUxMmQifQ"
+        },
+        {
+          "resource": "repo://src/verity/cli.py#L290-L419",
+          "version": "repo-lines-v1:sha256:8896fd1fb89f77f9d04ad3c60b018b4d1d3598d636d5635401f4643818a75b23:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkZDQ3YjZmYWU2MGE1MzA2MjQxNTU1ZTk2ODE3MGNmZTE0MGZmZWMzMmI5MjI5ZDc2MzVlMmVjNzFjMmQ1ZDA3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjNTZhZmFjYmQzNzE4Y2E3MzlhZjQyMGU5YTBiYWE2OWRiYTVlYzNjYzE5YzJkYjQ2NzQyM2QyYWEyOTBmMDAzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJjZDEzMmYxNzZhNDc2NzNjM2EwMDNlMzU1NzVhMDAzODViOTY0ZWE1OGNmNjFlNjc5Y2ExYjA1NzU4MGY5ZmMwIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_3ab33027eb5c4d6284bb4abf7bd8e994",
+      "statement": "The verity CLI provides doctor --verify, airgap export/import, export, forensics, run, analyze, and serve commands while storing runtime state under platformdirs or VERITY_HOME in standalone mode.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L703-L831",
+          "version": "repo-lines-v1:sha256:53d9f10c003697524f4306b4010aa3da0ae5b56232dcd75c433a9431ae06321a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzOTA1ZGJkYzc5NzdkNDExZDQ4MWU1MmY2NDJjM2RiOGU2OGY0MmU1Y2UzMTc5MjIwZTI3ZjJlNzY4YWRiYmRiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhOTVkNzk5ODMxMWNjMGFmNWUwYTc0NzIwOWViNTFjNzE5NjgyZmZjZWY1ZmQ1NzY1YmZlNjE1Y2QwMWFiMWY5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJjNDZhZWI1MDUzMDFkODQ4N2QzNzE5MmIxZWYzOWI2MmFmMWE4N2JhYTBlZDVhNDljODEzZjcyMDlkZmMwMTM2In0"
+        },
+        {
+          "resource": "repo://src/verity/paths.py#L44-L172",
+          "version": "repo-lines-v1:sha256:a3278604fd489f678b18ad6643d524f08c5e12aefcbcf9cb84fcd559c5060480:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5YmY0ZGI2MWYxNTczYThkOTBiZWU3ZDQ3NTUxNzg1MTQ4NmEzNzJjNjA1MzBjNzIwYzhkZGIxNDFiYTkzOGJlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIxOGMwNDFhZDBhYjU0ZmM1NDllOTBmMTk4YjI4ZTJhOTE3MmZlOGIyMDFiM2QzMDBkMzg5ZWMxNzI0NDhhYTQyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIxYTUyNDM3N2M5NTVhZGU2Y2U4MGExOGM1YWMyODgwODE5MDU0MGJhMTViOTJiMmQ4NjUxYzNlZTBmYWQ4ZTZkIn0"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

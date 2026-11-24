@@ -345,6 +345,7 @@ reproducibility only. Do not cite it in a finding.</div>
         raw = finding.raw_output
         stats = (raw.get("stats") or {})
         sampling = (raw.get("sampling") or {})
+        aux_agg = (raw.get("aux_aggregate") or {})
         rows = []
         faces = self._faces_analyzed(finding)
         if faces is not None:
@@ -353,9 +354,15 @@ reproducibility only. Do not cite it in a finding.</div>
         if stats.get("min") is not None:
             rows.append(("Score Range", f"[{stats['min']}, {stats['max']}]"))
         if stats.get("above_threshold") is not None and stats.get("count"):
-            rows.append(("Above Threshold (&gt;0.7)", f"{stats['above_threshold']} / {stats['count']}"))
+            thresh = stats.get("threshold", 0.7)
+            rows.append((f"Above Threshold (&gt;{thresh})", f"{stats['above_threshold']} / {stats['count']}"))
         if sampling.get("coverage_pct") is not None:
             rows.append(("Video Sampling Coverage", f"{sampling['coverage_pct']}%"))
+        if isinstance(aux_agg, dict) and aux_agg:
+            aux_str = ", ".join(f"{html.escape(str(k))}={v:.4f}" for k, v in aux_agg.items()
+                                if isinstance(v, (int, float)))
+            if aux_str:
+                rows.append(("Auxiliary Signals", f"<code>{aux_str}</code>"))
         detail = "".join(f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in rows)
         return f"""
 <h3>Key Figures</h3>
@@ -406,8 +413,21 @@ reproducibility only. Do not cite it in a finding.</div>
 
         sections = []
 
-        faces = self._sorted_images(out_dir / "faces", "*.png")
         per_face = {f["face_id"]: f["fake_prob"] for f in (finding.raw_output.get("per_face") or [])}
+
+        full_frames = self._sorted_images(out_dir / "full_frames", "*_frame.png")
+        full_frames.sort(key=lambda p: (-per_face.get(p.stem.removesuffix("_frame"), 0), p.name))
+        if full_frames:
+            sections.append((
+                "Top Suspicious Video Frames",
+                "Highest-scoring full video frames with detected face bounding boxes",
+                full_frames[:3],
+                full_frames,
+                320,
+                2,
+            ))
+
+        faces = self._sorted_images(out_dir / "faces", "*.png")
         faces.sort(key=lambda p: (-per_face.get(p.stem, 0), p.name))
         if faces:
             sections.append((
@@ -416,6 +436,18 @@ reproducibility only. Do not cite it in a finding.</div>
                 faces[:6],
                 faces,
                 220,
+                3,
+            ))
+
+        frames = self._sorted_images(out_dir / "frames", "*.png")
+        frames.sort(key=lambda p: (-per_face.get(p.stem, 0), p.name))
+        if frames and not faces:
+            sections.append((
+                "Scored Frames",
+                "Sampled frames / windows evaluated by the detector",
+                frames[:6],
+                frames,
+                240,
                 3,
             ))
 
@@ -454,17 +486,36 @@ reproducibility only. Do not cite it in a finding.</div>
 """)
 
         if per_face:
-            pf_rows = "".join(
-                f"<tr><td>{html.escape(str(f.get('face_id','')))}</td>"
-                f"<td>{f.get('frame_idx','N/A')}</td>"
-                f"<td>{f.get('bbox','N/A')}</td>"
-                f"<td>{f.get('fake_prob','N/A')}</td></tr>"
-                for f in sorted(
-                    (finding.raw_output.get("per_face") or []),
-                    key=lambda r: (-r.get("fake_prob", 0), str(r.get("face_id", ""))),
-                )
+            unit = finding.raw_output.get("unit") or "face"
+            sorted_items = sorted(
+                (finding.raw_output.get("per_face") or []),
+                key=lambda r: (-r.get("fake_prob", 0), str(r.get("face_id", ""))),
             )
-            parts.append(f"""
+            if unit == "window":
+                pf_rows = "".join(
+                    f"<tr><td>{html.escape(str(f.get('face_id','')))}</td>"
+                    f"<td>{f.get('start_s', f.get('frame_idx','N/A'))}s &ndash; {f.get('end_s', 'N/A')}s</td>"
+                    f"<td>{f.get('fake_prob','N/A')}</td></tr>"
+                    for f in sorted_items
+                )
+                parts.append(f"""
+<details><summary><b>Per-Window Results ({len(per_face)} total)</b></summary>
+<div class="collapsible-content">
+<table>
+<tr><th>Window ID</th><th>Time Span</th><th>Fake Prob</th></tr>
+{pf_rows}
+</table>
+</div></details>
+""")
+            else:
+                pf_rows = "".join(
+                    f"<tr><td>{html.escape(str(f.get('face_id','')))}</td>"
+                    f"<td>{f.get('frame_idx','N/A')}</td>"
+                    f"<td>{f.get('bbox','N/A')}</td>"
+                    f"<td>{f.get('fake_prob','N/A')}</td></tr>"
+                    for f in sorted_items
+                )
+                parts.append(f"""
 <details><summary><b>Per-Face Results ({len(per_face)} total)</b></summary>
 <div class="collapsible-content">
 <table>

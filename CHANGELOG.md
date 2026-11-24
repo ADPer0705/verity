@@ -8,8 +8,23 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Planned
 - Authentication and persisted job history for the API.
-- More audio detectors and an audio-forensics temporal view.
-- Optional signed evidence bundles (case export with hashes).
+
+## [0.6.0] — 2026-11-24
+
+### Added
+- **Standalone single-binary distribution (`verity-linux-x86_64`)**: PyInstaller executable embedding the orchestrator, FastAPI server, React Web Console SPA, and all 58 detector definitions/scripts. Uses `platformdirs` (`~/.local/share/verity`, `~/.cache/verity`, `~/.config/verity` or `$VERITY_HOME`), self-bootstraps `uv` + managed standalone Python runtimes, downloads & SHA-256-verifies checkpoints, and warms Hugging Face / Torch Hub caches in a single `verity setup --trained --airgap-ready` command before disconnecting for air-gapped operation.
+- **Cross-machine air-gap transfer kit (`verity airgap export` / `verity airgap import`)**: Exports verified archives of the binary, `uv`, managed Python runtimes, checkpoints, detector lockfiles, `uv` wheel cache, and pre-warmed HF/Torch Hub caches with `SHA256SUMS`, then recreates all detector environments offline via `uv sync --offline --no-python-downloads`.
+- **Forensic Evidence Preservation Bundle (`verity export` + `GET /api/media/{id}/export` + UI button)**: Packages a self-contained, chain-of-custody `.zip` archive with `MANIFEST.json`, `SHA256SUMS.txt` (verifiable via `sha256sum -c`), verified working copy, HTML/PDF dossier, model-free forensic figures, and all detector findings & explainability artifacts.
+- **11 new detector architectures (58 total, 39 evidence-grade)** spanning video, image, audio, and audio-visual lip-sync modalities: `d3`, `forensics_adapter`, `laa_net`, `lipfd`, `m2f2_det`, `m2tr`, `prodet`, `rawnet2`, `realforensics`, `syncnet`, `vlaforge`, plus official checkpoints for `ftcn` and `sbi`.
+- **`verity serve` & `verity doctor`** CLI commands and `POST /api/forensics` API endpoint.
+- **Web Console UX redesign**: Dedicated **Forensics** tab (metadata, compression/ELA, noise/FFT, video temporal, audio spectrogram with severity filters and lightbox galleries), Case Overview detector probability spectrum, top suspicious annotated video frames (`full_frames/`), scored whole frames (`frames/`), auxiliary branch score cards, and modality-aware unit tables (`face`, `frame`, `clip`, `window`).
+
+### Fixed
+- **Silent zero-weight checkpoint loading** in `efficientnetb4`, `meso4`, and `meso4Inception` (and hardened `resnet34`) by stripping the DeepfakeBench `backbone.` prefix before `load_state_dict`.
+- **Broken Grad-CAM / spatial localization** in `meso4`, `meso4Inception`, `gend`, `ftcn`, `altfreezing`, `i3d`, `lrl`, `ucf`, `clip`, and `recce` (attention-only FaceMesh region energy when reconstruction decoder is untrained).
+- **Truthful activation map reporting** in `detectors/common/engine.py` and harmonized `0.30` / `0.70` verdict band wording in `detectors/common/reasoning.py`.
+- **Air-gap offline enforcement**: Automatically sets `HF_HUB_OFFLINE=1`, `TRANSFORMERS_OFFLINE=1`, `DIFFUSERS_OFFLINE=1`, and `UV_OFFLINE=1` on detector subprocesses when offline mode is active.
+- **Hugging Face weights bundler** (`src/verity/weights/bundle.py`): `.gitattributes` now tracks all binary checkpoint extensions (`*.pth`, `*.pt`, `*.safetensors`, `*.onnx`, `*.model`, `*.tar`, `*.bin`) and the generated model card lists all non-redistributable upstream checkpoints dynamically.
 
 ## [0.5.1] — 2026-10-21
 

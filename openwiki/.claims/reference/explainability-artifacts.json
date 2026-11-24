@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:9763d025afc42f01351a232fc928cb61c20d80bcca37abeeca138d50510bc720",
+  "claims": [
+    {
+      "id": "claim_9f400014eccc47b4b69f10cf166c7bba",
+      "statement": "discover_evidence_paths collects timeline.png, top full_frames/*_frame.png, attention_maps/*_attention.png, reconstructions/*_recon.png, faces/*.png, and frames/*.png emitted by common/engine.py into Finding.reasoning.evidence.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/engine.py#L401-L517",
+          "version": "repo-lines-v1:sha256:c85fa27e561c9d55dc64166f3ba747449d73736bae18e511cd9d6032346bcbe5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2NjMxOTFiMjIyM2Y2ZTY5ODRlMjQ3N2FhZjJkOGMxYzc4ZTYwMzYzMDdhZGM0MzU3MDllMTUzYTU0ZGZhYTE2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkNGI5MTM5MWIyZWYyMzEwYzQ5OWNhZmZkM2I4MTA2ZjJkYThlMTUxMGUwZTE3YzU0MjA3ZGE2OTNiNzRkNDdiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4NGMxZmJjZWQ4MDMxYzczOTMzY2JjY2IwNTdkMjhhZWE1NDEzZWRlNmJhMDk2ZDJkZTcxZjljMmFkZTM4NTE0In0"
+        },
+        {
+          "resource": "repo://src/verity/detect/output_parser.py#L7-L33",
+          "version": "repo-lines-v1:sha256:7f2cf4af5f9b538946c2161652f33a3db0198d5fdf06a7267c9223ea6c926dbf:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NTQ0NDIzOTJkMGVmOWYwMjRmMWRiMjE0NzdlYTcyODZmMzY5OGQzMmI4YzA2NGRhOTQzMTlkMjg1ZTNjZjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg5OWM1MzI1YzczN2IyZTkyZDQ3NWQ0NmFiZDRlNThhNDY0ZmQ0N2RhZThlYTdhODhjN2VkNmY2YzkwODA0NjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI1ZmQyZmIyNGY5YzAzOWUwNDk1NjZlODViMmQ3OTVlYjAxMmM5NDRlMTk2NmE1NmQxZjQ4ZGQzNDIzYTBkODEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c700f66b0a224bb6a15e443b11d2798c",
+      "statement": "ReportGenerator embeds full_frames, faces or full-frame images, attention maps, reconstructions, aux_aggregate summaries, and switches between Per-Window Results and Per-Face Results tables based on unit.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L344-L527",
+          "version": "repo-lines-v1:sha256:d8ac95763f95f330d167375dad455d77577ade84ce22b5d37a663258d06f9297:eyJzZWxlY3RlZExpbmVDb3VudCI6MTg0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjYTFlZDkzYzg1MjNjZmIwZWUwYTEzMTg5ODZkNTQwMjEwMzllZWQ0ZTMxYjFkMTZlNTg3Y2I0ODljODQ2MTkwIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlZWVmZDQwZGU3MWU2YzFjNTM1ZWU2OWZlYzI3ZTU2NjQwYzRkY2ZiYjBlMWRkZWJiODU5ZjZkN2Y3ZjFlNzg5IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIwNzg3MWUyOTVjZmViOTMzMjMxNGFlNDE3Nzk1NTkzNDI2MjJlYWZlYzg2ZGE2YTg1MjliMTdjZmMxODk0NDg0IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJmZjRjMzI4ZWI4MTk3MjE4YjM3MmViYjQ5MjM0OWQ2ZDQ5OGE4YTllMGQzNjBjZTM5MGVhNjZhNWQyNzQ2ODBlIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_cca1872ecd4a44d8a7830488e0740e68",
+      "statement": "ForensicsReport sorts results deterministically by analyzer id and flattens observations ordered by severity rank (warning, notice, info), analyzer, and statement.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/models.py#L39-L70",
+          "version": "repo-lines-v1:sha256:ab63834bf3ff35f35d86f438322e92b139b36dd0b86bf9b55d104b80820c3762:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3NGM0MjhkZjViZGI2YTlkMDRkM2NkOTQ1NjdmMzM3MTIwMDg2YjhhYmJjMGQzMGMwZGU4ZWIzYjNmOWMzMGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2N2M2YzFmMTBjNmYwYmYyNmYyM2M5NzZhNmQ5N2Q1NzQ3ZDg5ZTk0MTdkNDc1OTk5NWI3OGVkNjE1ZDBiNmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRlYWVhYjI1MGNkYjQ3ZTE2YzkyZDBmMzUwYzViZDNmNmM3NDkzMzU0OWU5YjMyNDFmZTE1NmU0ZTMyYWU5OGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_26b502ab1a284f5f86c152e60a4102df",
+      "statement": "export_evidence_bundle writes atomic zip archives bundling working-copy media, reports, forensics images, and detector outputs together with MANIFEST.json and a sorted SHA256SUMS.txt covering MANIFEST.json itself.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/export.py#L92-L188",
+          "version": "repo-lines-v1:sha256:22a6e182c66d17db59773620fc1f78e92d76d1e1d3e54ef7b4c40272cee74bd7:eyJzZWxlY3RlZExpbmVDb3VudCI6OTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4MWQ5NzAwMDE0MzllNzc5YjcxMzViNTAzNjdmYjI0YTFiMzM1MjEzZGNjZWVhZDhhNjg1OThmYTUxOThjOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyMTUzMTNiMDkwZDk0YWUwZDhlNDBiMDMzNTk4ZDc0MTVmZWIxYjA3MzA0ZTE4YWFmZWFmMDhkM2RmOGEwNzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkMWMwNmY1ZGFiN2ViNDNjNTM5OGU2N2MxOTczN2MzYTIzYzdjMTcxMGY1ZDE2ZmVkOWVkNDViMmMwMWY3YTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

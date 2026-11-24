@@ -34,10 +34,12 @@ Every endpoint maps onto a `verity` CLI capability:
 |---|---|
 | `verity ingest` | `POST /api/media` |
 | `verity extract` | `POST /api/extract` |
+| `verity forensics` | `POST /api/forensics` |
 | `verity analyze` | `POST /api/analyze`, `GET /api/media/{id}` |
 | `verity run` | `POST /api/run` |
 | `verity compile` | `POST /api/compile` |
 | `verity report` | `POST /api/report`, `GET /api/media/{id}/report` |
+| `verity export` | `GET /api/media/{id}/export` |
 | `verity setup` | `POST /api/detectors/setup` |
 
 Long-running operations return a job; poll `GET /api/jobs/{id}` or subscribe
@@ -58,10 +60,12 @@ def _dev_origins() -> list[str]:
 
 
 def create_app() -> FastAPI:
+    from verity import __version__
+
     app = FastAPI(
         title="Verity API",
         description=DESCRIPTION,
-        version="0.5.1",
+        version=__version__,
         docs_url="/api/docs",
         openapi_url="/api/openapi.json",
     )
@@ -134,15 +138,17 @@ app = create_app()
 
 
 def main() -> None:
-    """Console-script entry point: ``verity-server``."""
+    """Console-script entry point: ``verity-server`` / ``verity serve``."""
     import uvicorn
 
-    uvicorn.run(
-        "verity_api.main:app",
-        host=os.environ.get("VERITY_HOST", "127.0.0.1"),
-        port=int(os.environ.get("VERITY_PORT", "8000")),
-        reload=os.environ.get("VERITY_RELOAD", "").lower() in ("1", "true", "yes"),
-    )
+    host = os.environ.get("VERITY_HOST", "127.0.0.1")
+    port = int(os.environ.get("VERITY_PORT", "8000"))
+    reload_ = os.environ.get("VERITY_RELOAD", "").lower() in ("1", "true", "yes")
+    if reload_:
+        uvicorn.run("verity_api.main:app", host=host, port=port, reload=True)
+    else:
+        # Pass the app object directly so frozen PyInstaller binaries work cleanly.
+        uvicorn.run(app, host=host, port=port)
 
 
 if __name__ == "__main__":  # pragma: no cover

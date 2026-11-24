@@ -72,14 +72,14 @@ Never commit checkpoints, `workspace/`, `output/`, `.env`, `.venv/`,
 3. Verify the tier: a head trained on a deepfake/generation task is
    `trained`; a pretrained backbone with an untrained head is
    `backbone-only`; random weights are `random-init`.
-4. Run `uv run python scripts/gen_detector_table.py` and
-   `uv run python scripts/gen_third_party_notices.py`.
+4. Run `uv run python scripts/gen_third_party_notices.py` (and verify
+   `uv run python scripts/gen_detector_table.py`).
 5. Add/extend tests:
    - registry loads the YAML and derives the expected capability/tier,
    - output parser maps a representative raw result to a `Finding`,
    - the detector is selected/excluded for the right media characteristics.
-6. Document the detector in `docs/detector-catalog.md` (what it looks for,
-   artifacts, caveats) and add its citation to `THIRD_PARTY_NOTICES.md`.
+6. Refresh the OpenWiki documentation (`openwiki/reference/detector-catalog.md`)
+   and add its citation to `THIRD_PARTY_NOTICES.md`.
 
 A port that only runs on the author's machine, or that hides a missing
 checkpoint behind plausible scores, will not be merged.
@@ -107,8 +107,8 @@ be synthetic) or describe the generated artifact.
 - Reference the affected area (`pipeline`, `detectors`, `api`, `ui`,
   `weights`, `forensics`, `docs`).
 - Describe **what changed and why**, plus any evidence/verification steps.
-- Keep generated files (`docs/detectors.md`, notice tables) in the same PR as
-  the change that caused them.
+- Keep generated notice tables (`THIRD_PARTY_NOTICES.md`) in the same PR as
+  the manifest change that caused them.
 - By contributing you agree your work is licensed under the project's
   CC BY-NC 4.0 license and that you have the right to submit it.
 

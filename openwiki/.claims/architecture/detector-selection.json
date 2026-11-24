@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:b50939c963229c26cc0721e46d31629869a68dc6a7bc5f1bd51baf59ac9ecb45",
+  "claims": [
+    {
+      "id": "claim_476e8da41ccf4719bdd7f9e934559127",
+      "statement": "DetectorSelector evaluates every registered detector in sorted id order and records an included/excluded SelectionDecision with human-readable reasons, producing a persisted DetectorSelection.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/analyze/detector_selector.py#L50-L68",
+          "version": "repo-lines-v1:sha256:fd38017c1d05c08d591ebf325a089bfb35319e809487877473908d293879013e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmYmUzZjBkYjM2YzE4ZWU3Mjg4MGJiMGU0YjE3NWIzMzJiYjA0ZDZlOTQ2NzMyYjhhNjc2NGYyOTgzZTgxNDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkZjgxNzUxMmRiYTZlOTQwOGFmOWU4NWZmZWJmYjA4ZGNjOGI4Y2EzNmM3MmE5OTc5NWI5NDVmYTEyOGE1NjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3M2RiMjE2ODdiMGFmNDMyZTcxZTc3NmJmNzIwMTM3YjJiY2ZjY2I5OWNiODE1NDkxYzA3MzkwYWY5YjUyMDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMzMWVmOWUzYTMyYWE1NjE5NmUzODkxMGQ3YTllNGUyMzNlZTkzZDkzNzAyNmFiZDgyZWQ5MmY0NjhhYmJhNDYifQ"
+        },
+        {
+          "resource": "repo://src/verity/analyze/models.py#L36-L55",
+          "version": "repo-lines-v1:sha256:609c6ee8a8e1b8b52c50f364ed19e936b4eb4c889c0d7a30b1e236be7bfe48f6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwYjdlZWQxNmIyMmUxNTU0ZGVkNWZmNTI0YzhlYzM0ZGIzNzJmZDE1ODYzOGMxNjU1MjliMmU2ODhiZGM2ZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlN2M5NTdiY2I0NGZiNjczYzk4YjAwNTBhNzVkMzgwODJkYjgxZDkxOGRlMzEzYTNmMDdjMTIzNTMwNmQ3ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMTk3YzM1OTQ5MjViYjRiNmIyMWE5OTQyYTg5M2JjNzdjMGUzZmMzMDJkOTIzMzdkZjlkM2QxYjk1NmMwMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6a6a762d4c954c209ce998b56abf0d7b",
+      "statement": "Detectors whose classification head is untrained are excluded from auto-selection unless include_untrained is set, because their outputs are not evidence-grade.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/analyze/detector_selector.py#L79-L88",
+          "version": "repo-lines-v1:sha256:3c131c9d476e2b4ab34b296bb7b1fe8b6bf141511195ff32fa6c222badf439a8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5NGY4MTI4OThkMTZhNGMyNTdhOGNjMDQ5MjI5Zjc3MzBiYzAxMDkxYzBkYzFjNGI2Y2QwYzQwNzk1ZTJiMmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2MmQzMjBkZWViODg2OTM3NjgxYjJmYjVkYTFjMzVhMWJkNTg5ZTM3MzU5MjA4YmZmMzJkZTFlYmIzZTYzYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYwNmM0MmZiOTAxMWFlMTAzODQ2NTUyODViYzZlZTY2NjkzMWFjZTE3ZWJkYzMwNGQ0MTk1NDg0NTZhZWQ3ZGMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5993ea9b68c1470f821c7bd3a6674119",
+      "statement": "Selection applies ordered checks for media-type compatibility, required audio tracks, face presence, minimum face size, temporal sufficiency for video-only detectors, and checkpoint availability or offline mode.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/analyze/detector_selector.py#L89-L143",
+          "version": "repo-lines-v1:sha256:cd1af72dbff7b24d29796db6e951f6dde0a7038d02816667dfc397707a57c2ba:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmYzFmNWJkOTkwNjE2ZDFjMGM4Mjc1MmRlMTVjODhiNTI0Y2VlNDYyNjQ4NTdjMTg2OWJmNTJhZjA0ZGVlZWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhMjE1NTM0M2ZhNjBiNzIyNjI5OGFmOWRjZTM0OGZiNmExZWJhYWM0Y2ZlZTM1NGZhMGUyZTQ4ZWNkYjExZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxZjYxMzM1M2ZiMGU1MTZhNmZmZTA5NDY4ZDAyZDBkMjRmNGNiNmE0ZDM0NWM4MDNiMjIzMjgzY2JiZjNmYTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMzMWVmOWUzYTMyYWE1NjE5NmUzODkxMGQ3YTllNGUyMzNlZTkzZDkzNzAyNmFiZDgyZWQ5MmY0NjhhYmJhNDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_43a4d3007d644ca0a7c3544d29f8ad85",
+      "statement": "Capabilities are derived from a detector's effective input mode and required artifacts: face_crop accepts image/video with faces, face_clip is video-only with faces, full_frame accepts image/video, full_clip is video-only, audio accepts audio/video with audio, and av_clip is video-only with faces and audio.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/base_detector.py#L67-L134",
+          "version": "repo-lines-v1:sha256:e5feeefbad344372b7037b934b5f6f2de4d0f7a0eb3ba7b8f62840c437512d0a:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmNWMzMTg1NWNiN2FiM2I1MGQ3YzI0ZTQ3ZGRmMmVhOWY1MTJhNGRhNzk2NDk4ZDBmZDU0ZDU1MmQ2OTNiYzAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwZDgyNjMwNmIxNmQ1MGI4NjEzMThmYmM2ZTg0MDVmNzc4YTYwZDUzODUxYzMxOWRmZTMyNTBlOGExZjQ0MDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5ZWEyNTc0YTRiMTUyY2Y5NzE0ZjcwZTI5NjJhYWFkZTdmY2RkYjg1MmI3MTBkMzkyMmNjNTMxNTIyYTYxMTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_09e5c2d302ee4540968180b0106442f7",
+      "statement": "Weight provenance is classified into four tiers: trained, backbone-only, random-init and untrained, with trained derived from an explicit weights.trained override or kind official, and only trained findings count as evidence.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/base_detector.py#L22-L65",
+          "version": "repo-lines-v1:sha256:98350c70e66517846c0770d6d92f258c44213f0b24f41583449254c7156fdeda:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyZjc3OGUxYWM3ODM3NzI1MDFjOTdkOGU3NDU3ZjIzNzAyMTU5OTVmMmJlODE4ZmM1MTE2YzdhNTUyMmRkOTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzNzhmMWFkOTE3NTA1ZWE5MjA4MDFkNDhjMWQ1OWQxNzZlNTNlYjcwYTc3MmU2MDZkNjVhNGZmZDM3Mjk5MGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcyMTQyNWJkYjhmYTZjYzJjNjIxNmZkYTA3MmIwNjY4NGQ2YTY2MzRjNmVmYzZkYWUyODEzMWFmNGY2ZDRkZTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhYzhmZThjMTQwYzI0ZTFlOWIyYTdlOWNmNGM4YjJkODA2Nzc3MmNmNDJjZmVkNTllMDUwZGEzYjc3MTJiMGUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_949ebf8eba3e48d08ff41621575d94ee",
+      "statement": "An explicit detector override runs the named detectors even if untrained, rewrites the saved selection's included flags to match what actually ran, and ignores unknown ids with a warning; auto-selection remains evidence-grade.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L148-L193",
+          "version": "repo-lines-v1:sha256:3ca5efd4348993c176757e716b4da3c8e4d1007ffacbc3ddc103854914464a74:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNkNDQ2MjMwMWUyYjQ5ZjgyNzZmMzRlYTc5OGM4NTdlZDNmZTkzMTA0ZTY1MTE3MGQ5Mjg2MTNhODNiN2VhZmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZjMjUyY2U3YmQzZGE1MmVmM2JkMzg1NTRhMzA0OWI4ZDc1ZTQzN2I0YThiNjQ0MWU3ODI4M2Y5MzcxZmI4NmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxYjVkZmE1NDMyMTJjZjZjMGNhYjM1ZWU3NTQyZDk4NDE4YTBmYWI1ZTdlODE3OTg3YzQ1YWM1MThkNzExNjkifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L662-L700",
+          "version": "repo-lines-v1:sha256:e60d86ce2c15ad55421b5723b9492c765b2a93c43b2f7631914a932c69ab2127:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1OWEwZDRjOWE1MjQ5MmM1ODYyYjRkOWY3M2RmMzA0NWFiM2YzMjA3MjdkNzc2OTllMGZjM2E1OGQwNTUwNTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjYzhkN2M3YTZiZjZhODRmMGFlN2I0ODUyOTFkMjg3M2VmMTIxOTRmMjFkNDFmN2E3ZDViMjFkZmZiNGJhMjQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA4NzFmZWQ0NjQyNmE0MDQ2NWY5ZTJmZmMxOTRmYjhhYjM0MmUxYzQ4NzExZTQzOGZkNDRmNmI2MmFiZTFlZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMxMGU1NmNjZWIzN2ViNjMwMzhlYzQ4ZDljNjJhZDZlZGFiNDkyMzliMzM4MTA1ODU4NGFhMDQ3N2IyYzZiYmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6a7ee9ad6cbd44988a6b44bd047a08c5",
+      "statement": "The manipulation-family taxonomy defines face_swap, face_reenactment, lip_sync, face_synthesis, image_synthesis, image_editing, video_synthesis and audio_synthesis, each with a label, modalities and description used for coverage reporting.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/models/taxonomy.py#L12-L59",
+          "version": "repo-lines-v1:sha256:7127a41b702f2b89bdba9e552306e3447591c5e559e205c7405e42878d6565ca:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkNDc4NTUyMTJjNWIwODViMTdlOWU2ZDhmZDUyY2E4NTA3Y2QyZWU2NjA5NTM2Yjk5ZjIzOWIzZjY3N2EzY2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE1Y2U5ZTBjMjVjNmY3YThjYzAzN2ZkNmE3Y2M1ODNhODk5NDFmMTQ2ZDllYTkxOTNiOGY3ZTNhM2ZiOTNlMjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVmMjIyODA5NTY2ZWI1Yzg2ZjAxNjVkOGNjODBhMjI4ZDg0MjM2YTY1NGRhZmM4ZDRkNGJlZTk2MzA2NDRlODQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_460b26cc76304080bbf917ebb637266d",
+      "statement": "Checkpoint availability follows weights.kind: random is always eligible, a configured file must exist under detectors/<id>/weights/, and external/file-less weights are eligible unless offline mode requires a local cache.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/analyze/detector_selector.py#L147-L176",
+          "version": "repo-lines-v1:sha256:ff0e9c239ae4357af6cc4f2c5b7870b0746e4b4c0263388801974d0bd8becdad:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxMjUxNTViNjcxNGMzMzc2ZDU2NjUxNmM0MTc3NzI4NTcwMWQ2YmMzNWFkMDIwYmQ1NjJkZDM3NjZlNTdkMTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2ZjA4ODdjMTNiODRmNWI5YWEwMjIzODNjZjE5ZjA1ODk5MzUzMDAwZTczZDAwODE5OGRiMDY1OTA4OTc2YzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMzMWVmOWUzYTMyYWE1NjE5NmUzODkxMGQ3YTllNGUyMzNlZTkzZDkzNzAyNmFiZDgyZWQ5MmY0NjhhYmJhNDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0OTM2NGM2NTY5NzU1YmY5MDAyMmZlNGFmMjQ1NzNlNGQxZjY5ZTE0YmE0NzljYzc3YzI1NjkwOGViNzEwZjIifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

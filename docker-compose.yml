@@ -24,6 +24,7 @@ services:
       - "${VERITY_BIND:-127.0.0.1}:8000:8000"
     environment:
       VERITY_HW_PROFILE: ${VERITY_HW_PROFILE:-auto}
+      VERITY_MAX_FRAMES: ${VERITY_MAX_FRAMES:-32}
       VERITY_WEIGHTS_AUTO: "1"            # fetch missing checkpoints on start
       VERITY_WEIGHTS_HUB: ${VERITY_WEIGHTS_HUB:-}   # empty: manifest mirror
       VERITY_OFFLINE: ${VERITY_OFFLINE:-}           # "1": never download

@@ -98,9 +98,11 @@ class AltFreezingDetector(nn.Module):
 
     def forward_detailed(self, x):
         inputs = [x]
-        prob = self.resnet(inputs)
+        feat_list = self.resnet(inputs, return_feat=True)
+        feat = feat_list[0]
+        prob = self.resnet.head([feat])
         logits = _prob_to_logits(prob)
-        return {"logits": logits, "probs": torch.softmax(logits, dim=1), "feat": prob}
+        return {"logits": logits, "probs": torch.softmax(logits, dim=1), "feat": feat}
 
 
 def build_model(weights_path, device, clip_size=16):

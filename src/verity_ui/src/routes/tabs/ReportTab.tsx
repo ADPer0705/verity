@@ -7,9 +7,15 @@
  */
 
 import { Badge, Button, Group, SimpleGrid, Text } from '@mantine/core'
-import { IconExternalLink, IconFileText, IconFileTypePdf, IconRefresh } from '@tabler/icons-react'
+import {
+  IconArchive,
+  IconExternalLink,
+  IconFileText,
+  IconFileTypePdf,
+  IconRefresh,
+} from '@tabler/icons-react'
 
-import { reportUrl } from '@/api/client'
+import { evidenceBundleUrl, reportUrl } from '@/api/client'
 import type { CaseDetail } from '@/api/types'
 import { Banner, EmptyState, KeyValue, SectionTitle } from '@/components/Primitives'
 import { formatBytes, formatTimestamp } from '@/lib/format'
@@ -55,6 +61,14 @@ export function ReportTab({
             onClick={() => onGenerate('pdf')}
           >
             Generate PDF
+          </Button>
+          <Button
+            variant="light"
+            leftSection={<IconArchive size={16} />}
+            component="a"
+            href={evidenceBundleUrl(detail.media_id)}
+          >
+            Export evidence bundle (.zip)
           </Button>
         </Group>
       </Group>

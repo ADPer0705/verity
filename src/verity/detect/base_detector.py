@@ -99,7 +99,7 @@ class DetectorDefinition(BaseModel):
     min_face: int = 30
     cam: bool = True
     resolution: int = 256
-    # face_crop | face_clip | full_frame | full_clip | audio (see detectors/common/spec.py)
+    # face_crop | face_clip | full_frame | full_clip | audio | av_clip (see detectors/common/spec.py)
     input_mode: str = ""
 
     @property
@@ -112,6 +112,10 @@ class DetectorDefinition(BaseModel):
     def capabilities(self) -> DetectorCapabilities:
         mode = self.effective_input_mode
         required = {r.type for r in self.artifacts.get("required", [])}
+        if mode == "av_clip":
+            # Audio-visual detectors: frames with a face plus the soundtrack of the same span.
+            return DetectorCapabilities(media_types=["video"], faces_required=True,
+                                        audio_required=True)
         if mode == "audio" or "audio" in required:
             # Audio detectors consume standalone audio and the soundtrack of videos.
             return DetectorCapabilities(media_types=["audio", "video"], faces_required=False,

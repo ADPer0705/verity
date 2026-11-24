@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:8ff308364c2732af5462f9e9393f042382de3d6921d82ee272b8ef1f3a24bd52",
+  "claims": [
+    {
+      "id": "claim_5265b5b936d44f7e984b83c11d8b7b97",
+      "statement": "Release builds compile packaging/verity_entry.py into a single executable on ubuntu-22.04 (glibc 2.35), embedding the React SPA, config, cv2/weasyprint data, and 58 detector definitions while excluding binary checkpoints and emitting .sha256 files.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/release.yml#L45-L78",
+          "version": "repo-lines-v1:sha256:aa88fbaa6f1f57321493d5b5c2dd9119a144e457ce0618b91a9cea7054b52627:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNTJiZTEwNDQyNDU4MjBlOWRkNzg0ZmRiNjk2Yjk2YzZkNDgxYzAwMjY4NGYwNTVhODEyYWUzNzAxMDU0NDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0ZjlhNGMzOTc0YTc2MzM2OTkzODAzNDMwNDk0NjM5ZmU3MTYyZjE3MjI4MjFhNTU0NzQ5NDczMDRjYTUyMTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU0MTBmZDRkYjFiMWJhOGE4YzNiMzVjZWRkZTEyNzVjYzQyNzQyYmM5MzljNDYyMTk1MmYwNGU4NWU4M2Y2NDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIwODY5OGNkNjBiMzk4YTdlZTc3NWQ1NTk4NGQ4ZTEwNjk2NDI4MTE3NDM4ZmRlYTk2OTY3ZDMxYWEwN2FlNzMifQ"
+        },
+        {
+          "resource": "repo://scripts/build_binary.py#L44-L187",
+          "version": "repo-lines-v1:sha256:c40ea452b40d39186db59b898973ae3e1a3b762be1f9cb4f979378c696f5f86d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQ0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJlNWVhMDljM2Q1MGM3MDhkMzJiZWMxYjY3MmE5ZDg4ZThlYTlmMDJjYjgyOTUxZTdkNzgyNjRkN2FmYjFmOGE0IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIxNjIzM2IzZmZlYTMyYTIzZGY1MzA2NTM0MzQ4ZjJkZWU3NzZhNWE2Zjc0ZmI1MzMxNzVkZGM1MzlhOGZlNDY0IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIwZjNhNzA0ZjgyNmZlNjU3NmQ1Yjc5Y2ZkYzg5YTMyNTcyNjAzMDU0ZmMxNTE1ODViZmFiYTViNGNlNWQxODJlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzZDQxMzQwY2MyMzlhMTU5Y2U5YjYwMjJlOWY2MzIyODMyZTJlYWQ3NmNhZTllNDc1NGQyMTBlYjhmYjZkNWU4In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_0176fc86d18b4d999816a7e347cad3b9",
+      "statement": "The release workflow builds and attaches the standalone Linux binary, root install.sh, SHA256-checksummed Compose deploy tarball, and slim GHCR container image on v* tag pushes.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/release.yml#L17-L102",
+          "version": "repo-lines-v1:sha256:9a325376d64c17e9530cb5927c17be05e92716fda6988dcc4875be577b022509:eyJzZWxlY3RlZExpbmVDb3VudCI6ODYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwMTIxNTkyMjExODQxNjBlOThlMzlhNWFiMGI2NjdhMzMzN2ZhYjdjMDllZmJmOGUyMjc3NzY4NTk5MDNkZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzMDEyOTBmZjU4YzdhNzBmODU1YWY0ZjA2YTIxZTg3M2ZmNmUxMWFhZDU4NDI5OTUzZTNkYWU3NTUxYjQ5NTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5NDYyZDVmMmMyMDdlNmI0ZjgyODQzZDkxNTRmZjBiYmFkMDM0MzkyNGIyYzNjNGJhYmQ5OWI4N2NjZDRiODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhYzJmZGY4OGYyYTk2ZThkZDhjMjk5ZGJlYTUxNjBlNWJmYmM1YTdlYWQ0Y2Q1MjRiZDkyNjgyYjI3MWM5MTYifQ"
+        },
+        {
+          "resource": "repo://scripts/build_deploy_bundle.py#L32-L90",
+          "version": "repo-lines-v1:sha256:d3da4468df8e9fccd7d4805a0b926ca4d086e100acb807887a0a9ebba234df16:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwYmM1MTI2NWRhM2M0OTRiZGQyOTQwOGMwZTE3NzY2NWJmZWFkNmZkMjc5MzZmMDU5ZDJjNTU3YjE5YTNjZTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0ODZmZjVjZjkzNjNiNDQyOTMzNjgwM2IyYzk2MGU3M2RhOGM0N2ZhMGM2ZjY3NjU4ZDE0YjMyM2NkMjJkMzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBmM2E3MDRmODI2ZmU2NTc2ZDViNzljZmRjODlhMzI1NzI2MDMwNTRmYzE1MTU4NWJmYWJhNWI0Y2U1ZDE4MmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4e8f4f38c52543cdbb18a6bb804fe482",
+      "statement": "Dockerfile defines a slim runtime target with on-demand uv provisioning and an optional manual full target that pre-bakes trained detector virtualenvs into VERITY_DETECTOR_ENVS_BAKED.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile#L22-L109",
+          "version": "repo-lines-v1:sha256:2fd18c7dc9185ef19eaeafe795386ad89d5e21f55cfacc3ea1c05be3e27941f5:eyJzZWxlY3RlZExpbmVDb3VudCI6ODgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZThhOWVmODg4OWQxNTFjODFkZDE0M2JhN2MwYWFhMDVjMzllZmE5NWJmZGY3NTBiNmE4ODI0YzIxZTIwODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhMTRkMDNjNmMwY2ZjYjAzYWNhZmVkN2U4YjBiYmQ3ODJhYThjNTIxN2Q5N2JlYzI4NTYzNDQwYTQ1MWY5N2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3NjUwYjc5YTZkNTRjOTY2Mzk0NTUwMzRlMzhiN2ZkOTI2NDk0N2IxMjkyNWFjNzIyZWRkODY5NzczYjYyY2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_852df1f57ed542c49fb728a0ec701d33",
+      "statement": "CI runs unit tests, manifest status checks, installer syntax/bundle checks, UI typecheck/build, and no-push slim Docker validation without requiring GPUs or downloaded checkpoints.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/ci.yml#L8-L59",
+          "version": "repo-lines-v1:sha256:bb2e4c71e3b426d35e8702593828bb7539f08ef4b427c321e92a5df2d0b08564:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiMGRkZDhlZjBmODYyYzY3YzYwN2U2MDcxZWVjM2Y3YmFkMjdkYWM3NTc2MmQxNWMxNmMzOGEwMDIzZmYyNmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjOWJkYTZmMzNiOGM3ZTIzZTE3OGMxNjhjN2NjMmU0M2YwNzU0MGRiMDVlNmEzM2NhNzEwMTc5Y2U4OGJhM2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNkNTJiZTEwNDQyNDU4MjBlOWRkNzg0ZmRiNjk2Yjk2YzZkNDgxYzAwMjY4NGYwNTVhODEyYWUzNzAxMDU0NDkifQ"
+        },
+        {
+          "resource": "repo://CONTRIBUTING.md#L51-L97",
+          "version": "repo-lines-v1:sha256:eebe2b74151c0d375537fbc2ab5111beb14edb09e59ad5c0cf32624c57edd42d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0YmU3OTE5OThlZmRmNTEzNzA5OGUzYWQwYTRmYTdmZGMwYTY0Yjg0NWNiMzUyYjUwZmUzMjEyNjhhNzMwNzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMxZWU2YzY1NjY4MGZmNGMyN2VjMjZkMjhkMjg5ZjM2MDJiNzYzMjkyNjAwMzJjYzZjODk5MmMyODBmZmJiZjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyMmQwYWFiMTY2NWY5YWQzYjEzYzk5N2Y3NTcyNzY3ZDU0YTVhMDZhOGYwYjFiOTYyYWUwYzAxMGE3Njk1NzkifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

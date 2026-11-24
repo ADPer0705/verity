@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:6fd7ee930bbf52820f355f1c8bb086931ca30f7a2dcbb981f40ec88ccbe6958f",
+  "claims": [
+    {
+      "id": "claim_930870328f8941eb8291d4f0bb385276",
+      "statement": "The repository separates the verity pipeline package (including platformdirs and optional build extras), the verity_api FastAPI service, the verity_ui React console, and per-detector uv environments under detectors/<id>/.",
+      "evidence": [
+        {
+          "resource": "repo://pyproject.toml#L26-L56",
+          "version": "repo-lines-v1:sha256:ff0dbada3397675560fc3b3d80b96c2d127e1e57bf81531d897b2d05711cf319:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOTVmNWU5ZWRlMDE4MTYwNDNjMDc5N2FjZThkYTJhYzRlOTlhOGE2YTYxMGZhOTg1NzBlZjM0YjkzNTYxMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA2NzU2MjBmNTM3MjQxMmUxMmEwMjA5NjYyNWZmZjU5ZDg0MmRjZmI4Zjg2NWEyNDQyZmIxZGUzNDFkNWU4MDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg3MTkyODdhZTVjMjM1ZDYwNmFkNmY0NjllYjFiMTNiYWZiNTM1Yjc5NWI3YjQxOTFkNTc3MmQxZWU2M2ExMGEifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/main.py#L1-L12",
+          "version": "repo-lines-v1:sha256:68f334e380ee98c745e6cf146fcbb18734db067ef3ed4670a8848a39f7499649:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyMmI3M2Q3YzUyYjJkOWQ4NGRhMmQ2YWUzNGU1MGRjOWEyOGQ0MGQxMzRhMTU5YTdhYjJjZGY5OGExNGNhODkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzODRiZmRiMmRmMzgwYjY1NTdjYzdhNzFkMTY4OTE0MTViY2NhYTg3Njk5NDA2ZTIzNmY3NTJjNjQxNTM4OWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3OWI2OGUxZTUxMmQ5YTI4ZDI2Y2IwNTFlZDM5MTczNWIzNzgxNDkyODZjOTM1MDIwMTM2MDQ0ZTJlNWQxNmYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9e67e57c94084321a7e3959b90680aa9",
+      "statement": "verity_api depends on verity and acts as an adapter: service functions compose the same pipeline stages the CLI uses and report progress through a JobContext rather than stdout.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L130-L222",
+          "version": "repo-lines-v1:sha256:75b77dbe0c911cbec668327f502ad3fd52f7790e7ba41f01dd6268db9c1aee1a:eyJzZWxlY3RlZExpbmVDb3VudCI6OTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzE0YTFiZmIyZDEyZTQyMDU0Njg4MjgyMmY4OWY0MGNkYjBjOTEyYzFiMjI4OGY3YmEwMWViNDBiMmFjYjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwYmIyZDcxY2U4YjU1MjMxM2E4Y2I4ZjYzODVmODQ1Mzc1YmQ1ODk2ZTM2ODkyN2FkOWI3MzY5ZjlmMDE3YWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyY2FmODA2MDM3NDAyNWJjMmViZmEwNDljZWZjZjRmNTM2OGM4YzhmMmY5NzAzODYyMGM0NDg2NDk3ZDExMzgifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L777-L861",
+          "version": "repo-lines-v1:sha256:617b34f52bcb83148feda6d035f4b7b4b4de6c611f6d5fbb33a1d4a0e6d5741a:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1ODU2NDA0NTRkZWJiOGEwN2UxM2IyNjI5MWFjZmJhNGMwMDYxMDQwMjkwN2FmN2M0NjZlM2RhNjkwNGViZjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlMTcyMjc5MjFkNWU0ZTE4ZmY5ZDkwZGQzNWNjZDZmOWJlMzhmNjAxYWUxYWEwZDNlMTc3MjYwMWQyZWM1ZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNlNmRiYmU1ZWM0MTY4Yzc4NTQ0M2MxZmY0NzNjMjY4ZjQ3NWM4YzQzM2U2YjEzNDBkZjMxNjQzYjZjNjA3MGMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bfc39567760447f586eae4f5025f1590",
+      "statement": "Detectors run out of process: the orchestrator launches each detector via env_manager (or scripts/verity.py shim) in its own uv environment and exchanges result.json, finding.json and log files rather than importing model code.",
+      "evidence": [
+        {
+          "resource": "repo://scripts/verity.py#L1-L20",
+          "version": "repo-lines-v1:sha256:aec30c959f5af6cdd7ff62609804657fe3fa79c058aba21f9f2692ea04014bd9:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2ODJjYmRiNGM4YjA3NTE4YmY0ODZjNTg5OTBmYzM5MTc4M2FhMjBhOTE2YmZiMjdhZDIxMWViMWQ1YzM2NDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2MzcyNmIwNWQzODllYjA5NzM5NTBhMDk0OWMzZTA4YjA5YWNmZjRiNjg4NzExYzA1YzIyMjMyMDg0YjJjNGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L39-L133",
+          "version": "repo-lines-v1:sha256:8be56828204940069cd61017c3e63a4b0410e7a5ac4fa7923e350e8bd25f3064:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0ZmYxZTY1ZmE4ZjVhMzk1MTEyM2NjNDRjOTZkYjM3NTRmMmMwODU3NjNlOTNkZWI2OTVlMTk2YjljYTFiY2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNmYzU4MDRhNzMyNzk2NTI4Y2YwNjk4YTE3ZjY0MzhjYzk0YzczNTg1OTM4NDMyZmQzYjdlM2MxNGM3N2RlMWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI2M2RiNGIzNzhkZTQyMWNmYjZkZjQ5ZTYxYjUzMmE1NzQ1NTVjNDRjOTI3NTY3ZmY3ZDliYzFkODYzMjQ5ZjMifQ"
+        },
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L418-L464",
+          "version": "repo-lines-v1:sha256:2e49aedbc367745a0ee2b08545d1fbe5922545ba9a41918ce89371218fc80d6c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxZmM0ODA5MzFmMTUxMmJkN2ZhOGI3OTU0MWM4YWQ3NzZhZGQxZjYwYzYwMjdkNjE5ZGRjNmQ2YjM3NGExYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1NzIyYjhjNGYyODMxYTA4YTZmZjE2OGQxNjUxMTRiNmZkYmFjZjk4NDIxNTM2NjI3NzY5M2JkY2IzYmQwMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0NTIwM2UyY2JlN2U0YmVjYzJkNGI5MjQxMGEwZjA5MzdiMjg3ZWI3OTk0YTZjNDY3NTFkY2M1OGRlYTY2NjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2ac5d577897946ebbcf1487f6013e039",
+      "statement": "JobManager runs pipeline jobs on a fixed-size ThreadPoolExecutor with a bounded registry of recent jobs, and jobs live in memory only.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/jobs.py#L229-L260",
+          "version": "repo-lines-v1:sha256:5d94453b5608345d573360f12d016e3995b9b3a7d4c2f7d17bfeaf15414b0def:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzOTc2ZmU0NmU1NmE1YzAyZTIyYjU3ODU0OTRmZDQyMjM5OGY0NzQyNTI0YjAzN2Q1ZWQ4YTEwYTgzNTIxNjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0YjZmOWMxMTIwNGE0OTM2MmQ1NGVlYWVlZDVjNzBmOTZiMGM2YjkwMDljNjkyMGJlNjA2ZGQyMWE3YTAwN2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI5ZGM4ODNlNWYzYmMxNzIwNDg4YzBmYjg5MjQ0OGFjZDY3ZTI2OTllODYwZmI1MmVkYWJmZmFlNjc5MzYzM2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgzNmIzMjQ5N2IwNDRjNTNhZjQ5YTc4ZDBjOTA0YzQ0ZDQ1YzkzODRkNjVkZjg5YjU0YTlmOTg5YmE2OWY1NDAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_60f2a42414f74ae9be1a84a7d784086b",
+      "statement": "In production the API process mounts the built verity_ui dist directory and serves index.html and /assets itself, so the console and API share one port.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/main.py#L102-L139",
+          "version": "repo-lines-v1:sha256:4684d29c245843e1cb2b1607f8d4cc6d8b3d879931aaae197c660bbc001216ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2YzlmYmQyZDNhNGVjOTAwOTA1ZDNhNTY4ZThiOTZlN2E3ZjRjZTk5NzViZWMxMWVmYTM4YWUyNThiZmFiZmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5MWE5MmI4ZGE0ZjgwNDQ4MzFlNjcyN2RiNjY3YjMxNmZlNWNiOTgzY2M1NDM3NDNlZDdhZTE1YjI0YmVhMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA1MWQxODhlZTllMGQ0MTg1MWQzN2I3YWQyOTY5MDBiMGU0ZWQ4YWNlZmMwNmVkOGU1Yzk4ZTU0Y2QyOTJhZTAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_44de332309354f17bfa73771df79cfbf",
+      "statement": "The workspace layout places read-only media copies and sidecars under workspace/media, extraction and forensic artifacts under workspace/artifacts/<media_id>, detector outputs under workspace/output/<media_id>_<detector_id>, and reports under output_dir/<media_id>.",
+      "evidence": [
+        {
+          "resource": "repo://config/pipeline.yaml#L1-L11",
+          "version": "repo-lines-v1:sha256:f0bb674f320f677f3883070b9e5c18df03521aa1c1d671370529c5018ebfc492:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4NzMwNmRkY2IwYTQ3MzdhYjY0YTgxYjk0Y2ZiODA2OGEzZTQ0YTI3YWRjZjliOGM4YzI5NWQ3YzM1MmUxNTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwNmY1N2Q1Mzk0YjJkZWQwMDI4NTFlMjRkNDE1NmI2ZDkxZjRkYWFmYTc3ODA5MjY5Njg3MTM3NDBhZDQwNmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/config.py#L46-L78",
+          "version": "repo-lines-v1:sha256:82ed5edbc5131f1bb7077297ac91f0798d347a1634421e0416ab74b30529c4a0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3MGFmYjYwOGMyM2ZjOTAzZTZhYWYxYmQ3MDkyM2E4ZDgwMDU4MDBlMGY1ZDVlYzg5ZGEzMDkwOWIwZjcyNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUyZTc4ZTY4ODcwYjE4YWFmYzVjYjcwMzgwYzM5YTZmMDdhN2RiNDZlODQwZDM1ODRmYjc5OWVkNjk5MzUzMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4ZDE2ZWQ4ZDJjZjk1N2ExNzc5YzExOWZlNzRlYjQ0OTIxNGI1NjRlMTI1MmEzMTgwNWU4MDBjYTg3MDI3NGIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_455f06d95dbd4c32b413b1ccd0130123",
+      "statement": "Detector outputs are hardcoded to workspace/output while reports go to the separately configurable output_dir, which defaults to workspace/output across both standalone and dev modes.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/config.py#L67-L78",
+          "version": "repo-lines-v1:sha256:c8eadb6f015acd11b6462855a5aae74ebd68e92dc7efc5379b451d3b0db53764:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzZDAwY2YyNzA5NjRkNDRhMTNkZmFjODc1MmIwOWZjYzQzNWIwZjE5YjMxNmFiY2Y4MWE3YWE2NGJiMTIyZDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFjYTU4ZjY1ZmQ4OTJjMmU0NDA1MzFmNDUxYzJlY2MyMmE2Y2ZjYWJkNWNhNmFhOGQzZWVkNDIwOTM5NTNmZWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4ZDE2ZWQ4ZDJjZjk1N2ExNzc5YzExOWZlNzRlYjQ0OTIxNGI1NjRlMTI1MmEzMTgwNWU4MDBjYTg3MDI3NGIifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/config.py#L95-L138",
+          "version": "repo-lines-v1:sha256:80904cc2bcfaea8862b3c59a26152a8118d40c548d847aab8aff31ab81f261d3:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZTQ3MjVjNjEwOGQxZDVhNjE0YWRhMWI0OGY3NzlkMDJmYjQ2YzlkMTU1OTQ0M2IxZTQxM2JjMjJjYzMyNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBmOGNmNmU2MjBjMDg2ZDAzMTIyYzIxNThkMTY2ODZkMmIzYzBkZGE3YjY1ZDdkMjc4YjVkNWFlOGE2MDMxMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk2YTRmMjEzODE5NTZkMTZmMmQwYjZhNzlmZTQwOWRhZDdmYjA5MGRiMWU0ZDQzMTNmYmM2M2JmNTcyYTRkYTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b93351b3ee9c4a67b401d42e1716ac4a",
+      "statement": "verity.paths supports dual-mode resolution: standalone/VERITY_HOME mode uses platformdirs and unpacks bundled detectors while symlinking persistent weights directories, whereas repo checkouts retain local defaults.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/paths.py#L239-L315",
+          "version": "repo-lines-v1:sha256:3ec8a7f4f5759c169a1297be34bb25a3237d0d7c1c099239e638652238dcac28:eyJzZWxlY3RlZExpbmVDb3VudCI6NzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyOTEwNDQ1OTVhNGY4NDExMTk4NTdiNGQ2MWFhYTBlZGU3Mzg0MGNjM2QwNmJkNjhkYTIwNWUzZjU0MTYwOGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjNWI3ZjkzNmM4NjI5MDNiZjRlYzUxMTA2NGQ0ZWY4YzVkZGJkNDkxNzMwNTg5YjI1NWU5MWYwNTNmMWFjOGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImExZjgyMWE1ZDY0YmFmM2QwMzg5YjVjMDlhZWVkZTFmODJmY2EyOTA1NDEwMTFhZGQxNWU0MDliNTJmZTAwOTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity/paths.py#L32-L79",
+          "version": "repo-lines-v1:sha256:febca199aabb06c43764402f1eee817bd9986bfb2d546b62e32e290ba41a9fad:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxN2ZkNGMwYzU5Yjk0NDg1OGQ4ZjdkMmYwZjI2NmFlMzcwMDIxNjZiMzExZDEzNzgyNDUwYThjNzg4YWJjYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZmMmNjMGRkYjkxNjgxOGQwYTRkNWVkZmY1OGE5Njk1Zjg4YThlNWMyNjU1YTM4MmJmNjI3ZThjNjQ1YmIwM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhkMTM4NjM3YTYxYTMxMWZhZWE2MDRhMDI1ZWU5NjViNWEwYzBmMTdhYWZiMTU3NWE3NGYwMGM3YTg4ZmQwODAifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:bdafbf49a201bd5a7b25b279d0c8d933b0bfbef390f2d0ffa019eba669fb0fa5",
+  "claims": [
+    {
+      "id": "claim_eb172b06cc754f74a352f88f27b1aa61",
+      "statement": "JobManager executes mutating pipeline endpoints (including POST /api/forensics) on a bounded worker pool, enforces one active job per case (409 Conflict), and streams incremental logs and steps over SSE at /api/jobs/{id}/events.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/jobs.py#L233-L349",
+          "version": "repo-lines-v1:sha256:8aa581ff260bb88713f33ce17c05f773805e0138e739074cd73ece7d11cf6fae:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIxNTIxZWJjMWI3ZmQyZmIyZWVhMzViMDYzNmUwNmVjOGFmYTYwNDRhNzM4YzZlZjFkYjFmMTlhNjI0ODhlOWYwIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNzFhZmUwM2Q1YjkxMjJjMWRhZjQ0MGY4MjlkZjEwYzFmN2ViNzc0NTIzMjE5MGY1YzU3OGM2MzY1NTY5ZDFiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhZmVlNmViMDllYTRiYjM3ZjQ5Y2FiMjNkMzQ5NjMxNzBkNTVjMWE2MDM4N2ZhOWI1NDJjY2M4Nzg1YTBkZWUwIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://src/verity_api/routers/jobs.py#L81-L340",
+          "version": "repo-lines-v1:sha256:d490f92c6ff91ddda6081ae044de1bdeee6c06ab8230bb8f56776ddbec31349f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI3NGYzOTliYWY4OTliMTYzYzM3YzdkZWNhOWRjMWJlNGU5YTU0ZmFhYzU5NzAwOGFkZDQ3MTk5ZjE4YWM0ZWU1IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzMGMxZjE4OGYxNDJlZDdhODI0NjgwYjIwNzE3MmM1NTE5YmM2MTRhNDhmZGE3Y2YxNjdlZGI4ZGRmNzk5NTZjIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3NmM4NzZkMWQxNzZhNWMzMzdkYzBmNTAyYmU2YzI2YWIxNTFhMjhmNWE0ZDkyYWE0NjQ5MWIxNDI4YzRhYzYyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_9d79847b8b67446abf1761328870009d",
+      "statement": "verity_api.main mounts the built React SPA on / alongside /api routes and passes the FastAPI app object directly to uvicorn.run when reload is disabled so frozen PyInstaller executables boot cleanly.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/main.py#L62-L155",
+          "version": "repo-lines-v1:sha256:c6d2688bba109d695bb3fc8b1c4ee0be52ae341ff587d10e149bd2f2a088514f:eyJzZWxlY3RlZExpbmVDb3VudCI6OTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3MTgyOTc0NzkyNjRjNGIzMTA4MWJhMDE4MDUzYmQ5ZDE0YjcyM2JjYTY3ZTA3NzI2MDdlZTRiMjE1ZDU4ZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlhODJlYmU5ZWQ0MDdjM2E2YmE0YjAwMzQyOTJiYWE1MmMxMWNlNWFlMjg2MTA3NDAyZGU0NzkyZWVlY2FjZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_81181cc592e342e8af472939cd29289d",
+      "statement": "probe_environment reports host readiness for detectors, uv, ffmpeg/ffprobe, OpenCV, and WeasyPrint (verifying native Pango/GObject importability up front rather than find_spec alone).",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/config.py#L187-L245",
+          "version": "repo-lines-v1:sha256:abd6b86e1871c433338178d58eeb2b3e4a2c97946984a31487922d3a6032fd5a:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkNmYxOWY4ZTlkMGU5YmQwYjI5MDkxNzU0Mzc5OGZhMTUwNzhmMDY5OWEyYTk5NGUzNDY5NjUwYjZmODk5NTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY5OWVmZWRmZDJkOTcwNmQ4OTFjN2JhOTgzZTdmODRlMDVhZDBlMDE5MWMxMzI3OThiZTVlM2MxY2M1MzA0MjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a9b40cfca5cd4212948c3f77e5b087aa",
+      "statement": "The redesigned React/Mantine console structures CaseDetail into eight URL-synchronized tabs including ForensicsTab, sorted XAI galleries with AuxSignalsTable, and modality-aware PerFaceTable schemas for face crops, whole frames, and audio/AV windows.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_ui/src/components/FindingTables.tsx#L86-L199",
+          "version": "repo-lines-v1:sha256:db1b725a13ab1d0decdbb0b111943a6949f9f965257f3972a34d4d1c12be8e69:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI3MTliNmFkNDIwYjE1MTA4ODVmNzI3OWNlMTJhYTM5MWQ0Njc0NDEyNjkyYzE4ODIxNTgwOWI3NTgxZmE1ZjMzIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyNDgwNjYwY2M5MDVhMzRlZThlOTdmYTg3NGYxZDI4YmM0Y2RjZDNmY2I1Nzc2NGY3MzlkZTkwMDA2NTE4ZDIyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIwNTFmYjJkODEyYTRmM2YxYzU5OWNjOTcxNTZlYWNiMjU4ZTBhZTM3MDFkOGVlOTcwZDZlNTAyN2I1M2M2NWIyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3ZjI2MzU4ZjNlNWFiYzQzMzBhZGRiMDE5YTk0MDhhYmQwYmNjMDc1MmM5ZWQ4ZmRhZmNmMzBiYjQ0NDRiYWZiIn0"
+        },
+        {
+          "resource": "repo://src/verity_ui/src/routes/CaseDetail.tsx#L57-L67",
+          "version": "repo-lines-v1:sha256:03edcc24818bc71cd94003978362604eee4a832f3109be9c2c7497d9a2a44330:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3OGViZmE3OTAwYzllODAwMjJiNmU2MjcyYjM2OWI4M2UwMGQxNDk5YzNhYzdjNjFiNjg1N2Q3ZjNhNDlmZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4N2FjMTExMDAxYjliYmUyMDgwMmYzZjk1MTYyNDZlYWM3ZWZhMjM4YjM4NjljOWI5NTQ5NzZiYzRmNzJkMzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUxYzM3YTE4ZWI1NWE0ZWU3ZWRlMWQyMjJmZDI0ZDYzYTBhZjExYzBiZjJhM2FiODAyYzQ5YjkxMmM4NTIyZDcifQ"
+        },
+        {
+          "resource": "repo://src/verity_ui/src/routes/tabs/ForensicsTab.tsx#L54-L120",
+          "version": "repo-lines-v1:sha256:9962ac094223d0fbb8bbe357379002aa8cf6ed5d2c4d55800c9388286cf6c285:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2ZDljMWQwYTY2YWI0ZGIxOWU5ZGZkYWEwZjVjMTI2MzUzZTk2MTc4Zjk1OTcxMDFlMGI3NzNhYjNkYTcyYWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzZWFhZWI4OTQyNDRkMjBjYzkwMmVmZGU1MzE0NTQwODQ1NTA1ODU5YmUxZmE5YTkyMTVjNjIzM2ZmOTRjMjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwYmI1MmYyNjI0YjRkZGI3YWM0OTRmMzA4MjcwNzE0ZTQ4MTZlMTQ4YzlmOGExMGUyMjhmNjFlODNlYTkxMzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZjYWJkY2ZkNzIxOTE2ODBlNGYwYzRkZWMyMWYyOWViZmU1Nzk1OTJhNzExY2M0YzkzZjNjYjJkMzQxNzQyM2QifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

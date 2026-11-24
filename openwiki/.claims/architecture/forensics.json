@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:0fdd1632fc1e341e4546e467aea5d4d568889a2842d48609eb3eaec165360775",
+  "claims": [
+    {
+      "id": "claim_9760dcfe5fc64029b1443453fb513792",
+      "statement": "Forensic analyzers emit Observations with info/notice/warning severity, never a real/fake verdict, and ForensicsReport sorts results by analyzer and observations by severity then analyzer then statement.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/models.py#L15-L70",
+          "version": "repo-lines-v1:sha256:2adaa9300090cba11aed59014edecf59f84e4ff351c8f8e77f46e3ce85678bda:eyJzZWxlY3RlZExpbmVDb3VudCI6NTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2N2E4YzU5MTFiYjM2M2U0ZDI1M2Q0MjI5Yjk0ODZiYjFjMWUzZmVjNzJlZDVjODU5YzY1MGNmMDBiNGRjOGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2N2M2YzFmMTBjNmYwYmYyNmYyM2M5NzZhNmQ5N2Q1NzQ3ZDg5ZTk0MTdkNDc1OTk5NWI3OGVkNjE1ZDBiNmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAyM2I2MGM0M2FmYmFmYTk0NzU0ODE3NDY3NWRkYjA5MWQzZDMyNWE5NTA3ODg2NmZhMTdjNjcxMjI0ZTc0YTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c7bf4fde521e479aa5ccb19e04d66167",
+      "statement": "ForensicsRunner runs the five analyzers in a fixed order, skips those whose media_types exclude the media, and converts an analyzer exception into a failed notice observation while continuing the others.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/runner.py#L19-L65",
+          "version": "repo-lines-v1:sha256:4e88445d09346c4b93db1a8279805e37eb9943bc2962388a3a3457ad1494bf80:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxYTJhMjY0NTZhOTAzNzM0NjBkMGY3ODhkZTZmODg0NzQxZDM4Y2I3OTJjMGMxOWFiYmVjZGM4MzAxOTA1YjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkZjgxNzUxMmRiYTZlOTQwOGFmOWU4NWZmZWJmYjA4ZGNjOGI4Y2EzNmM3MmE5OTc5NWI5NDVmYTEyOGE1NjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJjZWQxODNkYWNiODk4OTlhZDYwMzgyOTlmZDlhNjQxN2E1NDBiYzBmNWJjMGY4ZmVjYjY5Y2U1ZjEyMTA4NDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5MzFjZmViMWRjN2ZkOTEwMDQ5OWVhOTI1NTdhMDk1YTJkZGY0MzhhZjg5ZmFhNTgwZTgyMjAyM2Y3OWYwNTQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_053ad8fe091a4e4ba4008a794cccfc57",
+      "statement": "The forensic base helpers bound pixel analysis to a 2048 px longest side, sample video frames deterministically by sequential decoding, write PNGs without ancillary chunks and round/sort JSON so outputs are reproducible.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/base.py#L18-L123",
+          "version": "repo-lines-v1:sha256:8345fbf93bfbf78d8222e3daeac74fd246f1c263709bb5a55bfc7e03d9d81f67:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmY2Q1NWM4Y2UyODMzNzkxMmY1NzhiMDc2YWUzNjc5ODBkMThmY2JiODM4YTdhNjFkMjc3MzhhNmZjMzBkMGI4IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJjY2NkYjQ3NDA3ZTAxMzYwNWQwOTFjODJkZTcxMjU4ZjZmM2FkOWU4MGE0N2Q4YmJiMmVhZWZlYjBhMjAwYmViIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI0NTgwNDVhZDUyODQxYTY3ZDI0YjQwZTdkNjQwMzNiOWEzZTM0ZGFkYjI4YTc3ODRmMjI5ZTc2YTUzZDBlYjVlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI1ZGY3M2ExMWU3MWU0OGNhMTU3MGFkNGI4Mzc1YTQ4YTkxOTVlMjc5MTg5NGQxM2Q4MzE0MDczN2Q0ODFmMjdlIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_3109b3d2211b464b992aca35c877159c",
+      "statement": "The metadata analyzer checks ffprobe container/stream fields and Pillow EXIF against each other for encoder signatures, pixel formats and contradictory dates, and documents that clean metadata proves nothing.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/metadata_analyzer.py#L1-L14",
+          "version": "repo-lines-v1:sha256:2d33e4c93886f2bf89e2dc908c3d2628b9144c5b203f0bd7e9f681408d5157ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyNWJhMzgzYmIxOWQxNjc2MGFlZmZlY2Y4MThjZTY4Y2E4MTI2MWQ1ZDdiNGQxYmNhNzNkYzgzNzBlNTBlNDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM2NjcyMTIxMjQ2OGNjN2MwNDllNTRjZDEwNmZmNWM2ZmY1NzE1MTczYThmZGYxMGRkYjFhNjI1YzY4MDMwM2QifQ"
+        },
+        {
+          "resource": "repo://src/verity/forensics/metadata_analyzer.py#L153-L189",
+          "version": "repo-lines-v1:sha256:4f37b5f1a3e3ef91c2ad6124d688b01a9137132f5308a32547c783b8ed5c4284:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0YTI1ZTAzZTZiNjc2MzVmMzZlNjQ3YzBkNzYwYTM5MmQzZjRhNjY2MjE2NWNlNTdhMmZkNjgwMjZiZTRiMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwNmFhZGNlNDk1Y2QzNzBmN2RhMDUyYjZjNmI0M2ZhNjBiZGQ3YWEwNWM5ODM2YzlkYmMzYWMxMTFjMTkwZjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxMTE5MDk0MmMwYjQ4MDg1ZDkyYzQwMWIyNmUwZmEyNWQxNTMwM2RjNzdjYWIwNDE0ZDAwMmQ3OWM3ZjMzMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwODlmY2YwNDgxMTY5ZGMxNjdlYzM0ZGNiZDE3N2E3ZWQ1Njg4MmZmODEwN2YyZDI1YjIxY2EwOTFiN2FlZTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_14549a7e4abe4f0c83c0dcce8f3b1bea",
+      "statement": "The compression analyzer combines error level analysis, JPEG quantization tables, double-JPEG periodicity and 8x8 blockiness, writing ela.png, ela_overlay.png, blockiness.png and compression.json.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/compression_analyzer.py#L1-L40",
+          "version": "repo-lines-v1:sha256:f884646e88e861c3ad929cc7541b7a2c6f97ff98b32b8d8f2d9a40d16703ca64:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmOWE0M2YxY2U1ZjE5YWY1OGY2NjAyZDdkNjhjYjlmNjBmZGY4MzAxZWFkMmMxNTU0NTFmZGNmNjAyYTg2OGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzZWE0ZTUyZDRmMjA2NzM4MmIwODViZGJmOTNhMTdmMzI3NDFlMzQ1YzNlNGMyMjRlYTA3NzBjYzgwYTUxNjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQwYWRkMDk2ZDVmMjA4ZmJjNjRmNDU0ZjUzZmMzNjExYTUwMTVhZmEzMTQ5MmNlYjA4Y2JlYTc5ZTFlM2Y2MDIifQ"
+        },
+        {
+          "resource": "repo://src/verity/forensics/compression_analyzer.py#L153-L219",
+          "version": "repo-lines-v1:sha256:500683653d5b1dd584c07f5023dd1ea320ea4c02a5e4844616e6a8557d9d84e3:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NzM2OTYyYjI5ZjdlNGUzYjRkMjc5ZTM5M2IwMzgyYWNkNDU2NDE4YzY0NTY5MTQ5YTcwYjAyYzUyNjI3NzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmMDVhZWMxNGU0OGE0Yjk4NzA0NjRiZmYxOWRkZWNkMDE2Mzg3NGY5OTc1ZGIzM2Y5YjA3NThlNWJhZWZkYWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIyYWE0ZDk4YjU0ZjM4YjcwZDFmZTZmZTZjY2YyMzdkMjcxMjdjOTU1ODkyNjdkOTJmM2I0YmMyNjcyODk4YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJiZjJhZjdiNjcwM2RjZDY2NTA4YWQ1NmU1YzE5NjQyNGQ3NmM1NzczZWMzMWE3MjY0MmQ0OWY4NzAzZmI2YWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a798ad6672454ca4ba399bb49dbad0a1",
+      "statement": "The noise analyzer measures per-cell sensor-noise residual consistency and Fourier-spectrum peaks, writing noise_residual.png, noise_variance.png, spectrum.png and noise.json.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/noise_analyzer.py#L1-L23",
+          "version": "repo-lines-v1:sha256:e056ca3a275e7ea3eaeb77cb8c2c48756c00677b898d64a29e56bdc49ce45aa5:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhYTZjMDFhZTM4ODQ2ODZiNWJkMGFhNWVlYWZmNTJhNjk1ODUyNDM1MzI3Y2I2N2RhM2YzNTk5ODY3OGQ2NzAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ0YjFjMTE4MGRjYjM1MDFiN2I0NzQ2OTEwYWI5M2Y2YTAxZjI0ZjA0MzAwNjQwYTZjMDk1NWQ1OTRiOWI1MjQifQ"
+        },
+        {
+          "resource": "repo://src/verity/forensics/noise_analyzer.py#L47-L91",
+          "version": "repo-lines-v1:sha256:729ee15bada731c5bff17d45d8cca7f5e341c564da4585d02a8e19f46f229e7f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyYjZjYWM0MDE0MTMwYzY4ZDMzODgwNzYwYmEyYTg2NzQ4MDJkYWZjZGMyOGZmZTAyN2Q2Y2IyODg3NDgyMWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5NDQ3OTQ0ZTk2YjQ5NWMwM2UyODc2ZmNkYjY2OGJlNDFjOTJkMWZlZWIxYzY4YzEzYzJkYmNiZTI5MWI1MDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkYTllZDBhZDFlZjg1OTExYzQ2OTM5YmNjOTA5NzM4NjZlNjgwNTQxYTdiZWY0NjY1MDVhZTBiODhhZDQ1YTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU2NmM5YTBkYmMzMmNjYWFiZDNlM2M4ZWIwOTU4NzA4ZDlkYTRkN2I0ZTIyMzEwYTQzNmNkYTc1NmZiMmI2YjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6536cec6eb2b4d2e95ffa13dc58112ce",
+      "statement": "The video temporal analyzer derives scene-cut candidates, frozen/duplicated runs, flicker and face-size jitter from frame differences, perceptual hashes and luminance, writing timeline.png and temporal.json.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/video_temporal_analyzer.py#L1-L23",
+          "version": "repo-lines-v1:sha256:72c91ebfe03d70194d8eb77c68317cd4478f3621c27fb0b1ec8c22bd6279681d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3MTM5M2IwNTRiN2MwYzk2MzMzMzQzMDY3ZGQ5Y2ZhNzM4ZTdkNTVjMjhkZGVlZThmOTVlNTU0Mjg1YWM4YWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiNWRlNDhjNzViYTBlZGQ5N2ZhZDA1NjEyOTMzZWI5MTA4YzkyMjg0M2I5YWY4OTUyYTNiNmM1OWExNTVjODYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI0NjlmNTgxMDFmNGViZTRmZTY2MDk5OTY5MWVkNWI0NjE0ZmNhZjI2NjU3ZTVmZDQ0ODk2OTk3MTAxNTNhNTgifQ"
+        },
+        {
+          "resource": "repo://src/verity/forensics/video_temporal_analyzer.py#L63-L107",
+          "version": "repo-lines-v1:sha256:33db3ceee76cfdd8c3279adb6ab2ce3866d32474b4962a4d17b1d91dd1e19a52:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2YjYxYjgwMzBlOGRjOTdkN2U4MDMzNjkwNTczM2UzNzNlY2JiMjEyZmUyNTU3NjA4MmVlNTcyMjY5OWE2YzAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImExNGNjYjc1YzBmYzRiOTViZTAxMDRlMGFkMTk3ZGZlNjQwZWQ5N2MyYTk3Y2M2OGJiNDBkNmViMWQ4MGMxOTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg1YjhiZGUzMWE0ZDZhNmZhNWRlOTBjMzkwZjgzYmUxYWZmMTlkNTg1MDQ2NmU1MTgxZTFmZDMxOGE3Mzc3MWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2NmQ3MmMyYzI3NTE3ODZmMzk0NmM2YjUxMGEzYTg1YjhmZDViODNjYTlmYWNlZDQ1ZThkMTk0MDJiMzdkMzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_95357c3beef44da8abfddfefe189b373",
+      "statement": "The audio analyzer decodes the native-rate audio stream and reports silence, clipping, DC offset and above/below 8 kHz energy, writing audio.json, audio_native.wav and spectrogram.png, or audio.json with has_audio false when no track exists.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/forensics/audio_analyzer.py#L1-L20",
+          "version": "repo-lines-v1:sha256:8938043f16972bbf30bebe478e9b40f0e8d1a403b98315621eac7cdc3e21bbc5:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1NDc4ZDMxYzgwYWRjN2NiZWE2ZmI0MzIxNGI1Mzg2N2UzYWQxZjVhNmM4YTI0OTUwNDAyYmZhOWQ2MGQyNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzMDNlY2RkNGE0ZDEwZjE5YzczZmQ0MmZkMTI0MzdmZDMzNTRhODI2ODE2MDVkYTUyNTVhOTdhMzkwNjhkYmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImViNzFiNDYwMmFiNzJmOTJiNDA3ZDZkODkzZmViMDcwNTRhZTU3YzJkNGEzMDcyODc0N2U0ODE3ZGE5OTdkMzgifQ"
+        },
+        {
+          "resource": "repo://src/verity/forensics/audio_analyzer.py#L126-L174",
+          "version": "repo-lines-v1:sha256:1e800eb59ab78572ee3295d85c38533125bf17ee5362ec7be3c31abd42a20ac5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2ZmEzNGI4MTcwN2M4NmFlNjgzYWNkZmE3ZjUwYjBiMWRhOTc3N2YxOGRjMDYwM2IxMjY0YzE2YTExNTcxNmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxYjM2MjkwMWUwZmQwM2Y1NmI3NWEwMzQ1ZWM2Yzc0MWQ0YzA4YjNhNzVmOTkwYWQ4YzFmZmI3M2E4YTBjYjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZlNjc1Y2Y1MTllZTZiMThlNWM5NDM4MTUyMTE1YzBiY2I4MjYxNzliNmMyNDJkNmJjZDMxODYxZTgxNjM2MWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI4NDM3ODIxMzA2NmYwMzY4NmNmMjVhNTEzYzZmM2NlMjNhYTUyZTE5M2FjZDUyY2VkNjMzNGNjNDgwZmVkODMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3cb00d5faaa140859d13fa18bbd20221",
+      "statement": "Model-free forensic analyses can be executed independently via POST /api/forensics and inspected in the dedicated ForensicsTab of the Web Console with severity filtering, inline evidence badges, method notes, and PNG figures.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/routers/jobs.py#L185-L210",
+          "version": "repo-lines-v1:sha256:73c5e81e6e6fc6a428568d9773c4e6435727a28c878803890db537f8207e4c0c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2NjcwMTgyNDBmN2YxMmI2M2RmMjczNDNiYjI5ODRiZDVlMzQ3NTYyMDlkZWMyY2ViMGEzZWQ3NjVjMzg4NGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMwYmY3MDU3OWY1ZDAxMmExOTA5MmU4ZGM0ZDkyNjQzNzc3OWYzMjBmODliNWZiZDNmNmIyZDViNTUwZGY1MmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFkODdjM2ZmM2RhZjBkNjAzNjczN2FhMmYyMGQxMWU4MjAxNTUxYThhODhhZDg0YjdmNGNhOWU5OGQ1N2VmYTQifQ"
+        },
+        {
+          "resource": "repo://src/verity_ui/src/routes/tabs/ForensicsTab.tsx#L1-L120",
+          "version": "repo-lines-v1:sha256:7fe73185cb3607cc886022e24bc78e7e70848a1f5a8042af8c9a2ef9a49b7b5c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJlYWYyMmNmMDczMjU5MmMyNDcxNDFjYmU2MWVmYTExMDEyNjEyZjVhMzEyMmI5YWY5YmJhZjUyZjU3MjRkMTk0IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJiM2VhYWViODk0MjQ0ZDIwY2M5MDJlZmRlNTMxNDU0MDg0NTUwNTg1OWJlMWZhOWE5MjE1YzYyMzNmZjk0YzIxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJmY2FiZGNmZDcyMTkxNjgwZTRmMGM0ZGVjMjFmMjllYmZlNTc5NTkyYTcxMWNjNGM5M2YzY2IyZDM0MTc0MjNkIn0"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

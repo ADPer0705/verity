@@ -154,6 +154,9 @@ export const api = {
   extract: (mediaId: string, extractors?: string[] | null) =>
     request<Job>('/api/extract', json({ media_id: mediaId, extractors })),
 
+  forensics: (mediaId: string) =>
+    request<Job>('/api/forensics', json({ media_id: mediaId })),
+
   compileFindings: (mediaId: string) =>
     request<Job>('/api/compile', json({ media_id: mediaId })),
 
@@ -181,3 +184,5 @@ export const mediaFileUrl = (mediaId: string, download = false) =>
 
 export const reportUrl = (mediaId: string, format: 'pdf' | 'html', download = false) =>
   `/api/media/${mediaId}/report?format=${format}${download ? '&download=true' : ''}`
+
+export const evidenceBundleUrl = (mediaId: string) => `/api/media/${mediaId}/export`

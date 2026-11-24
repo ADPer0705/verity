@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:073d2122fb08b92ecdcaf50d764bd46ca8e330f05638a52602a280c27d9de7ec",
+  "claims": [
+    {
+      "id": "claim_41d52d3a7a05482c9321c36428267e29",
+      "statement": "MediaIngestor hashes incoming files with SHA-256 in 64 KiB chunks, assigns a 12-character hex media_id, writes a read-only (0o444) working copy, and records MediaInfo metadata in .<media_id>.json.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/ingest/media_ingestor.py#L10-L74",
+          "version": "repo-lines-v1:sha256:3d6756d514dea2d8c6af9b93548b03d233df19a5dd8918d26fcc7056dbe13503:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0NTAxYjg0MWU3ZTk2ZWI4ZDdhZGU2NTMzYTkzMmUyMTRlMzk1NTY4ZDQ4MWMzNzMwMTk0MGFiZmNjMjQ5M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUzMmE0OTVkMTgzYmU0ZTcxOTQ4YzM1MTRkZmFiOTVkNGY5ZWUyZTUzYzUxNGJmMDkyN2EyYTQzYmNiNDdkNDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b04fd2b2a2ee4e149b44239741c256f0",
+      "statement": "MediaAnalyzer characterizes container properties with ffprobe (falling back gracefully on failure) and runs a sequential deterministic OpenCV Haar face scan over up to 30 evenly spaced frames to populate face statistics in analysis.json.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/analyze/media_analyzer.py#L10-L105",
+          "version": "repo-lines-v1:sha256:db8a668499f7aec2d6ca421d097f433bc49d191002a064891d0c30cb2c189633:eyJzZWxlY3RlZExpbmVDb3VudCI6OTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3MmJmN2NkNWEyM2E1NDliMDk0NzZjMDNjMTU1MGM4NmNhZjg1YzIwM2ZmYTA3YWZiODk5MDY5OTUwNWE5YzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEwMmQwNWEzMDk0ZTJkYzM4NTUzOGFhZGJmZGY3MzVhYmYzYzhjMTQ3NDI2ZTA0MjY2ZmU2ZTFjOGQyM2M1NjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwNGFkNTdkMjQ4YjA4M2EyMjYyNjdhYmM5NGI1ZDk3ZDIyZTA0YzUwY2RiMDQxYzMyZjY2ZTczOGNkOWYwNjYifQ"
+        },
+        {
+          "resource": "repo://src/verity/analyze/media_analyzer.py#L156-L200",
+          "version": "repo-lines-v1:sha256:0b3f043ae5c2be7fadc88510cf90fd3f62fb623076db7a7aacbd5c16fe76667f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmYTc2MzZhOWRjMjg2ZDY0NzM4NWMxOWI3ZGFhM2UyMzIzYWM3NTRhMTIxY2U2M2IyMTYxNWZmYjg5OWZjOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0MzI0NDJjNDQ3ZDcyM2IzNzZmNzZmN2M0NzgwYTEzMjI0NjFiODkyNjNiZDQzMzEzNjRkNjMzNDU0YzVhODciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIzMmQ0NjY5ZDQ3M2ViYTdmZDBiNzExZjIzMzE0ZTNmZmVkM2IwOWQ0N2JhNTViMWJkNTZhZTBkNzgzZDU3YmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-24T11:23:46.564Z"
+  }
+}

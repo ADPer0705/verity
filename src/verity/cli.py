@@ -6,6 +6,7 @@ import yaml
 import click
 from pathlib import Path
 
+from verity import __version__, paths
 from verity.models.media import MediaType
 from verity.ingest.media_ingestor import MediaIngestor
 from verity.extract.frame_extractor import FrameExtractor
@@ -24,15 +25,17 @@ EXTRACTORS = ["frame", "face", "metadata", "audio"]
 
 
 def _default_config() -> dict:
+    user_cfg = paths.load_user_config()
     return {
-        "detectors_dir": os.environ.get("VERITY_DETECTORS_DIR", ""),
-        "workspace": os.environ.get("VERITY_WORKSPACE", "workspace"),
-        "output_dir": os.environ.get("VERITY_OUTPUT_DIR", ""),
-        "extractors": EXTRACTORS,
+        "detectors_dir": os.environ.get("VERITY_DETECTORS_DIR", "") or str(user_cfg.get("detectors_dir") or ""),
+        "workspace": os.environ.get("VERITY_WORKSPACE", "") or str(user_cfg.get("workspace") or ""),
+        "output_dir": os.environ.get("VERITY_OUTPUT_DIR", "") or str(user_cfg.get("output_dir") or ""),
+        "extractors": user_cfg.get("extractors") or EXTRACTORS,
     }
 
 
 def _load_config(config: str | None) -> dict:
+    paths.ensure_runtime_path()
     cfg = _default_config()
     if config and Path(config).exists():
         with open(config) as f:
@@ -43,23 +46,25 @@ def _load_config(config: str | None) -> dict:
 
 def _detectors_dir(cfg: dict) -> Path:
     if cfg.get("detectors_dir"):
-        return Path(cfg["detectors_dir"])
-    repo = Path(__file__).resolve().parents[2]
-    repo_detectors = repo / "detectors"
-    if repo_detectors.exists():
-        return repo_detectors
+        return Path(cfg["detectors_dir"]).expanduser().resolve()
+    ddir = paths.detectors_dir()
+    if ddir.exists():
+        return ddir
     raise click.ClickException(
-        "Cannot locate detectors/. Set detectors_dir in config or "
-        "VERITY_DETECTORS_DIR."
+        "Cannot locate detectors/. Run `verity setup` or set VERITY_DETECTORS_DIR."
     )
 
 
 def _workspace(cfg: dict) -> Path:
-    return Path(cfg.get("workspace", "workspace"))
+    if cfg.get("workspace"):
+        return Path(cfg["workspace"]).expanduser().resolve()
+    return paths.workspace_dir()
 
 
 def _output_dir(cfg: dict, workspace: Path) -> Path:
-    return Path(cfg.get("output_dir") or (workspace / "output"))
+    if cfg.get("output_dir"):
+        return Path(cfg["output_dir"]).expanduser().resolve()
+    return paths.output_dir(workspace)
 
 
 def _extractors(ws: Path, cfg: dict):
@@ -101,8 +106,10 @@ def _media_files(media: Path) -> list[Path]:
 
 
 @click.group()
+@click.version_option(version=__version__, prog_name="verity")
 def cli():
-    pass
+    """Verity — deterministic, air-gap-ready forensic deepfake examination pipeline."""
+    paths.ensure_runtime_path()
 
 
 @cli.command()
@@ -138,7 +145,11 @@ def run(media: str | None, detector: str | None, workspace: str | None, config: 
     analyzer = MediaAnalyzer(ws / "media")
     # An explicit --detector list is an explicit request: untrained detectors
     # named there run (and are flagged); auto-selection stays evidence-only.
-    selector = DetectorSelector(registry, include_untrained=include_untrained or bool(detector))
+    selector = DetectorSelector(
+        registry,
+        offline=paths.is_offline(),
+        include_untrained=include_untrained or bool(detector),
+    )
     compiler = FindingsCompiler(ws, registry.list_detectors())
     generator = ReportGenerator(ws, registry.list_detectors())
 
@@ -277,33 +288,134 @@ def analyze(media: str | None, workspace: str | None, config: str | None, as_jso
 
 
 @cli.command()
-@click.option("--all", "all_", is_flag=True, help="Provision all detector environments")
+@click.option("--all", "all_", is_flag=True, help="Provision all 58 detector environments")
 @click.option("--trained", is_flag=True,
-              help="Provision only detectors with a trained classification head (the default evidence set)")
+              help="Provision all 39 evidence-grade detectors with trained heads (default)")
 @click.option("--detector", default=None, help="Provision one or more detectors (comma-separated)")
-@click.option("--force", is_flag=True, help="Re-provision even if up to date")
-@click.option("--concurrency", type=int, default=8, show_default=True,
+@click.option("--profile", default="auto", type=click.Choice(["auto", "cuda", "cpu"]),
+              show_default=True, help="Hardware profile (cuda, cpu, or auto-detect)")
+@click.option("--force", is_flag=True, help="Re-provision environments even if up to date")
+@click.option("--concurrency", type=int, default=4, show_default=True,
               help="Number of detector environments to build in parallel")
+@click.option("--skip-weights", is_flag=True,
+              help="Skip downloading and verifying model checkpoints")
+@click.option("--skip-warmup", is_flag=True,
+              help="Skip pre-warming Hugging Face / Torch Hub runtime caches")
+@click.option("--skip-ffmpeg", is_flag=True,
+              help="Skip auto-fetching static ffmpeg/ffprobe if absent on host")
+@click.option("--airgap-ready", is_flag=True,
+              help="Verify all checkpoints and seal offline mode in user config so the workstation can disconnect from the internet")
 @click.option("--workspace", default=None, type=click.Path())
 @click.option("--config", default=None, type=click.Path())
-def setup(all_: bool, trained: bool, detector: str | None, force: bool, concurrency: int,
-          workspace: str | None, config: str | None):
-    """Provision detector environments with uv (cached under $VERITY_DETECTOR_ENVS)."""
+def setup(all_: bool, trained: bool, detector: str | None, profile: str, force: bool,
+          concurrency: int, skip_weights: bool, skip_warmup: bool, skip_ffmpeg: bool,
+          airgap_ready: bool, workspace: str | None, config: str | None):
+    """One-command workstation setup: bootstraps uv/Python, builds detector
+    environments, downloads & verifies checkpoints, and warms runtime caches
+    for air-gapped forensic operation."""
+    from verity.runtime import env_manager
+    from verity.weights import pull as weights_pull_fn, verify as weights_verify_fn
+
     cfg = _load_config(config)
     if workspace:
         cfg["workspace"] = workspace
-    ws = _workspace(cfg)
-    registry = DetectorRegistry(_detectors_dir(cfg))
-    runner = DetectorRunner(ws, registry)
+
+    if paths.is_standalone_mode():
+        click.echo(f"[setup] data dir  : {paths.data_dir()}")
+        click.echo(f"[setup] cache dir : {paths.cache_dir()}")
+        click.echo(f"[setup] config    : {paths.config_file()}")
+        paths.ensure_bundled_detectors_extracted(force=force)
+
+    ddir = _detectors_dir(cfg)
+    registry = DetectorRegistry(ddir)
+
     if detector:
         ids = [d.strip() for d in detector.split(",") if d.strip()]
-    elif trained:
-        ids = sorted(i for i, d in registry.list_detectors().items() if d.weights.is_trained)
     elif all_:
-        ids = None
+        ids = sorted(registry.list_detectors())
     else:
-        raise click.ClickException("Use --all, --trained or --detector <id>[,<id>...]")
-    sys.exit(runner.setup(detector_ids=ids, force=force, concurrency=concurrency))
+        # Default to --trained (evidence-grade set) when no filter flag is given
+        ids = sorted(i for i, d in registry.list_detectors().items() if d.weights.is_trained)
+
+    unknown = sorted(set(ids) - set(registry.list_detectors()))
+    if unknown:
+        raise click.ClickException(f"Unknown detector(s): {', '.join(unknown)}")
+
+    eff_profile = env_manager.detect_profile(profile)
+    click.echo(f"[setup] profile   : {eff_profile}")
+    click.echo(f"[setup] detectors : {len(ids)}")
+
+    # 1. Bootstrap uv (+ optional static ffmpeg/ffprobe)
+    uv_bin = env_manager.ensure_uv(allow_download=True)
+    click.echo(f"[setup] uv        : {uv_bin}")
+    if not skip_ffmpeg:
+        ff, fp = env_manager.ensure_ffmpeg(allow_download=True)
+        if ff and fp:
+            click.echo(f"[setup] ffmpeg    : {ff}")
+
+    # 2. Provision isolated detector virtualenvs via uv
+    click.echo(f"\n[setup 1/3] Provisioning {len(ids)} isolated detector environment(s)...")
+    rc = env_manager.setup_detectors(
+        detector_ids_list=ids,
+        profile=eff_profile,
+        force=force,
+        concurrency=concurrency,
+        offline=False,
+        detectors_dir=ddir,
+    )
+    if rc != 0:
+        raise click.ClickException("One or more detector environments failed to provision.")
+
+    # 3. Download & SHA-256-verify checkpoints from HF mirror + upstream origins
+    if not skip_weights:
+        click.echo("\n[setup 2/3] Fetching and SHA-256 verifying model checkpoints...")
+        manifest = _manifest(cfg)
+        wres = weights_pull_fn(
+            manifest, ddir, ids, source="auto", force=False,
+            log=lambda m: click.echo(m, err=True),
+        )
+        click.echo(
+            f"[weights] fetched {len(wres.fetched)}, linked {len(wres.linked)}, "
+            f"already verified {len(wres.already)}, failed {len(wres.failed)}"
+        )
+        for key, why in sorted(wres.failed.items()):
+            click.echo(f"  FAILED {key}: {why}", err=True)
+
+    # 4. Warm up runtime-fetched HF / Torch Hub foundation caches
+    if not skip_warmup:
+        click.echo("\n[setup 3/3] Warming runtime Hugging Face / Torch Hub caches...")
+        wstatus = env_manager.warmup_detectors(
+            detector_ids_list=ids,
+            profile=eff_profile,
+            detectors_dir=ddir,
+        )
+        ok_n = sum(1 for v in wstatus.values() if v == "ok")
+        fail_n = sum(1 for v in wstatus.values() if v.startswith("failed"))
+        click.echo(f"[warmup] {ok_n} cached, {fail_n} failed, {len(wstatus) - ok_n - fail_n} skipped")
+
+    # 5. Persist hardware profile & optionally seal air-gap offline mode
+    user_patch = {"hw_profile": eff_profile}
+    if airgap_ready:
+        click.echo("\n[setup] Verifying checkpoint integrity before air-gap seal...")
+        rows = weights_verify_fn(_manifest(cfg), ddir, ids)
+        corrupt = [r for r in rows if r.present and not r.verified]
+        missing = [r for r in rows if not r.present]
+        if corrupt:
+            for r in corrupt:
+                click.echo(f"  CORRUPT {r.target.detector_id}/{r.target.dest}", err=True)
+            raise click.ClickException("Corrupt checkpoints found; refusing to seal air-gap mode.")
+        if missing:
+            click.echo(
+                f"  WARN: {len(missing)} checkpoint(s) still missing; affected detectors will be skipped offline.",
+                err=True,
+            )
+        user_patch["offline"] = True
+        cfg_saved = paths.save_user_config(user_patch)
+        click.echo(f"\n[setup] Sealed for air-gapped operation (offline: true in {cfg_saved}).")
+        click.echo("        You may now disconnect this workstation from the network.")
+    else:
+        paths.save_user_config(user_patch)
+        click.echo("\n[setup] Workstation setup complete. Run `verity doctor` or `verity serve`.")
 
 
 @cli.command()
@@ -509,6 +621,31 @@ def weights_verify(config: str | None):
     sys.exit(1 if bad else 0)
 
 
+@weights.command("warmup")
+@click.option("--all", "all_", is_flag=True, help="Warm runtime caches for all detectors")
+@click.option("--trained", is_flag=True, help="Warm runtime caches for trained detectors (default)")
+@click.option("--detector", default=None, help="Comma-separated detector ids")
+@click.option("--profile", default="auto", type=click.Choice(["auto", "cuda", "cpu"]))
+@click.option("--config", default=None, type=click.Path())
+def weights_warmup(all_: bool, trained: bool, detector: str | None, profile: str, config: str | None):
+    """Pre-download runtime Hugging Face / Torch Hub / FAN caches for offline use."""
+    from verity.runtime import env_manager
+
+    cfg = _load_config(config)
+    ddir = _detectors_dir(cfg)
+    ids = _weights_ids(cfg, detector, trained or not (detector or all_), all_)
+    statuses = env_manager.warmup_detectors(
+        detector_ids_list=ids,
+        trained_only=not (detector or all_),
+        profile=profile,
+        detectors_dir=ddir,
+    )
+    failed = {k: v for k, v in statuses.items() if v.startswith("failed")}
+    for k, v in sorted(statuses.items()):
+        click.echo(f"  {k:<20} {v}")
+    sys.exit(1 if failed else 0)
+
+
 @weights.command("bundle")
 @click.option("--repo", required=True, help="Hugging Face repo id the bundle will be uploaded to, e.g. you/verity-weights")
 @click.option("--out", default="dist-weights", type=click.Path(), help="Output directory")
@@ -533,6 +670,164 @@ def weights_bundle(repo: str, out: str, config: str | None):
     click.echo(f"  hf upload {repo} {out_dir} . --repo-type model --commit-message 'Verity weights bundle'")
     click.echo(f"\nThen set hub.huggingface_repo: \"{repo}\" in detectors/weights_manifest.yaml")
     sys.exit(1 if info["missing"] else 0)
+
+
+@cli.command("export")
+@click.option("--media-id", required=True, help="Case media id to package")
+@click.option("--out", default=None, type=click.Path(), help="Destination zip path")
+@click.option("--workspace", default=None, type=click.Path())
+@click.option("--config", default=None, type=click.Path())
+def export_cmd(media_id: str, out: str | None, workspace: str | None, config: str | None):
+    """Export a self-contained forensic evidence preservation bundle (.zip) with
+    MANIFEST.json and SHA256SUMS.txt."""
+    from verity.export import export_evidence_bundle
+
+    cfg = _load_config(config)
+    if workspace:
+        cfg["workspace"] = workspace
+    ws = _workspace(cfg)
+    res = export_evidence_bundle(
+        workspace=ws,
+        output_dir=_output_dir(cfg, ws),
+        detectors_dir=_detectors_dir(cfg),
+        media_id=media_id,
+        out_path=Path(out) if out else None,
+    )
+    click.echo(f"Evidence bundle : {res['bundle_path']}")
+    click.echo(f"Bundle SHA-256  : {res['bundle_sha256']}")
+    click.echo(f"Files archived  : {res['file_count']} ({res['size_bytes'] / 1e6:.2f} MB)")
+    click.echo(f"Media integrity : {'VERIFIED' if res['integrity_verified'] else 'MISMATCH!'}")
+    sys.exit(0 if res["integrity_verified"] else 1)
+
+
+@cli.command("doctor")
+@click.option("--verify", "check_sha", is_flag=True, help="Verify SHA-256 checksums of present checkpoints")
+@click.option("--config", default=None, type=click.Path())
+def doctor(check_sha: bool, config: str | None):
+    """Verify workstation readiness, tools, weights, environments and air-gap status."""
+    import shutil
+    from verity.runtime import env_manager
+    from verity.weights import status as weights_status_fn
+
+    cfg = _load_config(config)
+    ddir = _detectors_dir(cfg)
+    ws = _workspace(cfg)
+    registry = DetectorRegistry(ddir)
+    defs = registry.list_detectors()
+    trained_ids = sorted(i for i, d in defs.items() if d.weights.is_trained)
+    profile = env_manager.detect_profile()
+
+    click.echo(f"Verity v{__version__} ({'standalone' if paths.is_standalone_mode() else 'dev'})")
+    click.echo(f"  offline mode   : {'ENABLED (air-gap sealed)' if paths.is_offline() else 'disabled (online)'}")
+    click.echo(f"  hw profile     : {profile}")
+    click.echo(f"  data dir       : {paths.data_dir()}")
+    click.echo(f"  cache dir      : {paths.cache_dir()}")
+    click.echo(f"  config file    : {paths.config_file()}")
+    click.echo(f"  detectors dir  : {ddir} ({len(defs)} total, {len(trained_ids)} evidence-grade)")
+    click.echo(f"  workspace dir  : {ws}")
+
+    uv_bin = env_manager.find_uv()
+    ffmpeg_bin = shutil.which("ffmpeg")
+    ffprobe_bin = shutil.which("ffprobe")
+    click.echo(f"  uv             : {uv_bin or 'MISSING (run `verity setup`)'}")
+    click.echo(f"  ffmpeg/ffprobe : {ffmpeg_bin or 'MISSING'} / {ffprobe_bin or 'MISSING'}")
+
+    try:
+        import weasyprint  # noqa: F401
+        click.echo("  PDF export     : WeasyPrint OK")
+    except Exception as exc:
+        click.echo(f"  PDF export     : unavailable ({exc})")
+
+    envs_dir = paths.envs_root() / profile
+    ready_envs = 0
+    if envs_dir.is_dir():
+        for det_id in trained_ids:
+            if (envs_dir / det_id / ".venv").is_dir():
+                ready_envs += 1
+    click.echo(f"  trained envs   : {ready_envs}/{len(trained_ids)} provisioned ({envs_dir})")
+
+    manifest = _manifest(cfg)
+    rows = weights_status_fn(manifest, ddir, trained_ids, check=check_sha)
+    present = sum(1 for r in rows if r.present)
+    corrupt = sum(1 for r in rows if r.verified is False)
+    click.echo(
+        f"  checkpoints    : {present}/{len(rows)} trained present"
+        + (f", {corrupt} CORRUPT" if check_sha else " (use --verify for SHA-256)")
+    )
+
+    hf_files = sum(1 for p in paths.hf_cache_dir().rglob("*") if p.is_file()) if paths.hf_cache_dir().is_dir() else 0
+    torch_files = sum(1 for p in paths.torch_cache_dir().rglob("*") if p.is_file()) if paths.torch_cache_dir().is_dir() else 0
+    click.echo(f"  runtime caches : {hf_files} HF file(s), {torch_files} Torch file(s)")
+
+    usage = shutil.disk_usage(ws.parent if ws.parent.exists() else Path.cwd())
+    click.echo(f"  free disk      : {usage.free / (1024 ** 3):.1f} GB")
+
+    sys.exit(1 if corrupt > 0 or not uv_bin else 0)
+
+
+@cli.group()
+def airgap():
+    """Export or import a complete offline Verity transfer kit (binary, uv,
+    Python runtimes, verified checkpoints, wheel cache, and HF/Torch caches)."""
+
+
+@airgap.command("export")
+@click.option("--out", required=True, type=click.Path(), help="Destination folder (e.g. USB drive path)")
+@click.option("--profile", default="auto", type=click.Choice(["auto", "cuda", "cpu"]))
+@click.option("--config", default=None, type=click.Path())
+def airgap_export(out: str, profile: str, config: str | None):
+    """Package this provisioned workstation into a verifiable offline transfer kit."""
+    from verity.export import export_airgap_kit
+
+    cfg = _load_config(config)
+    res = export_airgap_kit(
+        out_dir=Path(out),
+        profile=profile,
+        detectors_dir=_detectors_dir(cfg),
+    )
+    click.echo(f"\nAir-gap kit exported to: {res['out_dir']}")
+    click.echo("Carry this folder to the air-gapped workstation and run:")
+    click.echo(f"  {Path(res['out_dir']) / 'verity'} airgap import --from {res['out_dir']}")
+
+
+@airgap.command("import")
+@click.option("--from", "kit_dir", required=True, type=click.Path(exists=True),
+              help="Directory containing the exported air-gap kit")
+@click.option("--skip-verify", is_flag=True, help="Skip SHA256SUMS verification (not recommended)")
+@click.option("--concurrency", type=int, default=4, show_default=True)
+def airgap_import(kit_dir: str, skip_verify: bool, concurrency: int):
+    """Restore an air-gap kit onto this offline workstation and rebuild detector envs locally."""
+    from verity.export import import_airgap_kit
+
+    res = import_airgap_kit(
+        kit_dir=Path(kit_dir),
+        verify_checksums=not skip_verify,
+        concurrency=concurrency,
+    )
+    click.echo(f"\nRestored {res['detectors_restored']} detector environment(s) on profile '{res['profile']}'.")
+    click.echo(f"Offline mode sealed in {res['config_file']}.")
+    click.echo("Run `verity doctor` to confirm readiness, then `verity serve` to open the console.")
+    sys.exit(res["sync_returncode"])
+
+
+@cli.command()
+@click.option("--host", default=None, help="Bind address (default: $VERITY_HOST or 127.0.0.1)")
+@click.option("--port", default=None, type=int, help="Bind port (default: $VERITY_PORT or 8000)")
+@click.option("--reload", "reload_", is_flag=True, help="Enable auto-reload for development")
+@click.option("--offline", is_flag=True, help="Enforce strict offline air-gapped mode for this session")
+def serve(host: str | None, port: int | None, reload_: bool, offline: bool):
+    """Launch the Verity HTTP API and Web UI console (same as `verity-server`)."""
+    if host:
+        os.environ["VERITY_HOST"] = host
+    if port is not None:
+        os.environ["VERITY_PORT"] = str(port)
+    if reload_:
+        os.environ["VERITY_RELOAD"] = "1"
+    if offline or paths.is_offline():
+        os.environ["VERITY_OFFLINE"] = "1"
+    from verity_api.main import main as run_server
+
+    run_server()
 
 
 if __name__ == "__main__":

@@ -18,4 +18,11 @@ Interface contract for a ported ``model.py``:
 """
 
 from .spec import DetectorSpec, load_spec  # noqa: F401
-from .engine import run_detector  # noqa: F401
+
+
+def __getattr__(name: str):
+    if name == "run_detector":
+        from .engine import run_detector
+
+        return run_detector
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

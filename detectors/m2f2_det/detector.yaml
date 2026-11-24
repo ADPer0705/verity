@@ -1,0 +1,55 @@
+detector_id: m2f2_det
+version: 1.0.0
+name: M2F2-Det
+description: M2F2-Det stage-1 forged-face detector (Guo et al., CVPR 2025 oral) - frozen CLIP ViT-L/14-336 features
+  fused with an EfficientNet-B4 forensic branch through a bridge adapter; the binary detector that underlies
+  the LLaVA-based explainable M2F2-Det. Trained on FaceForensics++.
+architecture: CLIP ViT-L/14-336 (frozen) + EfficientNet-B4 features + 3-block bridge adapter over 2731 tokens + Linear(3712, 2)
+parameters: 326000000
+pretrained: Official detector-only stage-1 weights (CHELSEA234/M2F2_Det, Google Drive), FF++ trained; CLIP tower openai/clip-vit-large-patch14-336 from HuggingFace.
+resolution: 336
+mean:
+- 0.48145466
+- 0.4578275
+- 0.40821073
+std:
+- 0.26862954
+- 0.26130258
+- 0.27577711
+input_mode: face_crop
+video_mode: false
+clip_size: null
+cam: true
+caveat: 'The released stage-1 checkpoint does not contain the three bridge-adapter Transformer blocks (an
+  upstream oversight: they were never registered as sub-modules), so 128 of the 3,712 fused features come from
+  deterministically re-initialised, untrained layers; treat the score as a degraded version of the published
+  detector.'
+weights:
+  file: m2f2_det_stage1.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1X1ZUZkCwqg9mrsqoOS0EoO3v5WABNBAw/view
+  size: 1990597085
+  sha256: ac1cdb94fe341d1193c573d71d683d5786fc2f0dc27a7494bb0e27cd1cdab208
+  license: MIT
+  note: 'Official detector-only weights ({"model_state_dict": module.* ...}, 1,324 tensors incl. the frozen
+    CLIP vision and text towers; the text tower and prompt tokens are not used by the detection head and are
+    dropped; everything else loads strictly, except the unsaved bridge-adapter blocks, see caveat). The LLaVA
+    vision_tower.pth the README also asks for is byte-identical to the tower inside this checkpoint. Upstream
+    softmax index 0 is P(fake); columns are swapped so index 1 = fake. 336x336 face crops with CLIP mean/std.'
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 336
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+targets:
+- face_swap
+- face_reenactment

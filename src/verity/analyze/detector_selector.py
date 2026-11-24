@@ -120,8 +120,9 @@ class DetectorSelector:
                 f"< required min {definition.min_face}px",
             )
 
-        # 4. temporal sufficiency for video-only detectors
-        if set(caps.media_types) == {"video"} and not caps.audio_required:
+        # 4. temporal sufficiency for video-only detectors (face clips and
+        #    audio-visual windows; audio-only detectors also accept audio files)
+        if set(caps.media_types) == {"video"}:
             clip = definition.clip_size or 1
             available = self._available_frames(media)
             if available is not None and available < max(clip, 2):

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "verity"
-version = "0.5.1"
+version = "0.6.0"
 description = "Modular deepfake detection pipeline with containerized detectors and explainable findings"
 readme = "README.md"
 license = { text = "CC-BY-NC-4.0" }
@@ -27,6 +27,7 @@ dependencies = [
     "click>=8.0",
     "pydantic>=2.0",
     "pyyaml>=6.0",
+    "platformdirs>=4.0",
     "opencv-python>=4.8.0",
     "pillow>=10.0",
     "filetype>=1.2",
@@ -42,9 +43,12 @@ api = [
     "uvicorn[standard]>=0.27",
     "python-multipart>=0.0.9",
 ]
+build = [
+    "pyinstaller>=6.10",
+]
 
 [dependency-groups]
-dev = ["pytest>=8.0", "httpx>=0.27"]
+dev = ["pytest>=8.0", "httpx>=0.27", "pyinstaller>=6.10"]
 
 [project.scripts]
 verity = "verity.cli:cli"

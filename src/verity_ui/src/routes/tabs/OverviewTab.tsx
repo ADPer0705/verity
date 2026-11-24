@@ -8,19 +8,51 @@
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Anchor, Badge, Button, Grid, Group, List, Text } from '@mantine/core'
-import { IconDownload, IconFingerprint } from '@tabler/icons-react'
+import {
+  Anchor,
+  Badge,
+  Button,
+  Grid,
+  Group,
+  List,
+  Paper,
+  Stack,
+  Text,
+  UnstyledButton,
+} from '@mantine/core'
+import {
+  IconArchive,
+  IconArrowRight,
+  IconDownload,
+  IconFingerprint,
+  IconMicroscope,
+  IconPhotoSearch,
+} from '@tabler/icons-react'
 
-import { ApiError, api, mediaFileUrl } from '@/api/client'
+import { ApiError, api, evidenceBundleUrl, mediaFileUrl } from '@/api/client'
 import type { CaseDetail, IntegrityCheck } from '@/api/types'
 import { ConsensusVerdict } from '@/components/ConsensusPanel'
+import { unitLabels } from '@/components/FindingTables'
 import { MediaPreview } from '@/components/MediaPreview'
-import { Banner, CopyValue, KeyValue, MetricGrid, SectionTitle } from '@/components/Primitives'
+import {
+  Banner,
+  CopyValue,
+  KeyValue,
+  MetricGrid,
+  ProbabilityBar,
+  SectionTitle,
+} from '@/components/Primitives'
 import { formatBytes, formatDuration, formatTimestamp, shortHash } from '@/lib/format'
-import { standingLimitations } from '@/lib/verdict'
+import { CLASSIFICATION_TAG, standingLimitations } from '@/lib/verdict'
 
-export function OverviewTab({ detail }: { detail: CaseDetail }) {
-  const { media, analysis, consensus, summary } = detail
+export function OverviewTab({
+  detail,
+  onOpenTab,
+}: {
+  detail: CaseDetail
+  onOpenTab?: (tab: string, detectorId?: string) => void
+}) {
+  const { media, analysis, consensus, summary, forensics, findings } = detail
   const [check, setCheck] = useState<IntegrityCheck | null>(null)
   const [verifying, setVerifying] = useState(false)
   const [verifyError, setVerifyError] = useState<string | null>(null)
@@ -38,6 +70,17 @@ export function OverviewTab({ detail }: { detail: CaseDetail }) {
   }
 
   const intact = check ? check.matches && check.size_matches : null
+  const trainedFindings = [...findings]
+    .filter((f) => f.trained)
+    .sort((a, b) => b.mean_fake_probability - a.mean_fake_probability)
+  const topForensicAlerts = (forensics?.results ?? [])
+    .flatMap((r) =>
+      r.observations
+        .filter((o) => o.severity === 'warning' || o.severity === 'notice')
+        .map((o) => ({ ...o, label: r.label })),
+    )
+    .sort((a, b) => (a.severity === 'warning' ? -1 : 1) - (b.severity === 'warning' ? -1 : 1))
+    .slice(0, 5)
 
   return (
     <Grid gutter="xl">
@@ -79,14 +122,120 @@ export function OverviewTab({ detail }: { detail: CaseDetail }) {
               hint: 'Unweighted mean across evidence-grade detectors',
             },
             {
-              label: 'Faces detected',
-              value: analysis?.media.face_count ?? '—',
-              hint: analysis
-                ? `across ${analysis.media.sampled_frames} sampled frames`
-                : 'Media not yet characterized',
+              label: 'Forensic signals',
+              value: forensics
+                ? `${forensics.counts?.warning ?? 0}W / ${forensics.counts?.notice ?? 0}N`
+                : '—',
+              hint: forensics
+                ? `${forensics.results.length} model-free analyzers ran`
+                : 'Forensics not yet run',
             },
           ]}
         />
+
+        {trainedFindings.length > 0 ? (
+          <>
+            <Group justify="space-between" align="baseline" mt="1.5rem" mb="xs">
+              <SectionTitle>Detector probability spectrum (evidence-grade)</SectionTitle>
+              {onOpenTab ? (
+                <Button
+                  variant="subtle"
+                  size="compact-xs"
+                  rightSection={<IconArrowRight size={12} />}
+                  onClick={() => onOpenTab('findings')}
+                >
+                  All findings ({findings.length})
+                </Button>
+              ) : null}
+            </Group>
+            <Paper withBorder p="sm" className="vy-card">
+              <Stack gap={8}>
+                {trainedFindings.map((finding) => {
+                  const labels = unitLabels(finding.unit)
+                  return (
+                    <UnstyledButton
+                      key={finding.detector_id}
+                      className="vy-spectrum-row"
+                      onClick={() => onOpenTab?.('evidence', finding.detector_id)}
+                      title={`Inspect ${finding.detector_name} explainability evidence`}
+                    >
+                      <Group justify="space-between" wrap="nowrap" gap="sm">
+                        <Group gap="xs" wrap="nowrap" style={{ minWidth: '11rem' }}>
+                          <Badge
+                            color={CLASSIFICATION_TAG[finding.classification]}
+                            size="xs"
+                            w={72}
+                          >
+                            {finding.classification}
+                          </Badge>
+                          <Text fz="sm" fw={500} truncate>
+                            {finding.detector_name}
+                          </Text>
+                        </Group>
+                        <div style={{ flex: 1 }}>
+                          <ProbabilityBar value={finding.mean_fake_probability} />
+                        </div>
+                        <Text fz="xs" c="dimmed" ff="monospace" w="5.5rem" ta="right">
+                          {finding.faces_analyzed ?? 0} {labels.plural}
+                        </Text>
+                      </Group>
+                    </UnstyledButton>
+                  )
+                })}
+              </Stack>
+              <Text fz="xs" c="dimmed" mt="xs">
+                Click any detector row to jump directly to its timelines, attention maps and
+                per-unit scores in the Evidence Lab.
+              </Text>
+            </Paper>
+          </>
+        ) : null}
+
+        {forensics ? (
+          <>
+            <Group justify="space-between" align="baseline" mt="1.5rem" mb="xs">
+              <SectionTitle>Model-free forensic highlights</SectionTitle>
+              {onOpenTab ? (
+                <Button
+                  variant="subtle"
+                  size="compact-xs"
+                  leftSection={<IconMicroscope size={12} />}
+                  rightSection={<IconArrowRight size={12} />}
+                  onClick={() => onOpenTab('forensics')}
+                >
+                  Open Forensics tab
+                </Button>
+              ) : null}
+            </Group>
+            <Paper withBorder p="sm" className="vy-card">
+              {topForensicAlerts.length > 0 ? (
+                <Stack gap={6}>
+                  {topForensicAlerts.map((obs, idx) => (
+                    <Group key={idx} gap="xs" align="flex-start" wrap="nowrap">
+                      <Badge
+                        color={obs.severity === 'warning' ? 'red' : 'orange'}
+                        variant={obs.severity === 'warning' ? 'filled' : 'light'}
+                        size="xs"
+                        mt={2}
+                        style={{ flexShrink: 0 }}
+                      >
+                        {obs.severity}
+                      </Badge>
+                      <Text fz="sm" lh={1.45}>
+                        <b>{obs.label}:</b> {obs.statement}
+                      </Text>
+                    </Group>
+                  ))}
+                </Stack>
+              ) : (
+                <Text fz="sm" c="dimmed">
+                  No warnings or notices raised across {forensics.results.length} model-free
+                  analyzers ({forensics.counts?.info ?? 0} baseline measurements recorded).
+                </Text>
+              )}
+            </Paper>
+          </>
+        ) : null}
 
         <SectionTitle mt="1.5rem">Media identity</SectionTitle>
         <KeyValue
@@ -131,7 +280,7 @@ export function OverviewTab({ detail }: { detail: CaseDetail }) {
           Recomputes the SHA-256 of the working copy the detectors read and compares it against the
           hash recorded at ingest. Run this before citing the findings.
         </Text>
-        <Group gap="xs">
+        <Group gap="xs" wrap="wrap">
           <Button
             variant="default"
             leftSection={<IconFingerprint size={16} />}
@@ -139,6 +288,14 @@ export function OverviewTab({ detail }: { detail: CaseDetail }) {
             disabled={verifying}
           >
             {verifying ? 'Verifying…' : 'Verify integrity now'}
+          </Button>
+          <Button
+            variant="light"
+            leftSection={<IconArchive size={16} />}
+            component="a"
+            href={evidenceBundleUrl(detail.media_id)}
+          >
+            Export evidence bundle (.zip)
           </Button>
           <Button
             variant="subtle"
@@ -208,6 +365,17 @@ export function OverviewTab({ detail }: { detail: CaseDetail }) {
         <Text fz="xs" c="dimmed" mt="xs">
           Played from the read-only working copy in the workspace, not the source path.
         </Text>
+        {onOpenTab && findings.length > 0 ? (
+          <Button
+            variant="light"
+            fullWidth
+            mt="md"
+            leftSection={<IconPhotoSearch size={16} />}
+            onClick={() => onOpenTab('evidence')}
+          >
+            Open Evidence Lab ({findings.length} detector{findings.length === 1 ? '' : 's'})
+          </Button>
+        ) : null}
       </Grid.Col>
     </Grid>
   )

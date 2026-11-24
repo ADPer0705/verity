@@ -39,28 +39,18 @@ def sha256_of(path: Path) -> str:
 def weights_dir(detectors_dir: Path, detector_id: str) -> Path:
     """Where ``detectors/<id>/weights`` really lives.
 
-    With ``VERITY_WEIGHTS_ROOT`` set (the container), weights persist under
-    ``$VERITY_WEIGHTS_ROOT/<id>`` and the package directory is a symlink to
-    it, exactly as ``scripts/verity.py`` arranges. Local dev keeps them in
-    the package.
+    With ``VERITY_WEIGHTS_ROOT`` set (container) or in standalone binary mode
+    (``platformdirs``), weights persist under ``<weights_root>/<id>`` and the
+    package directory is a symlink to it. Local dev keeps them in the package.
     """
+    from verity import paths
+
     pkg = detectors_dir / detector_id / "weights"
-    root = os.environ.get("VERITY_WEIGHTS_ROOT", "")
-    if not root:
+    root = paths.weights_root()
+    if root is None:
         pkg.mkdir(parents=True, exist_ok=True)
         return pkg
-    target = Path(root) / detector_id
-    target.mkdir(parents=True, exist_ok=True)
-    if pkg.is_symlink():
-        return target
-    if pkg.exists():
-        readme = pkg / "README.md"
-        if readme.exists() and not (target / "README.md").exists():
-            shutil.copy2(readme, target / "README.md")
-        shutil.rmtree(pkg)
-    pkg.parent.mkdir(parents=True, exist_ok=True)
-    pkg.symlink_to(target, target_is_directory=True)
-    return target
+    return paths.link_weights_dir(detectors_dir / detector_id, root / detector_id)
 
 
 def dest_path(detectors_dir: Path, target: Target) -> Path:
@@ -167,13 +157,17 @@ def _fetch_file(manifest: Manifest, spec: FileSpec, dest: Path, source: str, log
         try:
             if spec.archive is not None and url == spec.origin:
                 archive_path = archive_cache.get(url)
-                if archive_path is None or not _verified(archive_path, spec.archive.sha256, spec.archive.size):
+                if archive_path is None:
                     archive_path = Path(tempfile.gettempdir()) / f"verity-{spec.archive.sha256[:16]}.zip"
                     if not _verified(archive_path, spec.archive.sha256, spec.archive.size):
                         log(f"  archive {url}")
                         _download(url, archive_path, spec.archive.size, log)
                         if not _verified(archive_path, spec.archive.sha256, spec.archive.size):
-                            raise RuntimeError("archive checksum mismatch")
+                            # Some hosts (Dropbox folder downloads) build the zip on the
+                            # fly, so its bytes drift; the member below is still verified.
+                            log("  archive checksum differs from the manifest; verifying the member instead")
+                            if not zipfile.is_zipfile(archive_path):
+                                raise RuntimeError("archive checksum mismatch and not a zip file")
                     archive_cache[url] = archive_path
                 with zipfile.ZipFile(archive_path) as zf, zf.open(spec.archive.member) as src, \
                         open(dest, "wb") as out:

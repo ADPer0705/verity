@@ -62,9 +62,20 @@ def build_model(weights_path, device):
     model = EfficientDetector(num_classes=2, inc=3, dropout=False, mode="Original")
     if weights_path is not None:
         state = torch.load(weights_path, map_location="cpu")
+        if isinstance(state, dict) and "state_dict" in state and isinstance(state["state_dict"], dict):
+            state = state["state_dict"]
         if all(k.startswith("module.") for k in state.keys()):
             state = {k[7:]: v for k, v in state.items()}
-        model.load_state_dict(state, strict=False)
+        if any(k.startswith("backbone.") for k in state.keys()):
+            state = {
+                k[len("backbone."):]: v
+                for k, v in state.items()
+                if k.startswith("backbone.")
+            }
+        missing, unexpected = model.load_state_dict(state, strict=False)
+        if missing or unexpected:
+            print(f"[efficientnetb4] state dict mismatch: {len(missing)} missing, "
+                  f"{len(unexpected)} unexpected")
     model.to(device)
     model.eval()
     return model

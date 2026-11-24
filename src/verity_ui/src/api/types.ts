@@ -58,6 +58,8 @@ export interface CaseSummary {
   ingested_at: string | null
   has_analysis: boolean
   has_selection: boolean
+  has_forensics?: boolean
+  forensics_counts?: Record<string, number> | null
   detectors_selected: number
   detectors_excluded: number
   findings_count: number
@@ -112,11 +114,26 @@ export interface Selection {
   selected: string[]
 }
 
+export type DetectorUnit = 'face' | 'frame' | 'clip' | 'window'
+export type DetectorInputMode =
+  | 'face_crop'
+  | 'face_clip'
+  | 'full_frame'
+  | 'full_clip'
+  | 'audio'
+  | 'av_clip'
+
 export interface PerFace {
   face_id?: string
   frame_idx?: number
+  face_index?: number
   bbox?: string | number[]
   fake_prob?: number
+  start_s?: number
+  end_s?: number
+  region_energy?: Record<string, number | RegionEnergy>
+  aux?: Record<string, number>
+  info?: Record<string, unknown>
   [key: string]: unknown
 }
 
@@ -136,6 +153,8 @@ export interface Finding {
   confidence: number
   mean_fake_probability: number
   faces_analyzed: number | null
+  unit?: DetectorUnit
+  input_mode?: DetectorInputMode
   reasoning: {
     summary: string
     confidence_factors: string[]
@@ -144,18 +163,89 @@ export interface Finding {
   stats: {
     min?: number
     max?: number
+    mean?: number
+    median?: number
+    std?: number
     count?: number
+    threshold?: number
     above_threshold?: number
+    below_threshold?: number
+    high_confidence_fake?: number
+    high_confidence_real?: number
     [key: string]: unknown
   }
-  sampling: { coverage_pct?: number; [key: string]: unknown }
+  sampling: { sample_interval?: number; coverage_pct?: number; [key: string]: unknown }
   region_aggregate: Record<string, RegionEnergy>
+  aux_aggregate?: Record<string, number>
+  audio?: {
+    sample_rate?: number
+    duration_seconds?: number
+    window_seconds?: number
+    hop_seconds?: number
+    window_frames?: number
+    hop_frames?: number
+    fps?: number
+    windows?: number
+    error?: string
+  } | null
+  model?: {
+    name?: string
+    version?: string
+    architecture?: string
+    parameters?: number | null
+    pretrained?: string
+  }
+  weights?: {
+    status?: string
+    file?: string | null
+    note?: string
+  }
+  device?: string
+  timing_seconds?: {
+    model_load?: number
+    face_detection?: number
+    preprocess?: number
+    inference?: number
+    visualization?: number
+    total?: number
+  }
+  total_video_frames?: number
+  reconstruction?: {
+    available?: boolean
+    evidence?: string
+  } | null
   per_face: PerFace[]
   timestamp: string
   output_dir: string | null
   has_logs: boolean
   /** Manipulation families the detector was trained to recognise. */
   targets?: string[] | null
+}
+
+export type ForensicSeverity = 'info' | 'notice' | 'warning'
+
+export interface ForensicObservation {
+  analyzer: string
+  severity: ForensicSeverity
+  statement: string
+  evidence: Record<string, unknown>
+}
+
+export interface ForensicAnalyzerResult {
+  analyzer: string
+  label: string
+  method: string
+  ok: boolean
+  observations: ForensicObservation[]
+  metrics: Record<string, unknown>
+  artifacts: string[]
+}
+
+export interface ForensicsReport {
+  media_id: string
+  media_type: MediaType
+  results: ForensicAnalyzerResult[]
+  counts?: Record<ForensicSeverity, number>
 }
 
 export interface FileEntry {
@@ -191,6 +281,7 @@ export interface CaseDetail {
   aggregated_score: number | null
   consensus: Consensus
   artifacts: ArtifactGroup[]
+  forensics: ForensicsReport | null
   reports: ReportFiles
 }
 
@@ -253,7 +344,9 @@ export interface DetectorAssets {
   exists: boolean
   output_dir?: string
   timeline: FileEntry | null
+  full_frames: FileEntry[]
   faces: FileEntry[]
+  frames: FileEntry[]
   attention_maps: FileEntry[]
   reconstructions: FileEntry[]
 }

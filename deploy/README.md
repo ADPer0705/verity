@@ -31,11 +31,11 @@ sha256sum -c SHA256SUMS
 
 1. pulls `ghcr.io/adper0705/verity:<version>-slim`
 2. runs `verity weights pull --trained` (progress visible)
-3. runs `verity setup --trained` (all 26 evidence-grade detector environments)
+3. runs `verity setup --trained` (all 39 evidence-grade detector environments)
 4. starts the stack and waits for `/api/system`
 5. runs `doctor.sh`
 
-Add `--all-envs` to build the research-scaffold environments too (all 47
+Add `--all-envs` to build the research-scaffold environments too (all 58
 architectures). Re-run `./install.sh` at any time; every step is idempotent.
 
 ## Access

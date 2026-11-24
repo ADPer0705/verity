@@ -29,7 +29,12 @@ import { api } from '@/api/client'
 import { useAsync } from '@/api/hooks'
 import type { CaseDetail, CoverageFamily, Finding } from '@/api/types'
 import { ExplainabilityPanel, LogsPanel, RawPanel } from '@/components/DetectorEvidence'
-import { PerFaceTable, RegionEnergyTable } from '@/components/FindingTables'
+import {
+  AuxSignalsTable,
+  PerFaceTable,
+  RegionEnergyTable,
+  unitLabels,
+} from '@/components/FindingTables'
 import {
   EmptyState,
   FamilyChips,
@@ -121,12 +126,16 @@ function FindingPanel({
   finding: Finding
   families: CoverageFamily[]
 }) {
+  const labels = unitLabels(finding.unit)
+  const threshold = finding.stats.threshold ?? 0.5
   return (
     <Tabs defaultValue="reasoning" keepMounted={false} variant="outline">
       <Tabs.List>
-        <Tabs.Tab value="reasoning">Reasoning</Tabs.Tab>
-        <Tabs.Tab value="faces">Per-face ({finding.per_face.length})</Tabs.Tab>
-        <Tabs.Tab value="explainability">Explainability</Tabs.Tab>
+        <Tabs.Tab value="reasoning">Reasoning & figures</Tabs.Tab>
+        <Tabs.Tab value="faces">
+          Per-{labels.singular} ({finding.per_face.length})
+        </Tabs.Tab>
+        <Tabs.Tab value="explainability">Explainability & visuals</Tabs.Tab>
         <Tabs.Tab value="raw">Raw output</Tabs.Tab>
         <Tabs.Tab value="logs">Logs</Tabs.Tab>
       </Tabs.List>
@@ -149,12 +158,18 @@ function FindingPanel({
           </>
         ) : null}
 
+        {Object.keys(finding.aux_aggregate ?? {}).length > 0 ? (
+          <div style={{ marginBottom: '1rem' }}>
+            <AuxSignalsTable finding={finding} />
+          </div>
+        ) : null}
+
         {finding.reasoning.evidence?.length ? (
           <>
-            <SectionTitle>Evidence cited</SectionTitle>
-            <List fz="sm" spacing={4} mb="md">
+            <SectionTitle>Evidence artifacts cited ({finding.reasoning.evidence.length})</SectionTitle>
+            <List fz="xs" spacing={2} mb="md" ff="monospace">
               {finding.reasoning.evidence.map((item) => (
-                <List.Item key={item}>{item}</List.Item>
+                <List.Item key={item}>{item.split('/').slice(-2).join('/')}</List.Item>
               ))}
             </List>
           </>
@@ -166,19 +181,41 @@ function FindingPanel({
             ['Classification', finding.classification],
             ['Classification head', <TierBadge key="tier" tier={finding.tier} />],
             ['Targets', <FamilyChips key="t" targets={finding.targets} families={families} size="sm" />],
+            ['Input modality / unit', `${finding.input_mode ?? 'face_crop'} (${labels.plural})`],
             ['Mean fake probability', finding.mean_fake_probability.toFixed(4)],
             ['Detector confidence', finding.confidence.toFixed(4)],
-            ['Faces analyzed', finding.faces_analyzed?.toLocaleString() ?? '—'],
+            [
+              `${labels.title}s analyzed`,
+              finding.faces_analyzed?.toLocaleString() ?? '—',
+            ],
             ...(finding.stats.min != null
               ? ([['Score range', `[${finding.stats.min}, ${finding.stats.max}]`]] as [string, string][])
               : []),
             ...(finding.stats.above_threshold != null && finding.stats.count
               ? ([
-                  ['Above 0.7 threshold', `${finding.stats.above_threshold} / ${finding.stats.count}`],
+                  [
+                    `Above ${threshold} threshold`,
+                    `${finding.stats.above_threshold} / ${finding.stats.count}`,
+                  ],
+                ] as [string, string][])
+              : []),
+            ...(finding.stats.high_confidence_fake != null && finding.stats.count
+              ? ([
+                  [
+                    'High-confidence fake (>0.70)',
+                    `${finding.stats.high_confidence_fake} / ${finding.stats.count}`,
+                  ],
                 ] as [string, string][])
               : []),
             ...(finding.sampling.coverage_pct != null
               ? ([['Video sampling coverage', `${finding.sampling.coverage_pct}%`]] as [string, string][])
+              : []),
+            ...(finding.model?.architecture
+              ? ([['Architecture', finding.model.architecture]] as [string, string][])
+              : []),
+            ...(finding.device ? ([['Execution device', finding.device]] as [string, string][]) : []),
+            ...(finding.timing_seconds?.total != null
+              ? ([['Runtime', `${finding.timing_seconds.total}s`]] as [string, string][])
               : []),
             ['Detector version', finding.detector_version],
             ['Produced', formatTimestamp(finding.timestamp)],
@@ -191,7 +228,11 @@ function FindingPanel({
       </Tabs.Panel>
 
       <Tabs.Panel value="faces" pt="md">
-        <PerFaceTable rows={finding.per_face} />
+        <PerFaceTable
+          rows={finding.per_face}
+          unit={finding.unit}
+          inputMode={finding.input_mode}
+        />
       </Tabs.Panel>
 
       <Tabs.Panel value="explainability" pt="md">
@@ -262,52 +303,62 @@ export function FindingsTab({
                   <Table.Th>Method</Table.Th>
                   <Table.Th>Targets</Table.Th>
                   <Table.Th>Classification</Table.Th>
-                  <Table.Th>Faces</Table.Th>
+                  <Table.Th>Evaluated units</Table.Th>
                   <Table.Th w="15rem">Mean fake probability</Table.Th>
                   <Table.Th>Confidence</Table.Th>
                   <Table.Th aria-label="Evidence" w={48} />
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
-                {findings.map((finding) => (
-                  <Table.Tr key={finding.detector_id}>
-                    <Table.Td>
-                      <Text fz="sm">{finding.detector_name}</Text>
-                      <Text fz="xs" c="dimmed" ff="monospace">
-                        {finding.detector_id} v{finding.detector_version}
-                      </Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <FamilyChips targets={finding.targets} families={families} />
-                    </Table.Td>
-                    <Table.Td>
-                      <Group gap={4} wrap="nowrap">
-                        <Badge color={CLASSIFICATION_TAG[finding.classification]} size="sm">
-                          {finding.classification}
-                        </Badge>
-                        {!finding.trained ? <TierBadge tier={finding.tier} /> : null}
-                      </Group>
-                    </Table.Td>
-                    <Table.Td>{finding.faces_analyzed?.toLocaleString() ?? '—'}</Table.Td>
-                    <Table.Td>
-                      <ProbabilityBar value={finding.mean_fake_probability} />
-                    </Table.Td>
-                    <Table.Td ff="monospace">{finding.confidence.toFixed(4)}</Table.Td>
-                    <Table.Td>
-                      <Tooltip label="Browse this detector's evidence">
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray"
-                          size="sm"
-                          aria-label={`Evidence for ${finding.detector_name}`}
-                          onClick={() => onOpenEvidence(finding.detector_id)}
-                        >
-                          <IconPhotoSearch size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
+                {findings.map((finding) => {
+                  const labels = unitLabels(finding.unit)
+                  const count = finding.faces_analyzed
+                  return (
+                    <Table.Tr key={finding.detector_id}>
+                      <Table.Td>
+                        <Text fz="sm" fw={500}>
+                          {finding.detector_name}
+                        </Text>
+                        <Text fz="xs" c="dimmed" ff="monospace">
+                          {finding.detector_id} v{finding.detector_version}
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <FamilyChips targets={finding.targets} families={families} />
+                      </Table.Td>
+                      <Table.Td>
+                        <Group gap={4} wrap="nowrap">
+                          <Badge color={CLASSIFICATION_TAG[finding.classification]} size="sm">
+                            {finding.classification}
+                          </Badge>
+                          {!finding.trained ? <TierBadge tier={finding.tier} /> : null}
+                        </Group>
+                      </Table.Td>
+                      <Table.Td ff="monospace" fz="xs">
+                        {count != null
+                          ? `${count.toLocaleString()} ${count === 1 ? labels.singular : labels.plural}`
+                          : '—'}
+                      </Table.Td>
+                      <Table.Td>
+                        <ProbabilityBar value={finding.mean_fake_probability} />
+                      </Table.Td>
+                      <Table.Td ff="monospace">{finding.confidence.toFixed(4)}</Table.Td>
+                      <Table.Td>
+                        <Tooltip label="Browse this detector's evidence">
+                          <ActionIcon
+                            variant="subtle"
+                            color="gray"
+                            size="sm"
+                            aria-label={`Evidence for ${finding.detector_name}`}
+                            onClick={() => onOpenEvidence(finding.detector_id)}
+                          >
+                            <IconPhotoSearch size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      </Table.Td>
+                    </Table.Tr>
+                  )
+                })}
               </Table.Tbody>
             </Table>
           </Table.ScrollContainer>

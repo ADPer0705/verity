@@ -1,0 +1,51 @@
+detector_id: m2tr
+version: 1.0.0
+name: M2TR
+description: M2TR deepfake detector (Wang et al., ICMR 2022) - EfficientNet-B4 with multi-scale patch self-attention
+  on low-level texture maps, a learned frequency filter branch and cross-modality attention fusing RGB and
+  frequency cues; trained on FaceForensics++ c23.
+architecture: EfficientNet-B4 (static-pad) + 4 x [multi-scale patch Transformer + rFFT global filter + cross-modality attention] on the 32x80x80 texture map + Linear(1792, 2)
+parameters: 18738388
+pretrained: Official FF-C23 model-zoo checkpoint (wdrink/M2TR, Google Drive), 97.9 % FF++ c23 accuracy.
+resolution: 320
+mean:
+- 0.485
+- 0.456
+- 0.406
+std:
+- 0.229
+- 0.224
+- 0.225
+video_mode: false
+clip_size: null
+cam: true
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 320
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+weights:
+  # Alternates (same layout, drop-in via this field): FF-RAW id 1_HaPE6r7Zzof2mmLmmc4fbIbqyWs17S0,
+  # FF-C40 id 1xhclIjoh8GkVvoVefjDY-itdaV0VaMxY (Google Drive, model zoo in the README).
+  file: m2tr_ff_c23.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1XRIllA6p5YnITztl1burwcr5l7LAcpqv/view
+  size: 224488781
+  sha256: 4700e0392884fdeeb24689935bd66de4ae52b8cbeae955cb98766f784d8bd061
+  license: MIT
+  note: 'Official M2TR FF++ c23 checkpoint ({"model_state": ...} with model.*, layers.*, classifier.* keys,
+    loaded strictly). Face crops are resized to 320x320 with ImageNet mean/std (TEST_AUGMENTATIONS). The
+    backbone keeps M2TR''s static TF-SAME padding (nominal 380 px) so the 320 px activations match upstream.
+    P(fake) = softmax over the two trained logits.'
+targets:
+- face_swap
+- face_reenactment

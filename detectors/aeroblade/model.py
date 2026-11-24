@@ -169,7 +169,13 @@ class AEROBLADEModel:
             logit_fake = SCALE * (THRESHOLD - d_min)
             logits = torch.stack([-logit_fake, logit_fake], dim=1)
             probs = torch.softmax(logits, dim=1)
-        return {"logits": logits, "probs": probs, "feat": d}
+            names = list(self.autoencoders.keys())
+            aux = {
+                f"{name}_lpips": d[:, idx]
+                for idx, name in enumerate(names)
+            }
+            aux["min_lpips"] = d_min
+        return {"logits": logits, "probs": probs, "feat": d, "aux": aux}
 
 
 def build_model(weights_path, device):

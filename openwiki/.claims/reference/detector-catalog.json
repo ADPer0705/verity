@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:faab9f3f7388548a8d056282b4974d1431ada2a4747fa06b165102810c1f9adc",
+  "claims": [
+    {
+      "id": "claim_eb597a62a97245c296949870aa6d4397",
+      "statement": "Verity registers 58 detector architectures (39 evidence-grade trained models and 19 research scaffolds across backbone-only, random-init, and untrained tiers) partitioned by face_crop, full_frame, face_clip, av_clip, and audio input modes.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/weights_manifest.yaml#L599-L620",
+          "version": "repo-lines-v1:sha256:42cebb52534bee16e47fc92e1076eb9ba27ec906c29527b836b8a0f5917cd878:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmYTExZjljZmVmYTljNzUxZTRlMmIzYTg1ZmNjMDgxZWI1M2RhOThlYzk3MDk0NGM1NDcyMjk0MTQ3NDg5MTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmNzljNzlkNmRjZmE4ZjdkODI5OWJjMzNlMTA0NzI1NWYyYTEzZTQ3Mjk1ZGJkZTA5NmE3NDg2YjY1MDNmZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhhMjE4NjI1ODU0ZGNiYzU2M2RlN2QxMjg4ZWQzNDRjYjJkMGQ5MjAwOTg5NmQxZWM2ZDQ5ZWI0NjAzZjQzNTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZkNjhiNGU4M2I3NDY4NjhmMzRhMzcyNDRhMzUyMjAyNjQzM2VjNGYwYjk2ZGEzZDQxNmEyOGY3YzY3NDNiNWMifQ"
+        },
+        {
+          "resource": "repo://scripts/gen_detector_table.py#L18-L55",
+          "version": "repo-lines-v1:sha256:8d420a5c819aaa3b18d37c192662b5f4e2e2feabef2edb000f419089cd0076db:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzN2YzMTIzNDA2YWRiMDg0YzdhZDI2YWUwM2YzNTA3MzU1MWY2MWQ3NzNmNGQzNDdhOTk5YmY5ZGJiZDI2ZDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwN2M5ZjA3YzliNTIwZWVlODk5MmYyNjAyOTI3NzU4MTUwNzEwNTU1MDNiY2QyZWQyZWE0MDI3MWJkZTBhNzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc4MTZlNGUyZWQ4NWU0MDIxNTM2OWI5Mjk5OTFkYTY5MDNhODA5MzIyMjFkNjM5ZjE4MDgzODA1ZmE1ZDc2YjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a0bc7e4dc850465fb653827a01309101",
+      "statement": "DeepfakeBench-derived ports such as efficientnetb4 unwrap module. and backbone. state_dict key prefixes before load_state_dict so checkpoint weights do not silently stay randomly initialized.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/efficientnetb4/model.py#L61-L81",
+          "version": "repo-lines-v1:sha256:6b3e8e04e6580b65bbb1501463cfa62586c2257caec119ee087c40e8f8c1c655:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhYmNjZDFiMTc4ODU0ZWE2MmE3ODJhYWUxMWY2OTViNTIxZjZkZjg1OGNlNWMxZjZhZWYwMDlhMGIxZTYwMGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY3OTg5MjY2MGFkN2JjMjkxYTYwOTdkN2Q2MjU5ZTU3ZmI0Njg2NjdhYjc5Mjc3Yzc2YTJiZmI5YmQ0MTNmOTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIyNDEwNzhjMThkMTVkM2RhYjUwMWNkYWQ2YTBhMzM1ZWRlMGQ5NDY2MDgzZjRjYmJlMDRjNzkyYTdkOWIxOGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0fe91dcc820e4322ba019567301788d1",
+      "statement": "AEROBLADE evaluates native-resolution images against three latent-diffusion autoencoders (SD1.1, LanguageMachines SD2.1 mirror fallback, Kandinsky 2.1) and exposes per-autoencoder VGG LPIPS distances alongside min_lpips in aux.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/aeroblade/model.py#L54-L179",
+          "version": "repo-lines-v1:sha256:db5128263b6ef76d6304c747bd5c34e0fb17f7ddb3de8f12959bb2e07f443671:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2YjkxY2E4NzE2NDBiYjZkN2IyNGNlY2NlYjdhYjM2M2NkYzUyNjM1Y2RhNTk5N2QyMjczZjlmZjllN2FiMjdiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4OWJiNTkwMDQ1MjAyOTZmOGQ2YWFkMzJjYzNkMTRjMTAyYmJkMjQyMzJmOWFjOGE2NTJiYmMyMjY5Nzc3NWI0IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlZTRiMGE5YmQ3ZWY3MzM5OGZjNzQyYjI0YzAyNTIyNGU3MDgzOGNhYWNmZWE3MjU4YmMyOTAxYzJjYzM0MjlkIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_c0411bacd6f2450a80f015f1224f551d",
+      "statement": "Detectors declare explicit cam and caveat contracts in detector.yaml (disabling meaningless spatial Grad-CAM on temporal/wavelet/audio models) and audit broken checkpoint sub-modules such as RECCE's untrained decoder before reporting.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/spec.py#L36-L41",
+          "version": "repo-lines-v1:sha256:f96319b177afe2c1a4231f9af6976d5f8f084e03b465397cb089e534b9933072:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDUxZDQ3YWQ0ZmUxNjIyODNkZmZmZDBjMGFkNTAxOWJiN2ExNDY1MzMzOTEwNjgxMTNkNjA0OWI4MTVlNTYwYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmRmOWM3ZjM4MmQ0MTI0MmRkMzQ4ZjlmOTg3NTlkNzg2YWUzNjY1NjVlYWIzYmQ5ZDQ4NjI0ODkxNzA2MmZkMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2YxNDNlYTIxNmY5MzFhNmQwNjI2ZTA4NzAwYWVkNjBkODBhZDIxMDhiYTNmNGJkMDQ1ZTU1MDRlYjBhZjY3MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzFlNDE5M2E2ZDEyZDE4YzEwMGJlM2I0OWFmNDZkMTE1YWE2MjgzZTc3MWNjNjNiZDdmYzM3YjE5YTdhNGU4MiJ9"
+        },
+        {
+          "resource": "repo://detectors/recce/inference.py#L56-L100",
+          "version": "repo-lines-v1:sha256:fce04a549fb7201e73d2f8371b2fa499d2784f8aeafbe3e7c60b3f5fe7e3b3ec:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3MjA1YWEyNzE5MTQxNDYzN2U0ZTQ2NmRjYjhlNWQ4MDdkNDY5NWU2OTE0NTI3ZWMzNmQ1YTQ0MTk2YjZhODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiZjgxMWJlZTE4MDU0YzM3MGUzYTBkMGE1M2VmMzY0ODBhODU3MWRjZDExOTMyZmM0ODcwMTUzZmFmNzY1MTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU1YmM3ZjkxYTA5YjVlODFlOWNkMjBlYzc1NWFmMjA1OWVlMWYyNjg1MTAwY2ExMDRmNDY2ZTUxMTZhYTczMWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3YjI0ZDI1YzRjMjNkN2UxNWViZWFlZDZkY2FkZmU5YzA1NDYxNDNlYWFmOTI0NmUyNDQ0NDQyZDE1NjEzN2UifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

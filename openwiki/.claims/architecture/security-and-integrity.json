@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:b2c6cd0b64414185ecb845f671a848cd3697147c6e2e372188b074dee6f32381",
+  "claims": [
+    {
+      "id": "claim_6b79b5f39b4847098b953e64e2d42e13",
+      "statement": "Media ids are the first 12 hex characters of the file SHA-256 and the full checksum is stored in the media sidecar, making admission idempotent and any byte change produce a different case id.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/ingest/media_ingestor.py#L10-L74",
+          "version": "repo-lines-v1:sha256:3d6756d514dea2d8c6af9b93548b03d233df19a5dd8918d26fcc7056dbe13503:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0NTAxYjg0MWU3ZTk2ZWI4ZDdhZGU2NTMzYTkzMmUyMTRlMzk1NTY4ZDQ4MWMzNzMwMTk0MGFiZmNjMjQ5M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUzMmE0OTVkMTgzYmU0ZTcxOTQ4YzM1MTRkZmFiOTVkNGY5ZWUyZTUzYzUxNGJmMDkyN2EyYTQzYmNiNDdkNDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_68382dbe2c664c6fad315596e3dbac53",
+      "statement": "The working copy is chmod 0o444 after ingest and detectors receive a temporary copy rather than the workspace file.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L178-L192",
+          "version": "repo-lines-v1:sha256:21f6b79f856f63f513e21844f9df830210497b2ea420375357cfd1d3de1bc0dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3YTgxZWU0ZWU4OTY0YjllY2MzZjRjOGVhNWE0NjZmZDVkNzE2ZDM2NGUyYTk3MzYyNzNlYTgzYTRjZWI3NDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmMGU3NmE1NTlkZTI4ZjBlZDZmNmViMDcxN2YyOGFkYzc1MmYzOTEyN2NiNmJkMzNiMTQzMjE3YTZkNjE5YzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY0ZjI4YzJlNWM2OGFhYTUzZjNmY2QxMWQyZGQ1N2JjNzk3OGIyMWI2MGI4NmQwZDRmOTYyZjA1Yjc1N2UzMzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzZDQ0YTJjOTRhOGY1NDM3ODM3ZDE3ZTk0NDViNzQ4MjMxMzY3OTdhYzg5M2VlNjFkNTdkODk4YWZkYzJhNWMifQ"
+        },
+        {
+          "resource": "repo://src/verity/ingest/media_ingestor.py#L39-L58",
+          "version": "repo-lines-v1:sha256:61b59f1a161fefc088ef55e8ee755ba5be2a48ee67adc6ce99709408259de849:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhYTczZTI4NjczYjZlNDgxNjM3MTg0ODliZjYyMWEwMTM5YjE0NGM5MWJhNWUyMDNjODExN2YzODdhYzJkOGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxNmVjMDQ2OTQ5M2VjNjBlNjYwM2U4OWZlNjE4YTUyZTkwMTFkMWEzMmFhNmNlNWY0NTk1OWFhYWVjNjBiZDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzMjBjNThmYjdjOWVjZTJlNzg0ZjA1ZDc0NzExODgxZjE4YjBiOGZlZDQ3ZjczNzQ3NDI4NDVmNzE3ZGJkM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc0NzJkYTIzYzdiOTg0NDViY2ExOTdhYjM5N2IwNWE1MjBhNjY5YmEzMmYzZTRhZWQ5MjU5NzA4Yzg2Y2IwODMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_05eff5766ff54a95ae015a711050eace",
+      "statement": "verify_integrity recomputes the working copy's SHA-256, compares it and the size to the ingest record, and reports whether the original source is present and still matches.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/service.py#L506-L544",
+          "version": "repo-lines-v1:sha256:7982d1cc7686f91e11ef4aaeb568b9eb2d297bf4d295a0d38e75cfb4abf69694:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyOWViYzY3MGVhMGJkMGI2YzFmYzZiNDk1NGU5ZjhmMGJkZDk4NzU4NmNlYTBmNWMxODM2MTEzNDk0MjU3NDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2Yzg3NmQxZDE3NmE1YzMzN2RjMGY1MDJiZTZjMjZhYjE1MWEyOGY1YTRkOTJhYTQ2NDkxYjE0MjhjNGFjNjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2OGM4NjMzMjkyNzRkOThiNzkzZmEwYmUxNDY1M2U1ZGMzNDIzMDU0ZDc1NmJmZDQxMjY1NjdlYTdhYzMxODQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3493d434ceb24671b88b38ad03d4cab7",
+      "statement": "File serving resolves paths strictly, requires them to be inside the workspace, output or detectors roots (403 otherwise), and serves only an allow-list of pipeline file suffixes (415 otherwise).",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/files.py#L1-L63",
+          "version": "repo-lines-v1:sha256:2e2db4ff136200154035a5a3e01692f0056cbdcfffc5b7c987722ab6851ca9aa:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwN2Y2MDlmOGUwNDI5YWNlZjg4YWMyZjdhOTVlOGQ1MDU3MjlhNDJkMjM1NGEyZDA3N2MzNTQ1NzczMWIwZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRjNWE5N2JhYWFmYmRmYTA0Y2I3ZmFhYWY0NGFkZDNkZjBiMjAxMGZlZDAxMmVmZjIwNTExMDMyNjk4ZTRkNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIzNDI0ZWQ0MDVjMTRjMjI2ZTI1YzY2NmVjZmY0MTVkMWYxYTc4OGU1YTY1YzkzYjViYzliZTI4MWQxMjNhMDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_055d281be07945a3ac8feab5bbbb78d3",
+      "statement": "Uploads stream to a temporary file in 1 MiB chunks and return 413 once the body exceeds the 2 GiB MAX_UPLOAD_BYTES ceiling.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/routers/media.py#L40-L96",
+          "version": "repo-lines-v1:sha256:e30f1f5673e96f2032c7eb3e93dfc6d1a22b5502a1eee3e8f9864a43e56b46be:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjYjc0MjM2OGVmYzE5OTcwZTlkMGVmNzVjZTFkNjIxZDFmZmMxOTI4YWI3YzVkMDBiODFlODg0MDc0M2ZhZDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU3MGRhMDMyZmJmZGJkMWI0MjRlODE0YzIxMmFlNTg0ODRlNzZmNTdkYzU2ZGJmZDEzYmY4MDM3MzZkMzI0YjIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE1ZGY3MTNhNTVhNzg1MGIzMGQ2NzZhOGE5ZWQ5NjQ0MDFmNjA2MjUwNjRiMWM0NTIzNzhkNzNhNmI3Y2M2Y2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU1NDUxZjZhYmI5YWM4YmRmMzE1ZDRjNzgxODA3MjhkYTI3OTYxNjNkNGQwOGU2MjhmZDM5NGYzZjcyYjQ0YjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3e9a56f1184d422486695ea742a19183",
+      "statement": "DELETE /api/media/{id} requires confirm=true, removes the working copy, sidecar, artifacts, detector outputs and report directory, and never touches the original source media.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/routers/media.py#L179-L191",
+          "version": "repo-lines-v1:sha256:e302d923b6d9d8c7b7876d0f0a9fc70bd089053944aa3f6455fcb03b01dfb5f0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkYTNlYWU0MTIxZmVkMzNiZGJhNGQ4ZTE5M2ZjMDI1OTZiMTE4NDVmYWQ5NzUwNTUyMDllZjc5YjU4NjMzNzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjZTE0ZjYzMWJmOWU4NzA5YWVmNDc1NDIwMjcwMGUxNGVjM2M3OTA4NjMzZGIzNWY5MDcyYjQyYjE0ZmUwZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyMGEyN2E3YzY1MTZlMDZjNjlkYTY1YWUxMDY2NTBiMDk1NTk0NzEzNGIzMjM1MTcyZDRlMjAxZjQ3MmJkMjMifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L556-L587",
+          "version": "repo-lines-v1:sha256:33f2b64df674029167fedf55350d9eb1ffa3661f30ec60fc20f93e948e7fbae8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU2ZDE3Yjc0NDY5NDlmNjRmY2MxY2FlN2VmNjdhMDM4ODBmYzYwYWZiYWZjOTg5YTIzYzM1MjdhMjQ1YzQ1NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzODcyYjg4NDE2NDYwN2Y2Zjg0M2YyY2NlZjk2YzBlMTExY2JkNWIwNTA4YWI3YTFjNjIyYTE5NTgyOTUyNmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2N2U3NjlkZWYxOTlmOWFmYWEyMDhmZDZmZTU3MjZhNzE2ZDMzYzZmMzAyMzllMGE0NmQ0YmI1OTZhNzE0MDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE5ZWI5YzMyMGJiYzA0NDc3NTM5ODk1OTg2MzliNDUwMWFlMjU2ZGIwODgyMjNlMDJhYjJhMzM1NzkwMGUxN2UifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e617fda414b64cfd8e5050d358669773",
+      "statement": "JobManager rejects a job whose media id already has a non-terminal job, raising JobConflict surfaced as 409, and keeps jobs in memory only.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/jobs.py#L229-L268",
+          "version": "repo-lines-v1:sha256:bc5954c4d597158ca92e2491ef9bf7bb4f0d6c1c5d0e29ca6e7d348e0ac510be:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzOTc2ZmU0NmU1NmE1YzAyZTIyYjU3ODU0OTRmZDQyMjM5OGY0NzQyNTI0YjAzN2Q1ZWQ4YTEwYTgzNTIxNjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhZDZjOGVhYTg1M2RmYjcwNzIwNTFhNWY1OTYyOWJiNzZmMDJkMTMzMDQyZjY0MTQzNDNmYTAxOWFiOGU2ZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI5ZGM4ODNlNWYzYmMxNzIwNDg4YzBmYjg5MjQ0OGFjZDY3ZTI2OTllODYwZmI1MmVkYWJmZmFlNjc5MzYzM2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU1ZWRhMTBiN2UxMDU5OWY4OGUzMGM3YmUyODZmZjA5NDc0OGQ0YWJjZjJhZTAxZGU4YWE5YjI1MzMwZjE5MmYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e092596dcba24ecc95497bf27a3ce3f1",
+      "statement": "The API has no authentication: compose binds 127.0.0.1 by default, install.sh refuses non-loopback binds without --allow-network, and SECURITY.md recommends an authenticating reverse proxy.",
+      "evidence": [
+        {
+          "resource": "repo://SECURITY.md#L24-L60",
+          "version": "repo-lines-v1:sha256:09f101bf5a04f9da2a67ead17cf57fec12881421f82211e58da607167097a8fb:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ2N2JmMTIwY2ZkMzQwMjI4ZDhiNDk5NzllZjYzMGQ0ZTk5ZDNmNTQwYjM3MDM2NzRkMGQ0MTAxZWE4Njg1NWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhMDBkZTliMjk2Y2MwZTVjNDBlMDFhMDJjNTEyOTI4M2FkZDA3NDdiYmMyNjhjN2RjOTUwYmRmNjdlYzhmMjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiYzNlMDU5YTMzMjhmNWY5NmQwZWVkYWNkNDA3ZGVlYWMyZGIzMWFiY2FjOWMzNjg1YWU2NmExMTQwZTRlMzEifQ"
+        },
+        {
+          "resource": "repo://deploy/install.sh#L132-L141",
+          "version": "repo-lines-v1:sha256:24da480342384579633f5e5352c13b17f0c05097f403e07428dd40e1a8260f9a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxODk4ZTdlYmVmYjAyYzcyMGQ5Y2U0MTA4YzI3MjljZTBmN2E1YmRmNjE3YWM5YzZmYTdiZGJjZDhiYTEyYTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5N2JjYTAwMjM2ODA1OGE4NDRlMjViMTBiMDU4MTIyNDJmZjdmZTVkZGNhZGUxNjA4MzRhMDJlMTlhOWE0YTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcyMGMxODAzNDAwMWM2MDgyZDg2NzYwY2ZiZjRjOWRmMTg5NzA2YzAzNGZmYzExNzdkZTU1MTJmYWVmZDY3MDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM1ODJjZjQxZTIwYzE3YTliOTU4MjcxYWIzNjdmM2EyMTNmODI2N2MxODdmODZhZGY0YWFiOTA4NTAxMGNhNjEifQ"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L19-L25",
+          "version": "repo-lines-v1:sha256:806b3de4d12be4a7e99c280c12da57895f34afb0e8c78a2ffbb98364362a6290:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODZhNjgyYTY1ZWYxZGMzZWFmYzRkNDg3YmI3ZmU3MzlmYzFlN2RkMDUyYzQ0ZTljMjIwYjMwNDg1OTEyYzViOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI3NDYzMzRmZGJkNjUxMzIzOWYxMzI2ZGI4YjYxMjc1N2I1YjMyYzA4MDhiNTA4MWE5OTM3ZjY1MzNiOGRiOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjc2YWI4YjE1ZDUwYjllNTk4ZWZhYmVmYTcyYTdhNzU4NzI1Nzk0ZTI3YWQwNzhjNDkzZTQ0NmE4NWVmOWViNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWIzMTM3NTY1ZDlkYjRmNTc4OTU4ZGRjMjc1OTUzNTQ2MWY0NGI3NzI0M2FjMzIzOGVjOTVjMjI1MmUzNGNhYyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_836898929ee24b3cb19d47d0f526c5a5",
+      "statement": "VERITY_OFFLINE=1 forbids network fetches and checkpoints are verified against manifest SHA-256 and size before use.",
+      "evidence": [
+        {
+          "resource": "repo://SECURITY.md#L32-L40",
+          "version": "repo-lines-v1:sha256:8cf6b224d9e1fc65ae23c9f06a07bf4d23f7304298b294d562ffecba34346bca:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDM5N2Y2ZjhhZDhhNmMxNTY2ZTk3ZGQ4M2RmNmNjZGU5YjdlN2M1MTQ1N2ZmZTgzNGNhZDUxNWQ0NGE4MDc5MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjVjMmZhZGYyMjFmZjNjMTk2YWI4MDIwNzYwODljMzE3MDcwNTlhNzNkZGFmOTAwOGE4ODgxZGY3MDNmYjM4YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjNlNmE4ODE2ZGZhNjZmZTRlNzQwZTYxZTVhODRlNTMzZTY0ZTJhNDViN2JlOWU1YTE3ZDhkYTdiODIwODZiNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGE4ZjRiMDg4NGU4ZmY3MGUxMDdkNjM1ZjE5ODM1NDJmMWZiNzNjNzVjNTEzN2ZlMzVjY2VhNzI2M2IwMmRlMiJ9"
+        },
+        {
+          "resource": "repo://src/verity/weights/manifest.py#L1-L40",
+          "version": "repo-lines-v1:sha256:f014df36246f53dfe7a2e3db509b17c854020f26060504bf8c419d1b4fe5193c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzODRiZmRiMmRmMzgwYjY1NTdjYzdhNzFkMTY4OTE0MTViY2NhYTg3Njk5NDA2ZTIzNmY3NTJjNjQxNTM4OWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwMTBhZTlhMWYxZWQ5ZDIwZDk2Yjc3MzAzMTlhZWQ4NWFlY2JlNGNhZTU2ODQzYzBkOWExMmNjMzQ4NjAzOWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEyMjAzZjJiMGY1ZTJmODhkYWE2ZjM5ZmJjZDRlMmQ1ZDU1NDNkY2JlNmE0N2Q0ZmNmYmQ1MTJjNWYxYTMzZmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_736794c73dd448ee84b7e0c29b70a465",
+      "statement": "export_evidence_bundle packages a case's read-only working copy, reports, forensics figures, and per-detector exhibits into a zip archive sealed with MANIFEST.json and sorted SHA256SUMS.txt verifiable via sha256sum -c.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/export.py#L65-L189",
+          "version": "repo-lines-v1:sha256:c8a74e67f0faf0aed018d1203bd5bb841c29d40c0370abf1a943a2286639002b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI0MzM4NDAxYWU2NmIyZTFkOWZiZDc2ODA4ODcyZTVmNjExNTZkNzVkYzY0MTRjYWVmNzJiNGM1Njg0Y2Y3MmNlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0ODkzZjQwZTM3ODFlYjg5NmM4MmQwNDZhMDgwNjdhMTFlMzVjZGYyZjFkZmFmMjZmZWE5MGI4ZGI2Njc2NDEzIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkNzAxNDllMDY5YWQ2N2VjY2Y0NzM2NDZmZjFjNzUwMDUwZDMyOWQxMTAwMThkYzU3NjY4NzhlYWZhMWQ2MDdkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0YTliYjRiMjNlMWNmZTdjMmVmMGYwMmYxNTVjODcyNjg2NGQzZTA1MTU0MmZkMzU3Yzc4ZGY2YTEwYTRjM2FmIn0"
+        },
+        {
+          "resource": "repo://tests/test_packaging_and_export.py#L43-L118",
+          "version": "repo-lines-v1:sha256:ad2282f42eb1832d59b40debbea60e04ff5a1fbbe8cc56e0d0a9354ea1a7ff38:eyJzZWxlY3RlZExpbmVDb3VudCI6NzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYjc3YjhlMjUwMjMwZjI4NTYxNmVjNTJhZmJlODc0MGJkZjgxN2I2N2FmM2IxYmJlNWUxYjkxNzQ4NzNmZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFiMDEwYWMwOTAzYTdhZjAzODU2ZTM5NjA0YTBlM2UzODkyNzkyYjBhNDEzZWI3OWY1NzE4OTU4M2I0N2RlYmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkZTNmZmFiNGMxNWQ0MmYyZThiNGY5ZDhhYTJhZmM5NWE4NTE2ZTNmZWU2ZTg1NDgyZWU1NjVlMzJlNWY4NmYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3980b138d95c4acc91b391a07f6adc65",
+      "statement": "is_offline checks VERITY_OFFLINE first and otherwise reads persisted offline mode from <config_dir>/config.yaml, which verity setup --airgap-ready seals after verifying checkpoint hashes.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L398-L416",
+          "version": "repo-lines-v1:sha256:a3c954e0da9fc707fd266b75b3be7c02ee10531ae1c6748374923f2c5d96d444:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyYjQ2ODJlZTZlMDE1OTdkM2M4ZTEwMjY5MTUxZTZmN2Y4MzZjNzY0MmQ1ZWE4MGVjZGI4ODM4MWUzMTFhYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5YzcxNDk3Y2ZjODJlNmZlMGZmZmYwYjA2MjM2NWVmNDk3MTUzODhhNjU0N2I5N2ExMzAwZjdlZWEyOGYwMmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3NmNmNzVmZDA1ZTYzMmUwYTFlMjBmMDkyMDQyYTViNjhiODdiN2EzMzIxMDJhNWY0Zjc2ZTJmZWNkMzU5ZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3Nzc0Y2QyNDY1ZDgwYTk3YWI4OTA5NDcyYjRkNjM1Y2UzNGI2MzQyZWE4MjNmZDRkNTNhZDUxZmQyYjlhNGMifQ"
+        },
+        {
+          "resource": "repo://src/verity/paths.py#L96-L117",
+          "version": "repo-lines-v1:sha256:a2209e4bebaf150b01c502345869b8948dff9751a9d10c9fbd2132df0fc54b7a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkYTA2OGUyZGIzNTMwMDdhY2UxNjQ3YTI2NTZhZTNmY2UxOGQzM2E5MDdiOWEzY2E4Y2Q2NmY3ZDQ2OWYwNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzNDY2NzgxZjY0YmU5ZjIwZGY3YWY3NWJkMDAzOGM3Zjg0ZDc5YmZjNzdhMzMzZWQ4MTdhODI4MDYzZDM4ODUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc2ZmU0NmEwMjM1N2M3YTRkYjViYzc5ZWRhNzhlZDNhZmZkODk2MTkwYTU0NDkwNWJjNWY1MDZjYmY5ZTQyM2IifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

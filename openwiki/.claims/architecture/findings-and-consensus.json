@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:14442af54764e0e9fc465fb4f1064d752d57eb2350ddbfccf28897cf3c0ba589",
+  "claims": [
+    {
+      "id": "claim_d2717e7a861f4919801a7384a85b6c27",
+      "statement": "Finding carries detector id/version, classification (REAL/FAKE/UNCERTAIN), confidence, reasoning, raw output, trust tier and timestamp, and is_trained is true only for the trained tier.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/models/findings.py#L9-L41",
+          "version": "repo-lines-v1:sha256:fa02df2fda3e6caf2b0fb5c99e6c500a713afef0d6771f2ed45ccdea3351fc5e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZDQ0ODdiZjI4N2ZjMzVlZTA0N2ZkNzUxM2ExYjQ2Mzg2ZDFmMDIyOTY4MWRiZDBlNjQ2NWYyMWM5ZjVmOTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjMTQxNGVhOTZmZjAxYTk1MTI1ODJlMzI4ZmZlMTNmODQwYTcwMTQxOTdiMDljNjVmYzYwMDA0NmRkYTQ3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVlYWJlZjFkNTE5ZGM0YzlmNDMwNjFiMGJjNDkzNDE2MWNkMzNhOWJmNmYyZWJiODg5YzgxYThhNjc4ZWU0NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2795097729fa468c82ea81984194d6c3",
+      "statement": "FindingsCompiler scans workspace/output for <media_id>_* directories, loads each finding.json, backfills a missing tier from the current registry definition, and sorts findings by detector id for deterministic presentation.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/compile/findings_compiler.py#L21-L47",
+          "version": "repo-lines-v1:sha256:5c45e31605af943a266cc1339cfdf43a53361266f500466141a84d8b54e4be46:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5YjllMzMxYWI4ODc2MWJmMTI0OGNhNTQ4NDViZjU0MmZkMWZkMWY1ZTk4OTVhMjQxZDMwYTZlZjlhZjI0OTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0ZmRlNWRjNjJjY2FmNDRhMmUzYTUwYzFjMzJmYzhlZjI5MjE3MTBhMDA3ZmUyOWU2ODFhNWFhZDhiYzc5NDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZiNGQwMmU2MTkyNmY0Y2Y4NTkzYTAwMDQ5YWNhYzE2MWQ3ZmNkNGZhNzUzYzMxN2Q4NmQwNWU3YTVkMTU5MzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3037b37c2a4f41569762aef2518b8dd8",
+      "statement": "The aggregate score excludes untrained findings and is the confidence-weighted fraction of trained findings classified FAKE, or None when there are no trained findings.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/compile/findings_compiler.py#L49-L58",
+          "version": "repo-lines-v1:sha256:2c35b0bb7103a4f4a801b908a7a9753ec9118f1e476902378c5a8ffd0a4df95c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxYWJjZDBjYzY5MTNkNGY1MWViMjFlNGY1YWZjMmU5MGY4NmQzNmE0NTBiYjQyY2IwNWM2ZjNlMGQ3MDZmOGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZmJkOGU1ZDQ1ZGRkMjgwMTQzZThiZmU5OGIyNDViZjNhNmY3ODJlMmE4MGIxOTNkNGUwZmJkODY2ODY2ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4ZDk0YTE4ZGQzM2JjMTI5ZGQyM2NiM2I1M2UxNzk4ZmU1NmFmMWJmMGI1Y2E1ZmI1NWIzYmI0NDkwNmQwZDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_125afc04298f40dea6eec0496c43c290",
+      "statement": "A finding's mean fake probability is the average per-face fake_prob when present, else the raw prediction, else zero, and the report and API share this derivation.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L653-L661",
+          "version": "repo-lines-v1:sha256:cc63a0cc981586133a1b76ace88d318a55fbefb7d6eb7e5ba0fd538d80f3a509:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWUyMTQ0ZjY0OWFmZmRkMjc3YmZkMDJhODU1MDY0M2RiYjI3MDE2NDgwN2E0N2E4NDdlMDY2MWMxNWY3ODNiNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDI5N2RmNDY0MDdiZTFkOTdiNjQwODA0MDA4ZmIwNmVkYzZhMTQ5MjIzZTM3N2ZhZWI3ZTExNDUyYmRiMTdiNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTZiMzY0MjE4NzE0NjRiNGNkN2M4MTAyMGM5NGFkYmJjZWI0ZDc4MjkwYzUwODEzNjE2YjlkYWU0OTUzZDUxNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzJhNzk1ZTE1Nzg4ZmI2MTdlMDE5ZDdkZTc0YjA5NmZiNDY2MTIyYTU4NTg5NTZlODNlMTNhYjVkZGRjMmMwMiJ9"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L203-L215",
+          "version": "repo-lines-v1:sha256:f8499fdc2ed2d0ca7dbac202dc5f6343d3d07da3ca32d8f4dc54c0cc738e92c5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4ZDVmZTIwZTY2MTJjNTRjNjIzOGEyYjQxZWM0ZDZlYzA2NDMxYjIwNjA1MDA3ODI2ODk1NmU4NjU5YjlmYWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjllM2FmOGRiNTgyMjJjODRjYzBkNDAzMWZhMTZiMjA3ZTgyNDAzYmJkYjgxYTVlZmQ2NmJkMGIyZDcwOThhMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2Yzg3NmQxZDE3NmE1YzMzN2RjMGY1MDJiZTZjMjZhYjE1MWEyOGY1YTRkOTJhYTQ2NDkxYjE0MjhjNGFjNjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiYzc1ODlmZjRmNjQwOWJhZDViOTcyNGE1NWE2ODkyOWFjYjhiNjM1NThjZmQ4OTM1NjZjZDBlNTg3ODViNzQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c7b751e6b940458689a43ad091e47f3a",
+      "statement": "consensus() excludes untrained findings, counts fake/real/uncertain, computes agreement as max(fake, real)/total, and flags disagreement when both fake and real findings exist.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/service.py#L268-L338",
+          "version": "repo-lines-v1:sha256:7685e81b9e04bfd84c7a39f71261ea9d847a835b532c028dbfe10a4181b15536:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjOWMzMzkyZTM1NjcwMDAzZWYzYWE4YmMzYTYzN2M5MTA4ODc3Zjg1ZTcyZGRjNGY0NzA5MGVlNmFiZTZkZmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmYmQwMDkzMTRiYzI3MDg0MTY3MzRhMDJhZTVmZjM5YTFlNDhhMDUwYmU5MWY0M2IyZmFhOTIwMDJjNjJiZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg0ODEzNTVlM2U5MjgzY2M4NTc5Y2U0ZGM4ZDExZGY2MTZiMTBjMjQ2NmZjMjE2ZjdjMGRhMzAwM2U3NzJmZGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6a816a00cd0740c1849c469014408b19",
+      "statement": "Consensus banding resolves a divided panel (disagreement with the minority at least 25%) to inconclusive, requires 70% agreement plus a mean probability of at least 0.6 for strong_manipulation and at most 0.4 for strong_authentic, and otherwise uses likely_* or inconclusive.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/service.py#L309-L323",
+          "version": "repo-lines-v1:sha256:0cda5feabb6368bde2bc08e519ede521ccfba37373ad35ee58c6610aaa6da8b5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlMGRjNDliNjVmZjFjYThlNjI5OThiMzJiOGU4MzEzMTQzOTE1Mjk0ZDBjMzdkYWM2YzE2MGIyNGJkMjcyNzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlMTNkZGI2NjZjZDFiYjE4MWViYWViNDNlMjZjYWNiZDlmYmJkOWExN2NlNGUyMjdmZTU0Nzk1YjM4MWI4Y2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVlYWQwM2FkZGM0MjQyODZjODM0MGVmZGQ2NWRhNDU2MTQ2YzVmMzQ5ZGUxMDUwNDY1YWZlOTgxYjVmMzk3OWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI0YmZhNDNjMmEwYTVlMDY5M2M0MDNiNDBiMjA3ZDc4YzI4NGY4YTM4NDM2NTA0MTgwOWQ2YzUzYWYzODI5OTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f38dfc9bd3be4a4ca4eaf02dd431a199",
+      "statement": "A detector leans fake at mean probability >= 0.6 and leans real at <= 0.4, and leaning_split records when the panel contains both leanings.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_api/service.py#L303-L307",
+          "version": "repo-lines-v1:sha256:9e76661c6246e073f1c8ad4ee920d284e744af0a6967314ccb0de17f742181ca:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzY1M2VmYWU0NGEzZTdlN2JhYTk4ZjdiODU2ZTUyOTFiZGMyMjE4NDMzZGFiMWM0NmI4OTBlOTFlM2U4NmE0ZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzUzZDY0YjZmNjczODQ0YjE1ZmQ0ODU5NjE5NjRmMGJhYmFjYTIxYmUyOTQ5NDQyNjlhNDQ5MGQ4YzBhNWI3NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTZlYWUxZjg3NjM0Mzk5MWYxZGFkN2EzYjQyMjQyNGRiYjVmMGJjZTgxZGZhZmE5YTZlMDM1ZGE3NmI0Y2YyMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmYwZWIzYTU1ZTZiNTAwMWQ0NGE4MzhlYWJkMmFmYTcwYWIzOWJkYzA4MmFiZDhmM2ViOTlhYzRiZWQwYWYwNSJ9"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L43-L45",
+          "version": "repo-lines-v1:sha256:c92b93361dfeffd36b9adb8518a4f54c6d8be82d8f2f565a50e7224a8802d102:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTA3ZmM2OGM1OGI0MTExNWJkYjkwOTNjNDk5NmY2YmEwZmFhNTU5NWNiZGMxYTZmOWFhMzU5ZjM4YTAwOTdhMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTM0OThmYTcwMWUzODY0NTZjNWIwZjdmMzRmY2M5ZmMwNzUzMDg3NmU1MmFlMGE1ODMyOWMzYTU2NDU1ZjBlYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODVmZDI5ZjlkYjdhZjA1NTQ5M2YzNWQ4ODAzM2VjNzhmODAxNjIzZDgxMzQ4ZjVlOTI3N2NkMTYzMWUwMWNlZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGI2YjdhZGRiMzY5NDIwMmQ5Njg5YzE0NGQyZTY0NWEwZjk2MDYzMGU4NDM3ZWYzMTg1YTc4MzI1M2M2N2UyNiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_97b80aa674cd4091b48636f1bcda3844",
+      "statement": "The Web Console OverviewTab renders a sorted detector probability spectrum across evidence-grade findings that deep-links directly into each detector's Evidence & XAI view.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity_ui/src/routes/tabs/OverviewTab.tsx#L73-L160",
+          "version": "repo-lines-v1:sha256:1c01e072cbfee5aef8e3de243d4ebb8101c804910b7cb9a32d916a6ea98aae92:eyJzZWxlY3RlZExpbmVDb3VudCI6ODgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2MGQ4Mzg3ZjZjODU2YjBhZjgzMGUxNzUwZWE5ZjI2YWEzMzgzOGFiMmVhNzEzZmQyYTMyYmE5ZTcyNGIxNTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk3NTQzYzRhMGJkZTNlYmFhYjkyMGM1NmZkOGU2NTJkMmI1NWYwODUxZDk1MjRlOTBkYjgxMDA4ODg0ZjBkNWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0M2FmMmNhMjZkOWRhZTVlMTA3NzMyNDVhOWNkMTFlMjJmZTI5ZjFhNGM3NzcxN2M5OGE5NWUxNWYwMzhmMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZjNTlhNDQxNGI2YTk4YjVmMTc3NDdmMGJlOTc3Y2QwMmI0MmNhOGMxZTc4NTlhM2Y4YTQ5MDJkZGYwZWE1ZTAifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

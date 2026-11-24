@@ -62,6 +62,13 @@ def _model_card(manifest: Manifest, repo: str, files: List[FileSpec]) -> str:
             + "- Files: " + ", ".join(f"`{s.hub_path}`" for s in specs) + "\n"
         )
 
+    non_redist = sorted({
+        manifest.sources.get(f.source, {}).get("name", f.source)
+        for f in manifest.files.values()
+        if not f.redistributable
+    })
+    non_redist_note = ", ".join(non_redist) if non_redist else "none"
+
     return f"""---
 license: cc-by-nc-4.0
 license_name: cc-by-nc-4.0-plus-upstream
@@ -76,19 +83,21 @@ library_name: pytorch
 
 # Verity detector checkpoints
 
-Mirror of the pretrained checkpoints used by **Verity**, an open deepfake
-examination pipeline for investigators and researchers. Verity downloads the
-files below on first run (`verity weights pull`) and verifies each one
-against the SHA-256 in `manifest.json` before it is used.
+Mirror of the redistributable pretrained checkpoints used by **Verity**, an
+open deepfake examination pipeline for investigators and researchers. Verity
+downloads the files below during setup (`verity setup` / `verity weights pull`)
+and verifies each one against the SHA-256 in `manifest.json` before it is used.
 
-**This repo re-hosts other people's work.** Every file keeps the license its
-authors released it under; the repo-level tag is the most restrictive one
-(CC BY-NC 4.0). Nothing here may be used commercially. See `NOTICE.md` for
-per-file attribution and `LICENSE` for the license texts.
+**This repo re-hosts other people's work for reproducibility and reliable
+offline lab provisioning.** None of these model weights were trained by the
+Verity maintainer. Every file keeps the license its original authors released
+it under; the repo-level tag is the most restrictive one (CC BY-NC 4.0).
+Nothing here may be used commercially. See `NOTICE.md` for per-file attribution
+and `LICENSE` for the license texts.
 
-Checkpoints that upstream authors did not license for redistribution (NPR,
-MLEP) are **not** in this repo; Verity fetches those from the authors'
-repositories directly.
+Checkpoints that upstream authors did not license for redistribution
+({non_redist_note}) are **not** in this repo; Verity fetches those from the
+authors' repositories directly while still verifying SHA-256 checksums.
 
 Assembled {date.today().isoformat()} from Verity's `detectors/weights_manifest.yaml`.
 
@@ -171,6 +180,12 @@ def build_bundle(manifest: Manifest, detectors_dir: Path, out_dir: Path, repo: s
     }, indent=2))
     (out_dir / "sha256sums.txt").write_text(
         "".join(f"{f.sha256}  {f.hub_path}\n" for f in files))
-    (out_dir / ".gitattributes").write_text("*.pth filter=lfs diff=lfs merge=lfs -text\n")
+    (out_dir / ".gitattributes").write_text(
+        "\n".join(
+            f"{ext} filter=lfs diff=lfs merge=lfs -text"
+            for ext in ("*.pth", "*.pt", "*.safetensors", "*.onnx", "*.model", "*.tar", "*.bin")
+        )
+        + "\n"
+    )
     return {"out_dir": out_dir, "copied": copied, "missing": missing,
             "total_bytes": sum(f.size for f in files if f.hub_path in copied)}

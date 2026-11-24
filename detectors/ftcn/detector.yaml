@@ -1,10 +1,12 @@
 detector_id: ftcn
 version: 1.0.0
 name: FTCN
-description: FTCN deepfake detector (DeepfakeBench port).
-architecture: I3D 3D-ResNet50 + temporal coherence head
-parameters: 0
-pretrained: Shares the I3D R50 backbone weight; head untrained.
+description: FTCN deepfake detector (Zheng et al., ICCV 2021) - fully temporal convolution network (I3D R50 with
+  1x1 spatial kernels) and a temporal Transformer head, trained on FaceForensics++ c23; detects temporal
+  incoherence of manipulated faces.
+architecture: I3D 3D-ResNet50 with temporal-only convs (stop point 5) + TimeTransformer head
+parameters: 14796524
+pretrained: Official FTCN+TT checkpoint ftcn_tt.pth (yinglinzheng/FTCN GitHub release), trained on FF++ c23.
 resolution: 224
 mean:
 - 0.5
@@ -18,11 +20,17 @@ video_mode: true
 clip_size: 16
 cam: true
 weights:
-  file: I3D_8x8_R50.pth
-  kind: backbone
-  url: https://github.com/SCLBD/DeepfakeBench/releases/download/v1.0.3/I3D_8x8_R50.pth
-  size: 112495617
-  note: Shares the I3D R50 backbone weight; head untrained.
+  file: ftcn_tt.pth
+  kind: official
+  trained: true
+  url: https://github.com/yinglinzheng/FTCN/releases/download/weights/ftcn_tt.pth
+  size: 59248500
+  sha256: 3d08fc78174bbfdb3fbede317b95dcac9095202ed7113649eecf6e2ef5ee77d8
+  license: none stated
+  note: 'Official FTCN+TT checkpoint (resnet.* state dict of the rewired network, 275 tensors, loaded strictly
+    after the temporal-only rewire). The upstream repository ships no LICENSE file, so the file is fetched from
+    the authors'' GitHub release only and never mirrored. Drop the Kinetics I3D_8x8_R50.pth in instead to get the
+    former backbone-only research configuration.'
 artifacts:
   required:
   - type: video

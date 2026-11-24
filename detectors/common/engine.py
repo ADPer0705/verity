@@ -14,7 +14,7 @@ from PIL import Image
 from .cam import grad_cam, upscale_to_pil
 from .face_utils import FaceDetector
 from .preprocess import pil_to_tensor
-from .reasoning import aggregate, aggregate_regions, build_reasoning
+from .reasoning import aggregate, aggregate_aux, aggregate_regions, build_reasoning
 from .sampling import VideoReader, build_image_tensor, crop_rgb
 from .spec import DetectorSpec, load_spec
 from .viz import (compute_region_energy, save_attention_overlay, save_audio_timeline,
@@ -84,8 +84,8 @@ def run_detector(build_model: Callable, spec_path: Path) -> None:
 
     mode = spec.input_mode
     unit = {"face_crop": "face", "face_clip": "face", "full_frame": "frame",
-            "full_clip": "clip", "audio": "window"}.get(mode, "face")
-    needs_faces = mode in ("face_crop", "face_clip")
+            "full_clip": "clip", "audio": "window", "av_clip": "window"}.get(mode, "face")
+    needs_faces = mode in ("face_crop", "face_clip", "av_clip")
     face_detector = FaceDetector(device=str(DEVICE), min_face=spec.min_face) if needs_faces else None
     face_mesh = _make_face_mesh() if needs_faces else None
 
@@ -114,6 +114,22 @@ def run_detector(build_model: Callable, spec_path: Path) -> None:
                 continue
             all_per_face.extend(pf)
             audio_info = info
+        elif mode == "av_clip":
+            if not is_video:
+                print(f"  [skip] {ext} is not a video; av_clip needs frames and a soundtrack", file=sys.stderr)
+                continue
+            try:
+                pf, n_total, interval, cov, info = _process_av_clip(
+                    model, media_path, spec, face_detector, OUTPUT_DIR, timing)
+            except AudioUnavailable as exc:
+                print(f"  [skip] {exc}", file=sys.stderr)
+                audio_info = {"error": str(exc)}
+                continue
+            all_per_face.extend(pf)
+            total_frames = max(total_frames, n_total)
+            sample_interval_ = interval
+            coverage_pct = cov
+            audio_info = info
         elif mode in ("full_frame", "full_clip"):
             if is_video:
                 pf, n_total, interval, cov = _process_video_full(
@@ -140,12 +156,19 @@ def run_detector(build_model: Callable, spec_path: Path) -> None:
         else:
             print(f"  [skip] unsupported extension {ext}", file=sys.stderr)
 
+    has_attn_files = (
+        (OUTPUT_DIR / "attention_maps").is_dir()
+        and any((OUTPUT_DIR / "attention_maps").glob("*.png"))
+    )
     mean_p, confidence, stats = aggregate(all_per_face, threshold=0.5)
     summary, factors = build_reasoning(
         spec.name, mean_p, stats, timing, str(DEVICE),
         per_face=all_per_face, weight_status=weight_status,
-        cam_available=spec.cam and mode != "audio", threshold=0.5, unit=unit,
+        cam_available=has_attn_files and mode not in ("audio", "av_clip"),
+        threshold=0.5, unit=unit,
     )
+    if spec.caveat:
+        factors.insert(0, f"Caveat: {spec.caveat}")
 
     result = {
         "prediction": round(mean_p, 4),
@@ -184,6 +207,7 @@ def run_detector(build_model: Callable, spec_path: Path) -> None:
             "coverage_pct": round(coverage_pct, 1),
         } if total_frames else None,
         "region_aggregate": aggregate_regions(all_per_face),
+        "aux_aggregate": aggregate_aux(all_per_face),
         "execution_context": {
             "runtime": os.environ.get("VERITY_RUNTIME", "native"),
             "sif": os.environ.get("VERITY_SIF", ""),
@@ -207,6 +231,34 @@ def _weight_status(spec: DetectorSpec, weights_path: Path | None) -> str:
     if weights_path is not None:
         return "missing"
     return spec.weights_kind  # external/random (weights loaded by build_model)
+
+
+def _expand_box(box, margin: float, width: int, height: int) -> tuple[int, int, int, int]:
+    """Grow an (x, y, w, h) box by ``margin`` of its size (split evenly on
+    both sides), clamped to the image."""
+    x, y, w, h = box
+    if margin <= 0:
+        return x, y, w, h
+    dx, dy = int(round(w * margin / 2.0)), int(round(h * margin / 2.0))
+    x1, y1 = max(0, x - dx), max(0, y - dy)
+    x2, y2 = min(width, x + w + dx), min(height, y + h + dy)
+    return x1, y1, max(1, x2 - x1), max(1, y2 - y1)
+
+
+def _extract_aux(out: dict) -> dict | None:
+    aux = out.get("aux")
+    if not isinstance(aux, dict) or not aux:
+        return None
+    clean: dict[str, float] = {}
+    for k, v in aux.items():
+        try:
+            if isinstance(v, torch.Tensor):
+                clean[str(k)] = round(float(v.detach().cpu().reshape(-1)[0].item()), 4)
+            elif isinstance(v, (int, float)):
+                clean[str(k)] = round(float(v), 4)
+        except Exception:
+            continue
+    return clean or None
 
 
 def _score_one(model, x: torch.Tensor) -> tuple[float, dict]:
@@ -245,7 +297,8 @@ def _process_image(model, media_path, spec, face_detector, face_mesh,
     boxes = face_detector.detect(pil)
     timing["face_detection"] += time.time() - t0
 
-    for i, (x, y, w, h) in enumerate(boxes):
+    for i, box in enumerate(boxes):
+        x, y, w, h = _expand_box(box, spec.face_margin, pil.width, pil.height)
         face = pil.crop((x, y, x + w, y + h))
         t1 = time.time()
         tensor = pil_to_tensor(face, spec.resolution, spec.mean, spec.std).to(DEVICE)
@@ -258,6 +311,9 @@ def _process_image(model, media_path, spec, face_detector, face_mesh,
         face_id = f"img{i:03d}"
         record = {"face_id": face_id, "frame_idx": 0, "face_index": i,
                   "bbox": [x, y, w, h], "fake_prob": round(prob, 4)}
+        aux = _extract_aux(out)
+        if aux:
+            record["aux"] = aux
         per_face.append(record)
 
         (output_dir / "faces").mkdir(exist_ok=True)
@@ -278,15 +334,14 @@ def _process_image(model, media_path, spec, face_detector, face_mesh,
 
 def _process_video(model, media_path, spec, face_detector, face_mesh,
                    output_dir, timing):
-    reader = VideoReader(media_path, sample_interval=spec.sample_interval)
+    reader = VideoReader(media_path, sample_interval=spec.sample_interval, max_frames=spec.max_frames,
+                         clip_size=spec.clip_size if spec.video_mode else None)
     n_sampled = len(reader.frames)
     if n_sampled == 0:
         return [], timing, reader.total_frames, spec.sample_interval, 0.0
 
     faces_dir = output_dir / "faces"
     attn_dir = output_dir / "attention_maps"
-    faces_dir.mkdir(parents=True, exist_ok=True)
-    attn_dir.mkdir(parents=True, exist_ok=True)
 
     per_face: list[dict] = []
     frame_cache: dict[int, Image.Image] = {}
@@ -303,7 +358,8 @@ def _process_video(model, media_path, spec, face_detector, face_mesh,
             continue
 
         frame_cache[reader.frame_indices[pos]] = pil_img
-        for i, (x, y, w, h) in enumerate(boxes):
+        for i, box in enumerate(boxes):
+            x, y, w, h = _expand_box(box, spec.face_margin, pil_img.width, pil_img.height)
             face = pil_img.crop((x, y, x + w, y + h))
             t1 = time.time()
             if clip_mode:
@@ -321,13 +377,18 @@ def _process_video(model, media_path, spec, face_detector, face_mesh,
             face_id = f"f{reader.frame_indices[pos]:05d}_face{i}"
             record = {"face_id": face_id, "frame_idx": reader.frame_indices[pos],
                       "face_index": i, "bbox": [x, y, w, h], "fake_prob": round(prob, 4)}
+            aux = _extract_aux(out)
+            if aux:
+                record["aux"] = aux
             per_face.append(record)
 
+            faces_dir.mkdir(parents=True, exist_ok=True)
             face.save(faces_dir / f"{face_id}.png")
 
             t3 = time.time()
             cam = _cam_for(spec, model, tensor, out)
             if cam is not None:
+                attn_dir.mkdir(parents=True, exist_ok=True)
                 att = upscale_to_pil(cam, face.width, face.height)
                 save_attention_overlay(face, att, attn_dir / f"{face_id}_attention.png")
                 if spec.region_analysis and face_mesh is not None:
@@ -335,7 +396,7 @@ def _process_video(model, media_path, spec, face_detector, face_mesh,
             timing["viz"] += time.time() - t3
 
     n_scored = len({r["frame_idx"] for r in per_face})
-    coverage = min(100.0, n_scored * spec.sample_interval / reader.total_frames * 100) if reader.total_frames else 0.0
+    coverage = min(100.0, n_scored / max(1, len(reader.frames)) * 100)
 
     timeline_path = output_dir / "timeline.png"
     save_timeline(per_face, timeline_path, reader.total_frames, threshold=0.5)
@@ -387,6 +448,9 @@ def _process_image_full(model, media_path, spec, output_dir, timing) -> list[dic
     timing["inference"] += time.time() - t2
     record = {"face_id": "img00000", "frame_idx": 0, "face_index": 0,
               "bbox": [0, 0, pil.width, pil.height], "fake_prob": round(prob, 4)}
+    aux = _extract_aux(out)
+    if aux:
+        record["aux"] = aux
     (output_dir / "frames").mkdir(exist_ok=True)
     thumb = pil.copy()
     thumb.thumbnail((512, 512))
@@ -402,7 +466,8 @@ def _process_image_full(model, media_path, spec, output_dir, timing) -> list[dic
 
 
 def _process_video_full(model, media_path, spec, output_dir, timing):
-    reader = VideoReader(media_path, sample_interval=spec.sample_interval)
+    reader = VideoReader(media_path, sample_interval=spec.sample_interval, max_frames=spec.max_frames,
+                         clip_size=(spec.clip_size or 16) if spec.input_mode == "full_clip" else None)
     n = len(reader.frames)
     if n == 0:
         return [], reader.total_frames, spec.sample_interval, 0.0
@@ -428,8 +493,12 @@ def _process_video_full(model, media_path, spec, output_dir, timing):
         prob, out = _score_one(model, tensor)
         timing["inference"] += time.time() - t2
         fid = f"f{reader.frame_indices[pos]:05d}"
-        per.append({"face_id": fid, "frame_idx": reader.frame_indices[pos], "face_index": 0,
-                    "bbox": [0, 0, pil.width, pil.height], "fake_prob": round(prob, 4)})
+        rec = {"face_id": fid, "frame_idx": reader.frame_indices[pos], "face_index": 0,
+               "bbox": [0, 0, pil.width, pil.height], "fake_prob": round(prob, 4)}
+        aux = _extract_aux(out)
+        if aux:
+            rec["aux"] = aux
+        per.append(rec)
         thumb = pil.copy()
         thumb.thumbnail((512, 512))
         thumb.save(frames_dir / f"{fid}.png")
@@ -529,3 +598,123 @@ def _process_audio(model, media_path, spec, output_dir, timing):
     timing["viz"] += time.time() - t3
     return per, {"sample_rate": sr, "duration_seconds": round(duration, 3),
                  "window_seconds": win / sr, "hop_seconds": hop / sr, "windows": len(per)}
+
+
+# --------------------------------------------------------------------------- #
+#  Audio-visual clip mode (frames + synchronised audio windows)                #
+# --------------------------------------------------------------------------- #
+
+
+def _probe_video(media_path: Path) -> tuple[float, int]:
+    import cv2
+    cap = cv2.VideoCapture(str(media_path))
+    fps = cap.get(cv2.CAP_PROP_FPS) or 0.0
+    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+    cap.release()
+    return (fps if fps > 0 else 25.0), total
+
+
+def _read_frame_windows(media_path: Path, ranges: list[tuple[int, int]]) -> list[list[np.ndarray]]:
+    """One streaming pass over the video; keeps only the frames that fall in
+    the requested ``[start, end)`` index ranges (BGR, native resolution)."""
+    import cv2
+    wanted: dict[int, np.ndarray] = {}
+    needed = set()
+    for a, b in ranges:
+        needed.update(range(a, b))
+    if not needed:
+        return [[] for _ in ranges]
+    last = max(needed)
+    cap = cv2.VideoCapture(str(media_path))
+    idx = 0
+    while idx <= last:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        if idx in needed:
+            wanted[idx] = frame
+        idx += 1
+    cap.release()
+    return [[wanted[i] for i in range(a, b) if i in wanted] for a, b in ranges]
+
+
+def _process_av_clip(model, media_path, spec, face_detector, output_dir, timing):
+    """Score ``clip_size``-frame windows of whole frames together with the
+    audio of the same time span. ``model.forward_detailed(window)`` receives a
+    dict (frames, frame_indices, fps, total_frames, audio, audio_full,
+    sample_rate, start_s, end_s, face_detector, device) and returns at least
+    ``logits`` (1, 2); it may add ``bbox`` [x, y, w, h] of the face it used,
+    ``attention_map`` and a JSON-serialisable ``info`` dict that is stored per
+    window (sync offsets, confidences, ...)."""
+    sr = spec.audio_sample_rate
+    t1 = time.time()
+    wave_ = _load_audio(media_path, sr)
+    timing["preprocess"] += time.time() - t1
+    fps, total = _probe_video(media_path)
+    clip = int(spec.clip_size or 5)
+    hop = int(spec.clip_hop or clip)
+    if total <= clip:
+        starts = [0]
+    else:
+        starts = list(range(0, total - clip + 1, hop))
+        if len(starts) > spec.max_windows:
+            starts = [starts[i] for i in _evenly(len(starts), spec.max_windows)]
+    t1 = time.time()
+    windows_frames = _read_frame_windows(media_path, [(s, s + clip) for s in starts])
+    timing["preprocess"] += time.time() - t1
+
+    frames_dir = output_dir / "frames"
+    frames_dir.mkdir(parents=True, exist_ok=True)
+    per: list[dict] = []
+    windows: list[dict] = []
+    for i, (st, frames) in enumerate(zip(starts, windows_frames)):
+        if len(frames) < max(1, clip // 2):
+            continue
+        while len(frames) < clip:
+            frames.append(frames[-1])
+        start_s, end_s = st / fps, (st + clip) / fps
+        a0, a1 = int(round(start_s * sr)), int(round(end_s * sr))
+        seg = wave_[a0:a1]
+        if len(seg) < max(1, (a1 - a0) // 2):
+            print(f"  [skip] window {i}: soundtrack ends before {start_s:.2f}s", file=sys.stderr)
+            continue
+        if len(seg) < a1 - a0:
+            seg = np.pad(seg, (0, a1 - a0 - len(seg)))
+        window = {
+            "frames": frames, "frame_indices": list(range(st, st + clip)), "fps": fps,
+            "total_frames": total, "audio": seg, "audio_full": wave_, "sample_rate": sr,
+            "start_s": start_s, "end_s": end_s, "face_detector": face_detector, "device": DEVICE,
+        }
+        t2 = time.time()
+        with torch.no_grad():
+            out = model.forward_detailed(window)
+        timing["inference"] += time.time() - t2
+        prob = torch.softmax(out["logits"], dim=1)[0, 1].item()
+        h_im, w_im = frames[0].shape[:2]
+        bbox = [int(v) for v in (out.get("bbox") or (0, 0, w_im, h_im))]
+        wid = f"w{i:04d}"
+        record = {"face_id": wid, "frame_idx": st, "face_index": 0, "bbox": bbox,
+                  "fake_prob": round(prob, 4), "start_s": round(start_s, 3), "end_s": round(end_s, 3)}
+        if out.get("info"):
+            record["info"] = out["info"]
+        per.append(record)
+        windows.append({"start_s": start_s, "end_s": end_s, "fake_prob": prob})
+
+        t3 = time.time()
+        pil = Image.fromarray(frames[0][:, :, ::-1])
+        thumb = pil.copy()
+        thumb.thumbnail((512, 512))
+        thumb.save(frames_dir / f"{wid}.png")
+        if out.get("bbox") is not None:
+            x, y, w, h = bbox
+            (output_dir / "faces").mkdir(exist_ok=True)
+            pil.crop((x, y, x + w, y + h)).save(output_dir / "faces" / f"{wid}.png")
+        timing["viz"] += time.time() - t3
+
+    t3 = time.time()
+    save_audio_timeline(wave_, sr, windows, output_dir / "timeline.png", threshold=0.5)
+    timing["viz"] += time.time() - t3
+    coverage = min(100.0, len(per) * clip / total * 100) if total else 0.0
+    info = {"sample_rate": sr, "duration_seconds": round(len(wave_) / float(sr), 3),
+            "window_frames": clip, "hop_frames": hop, "fps": round(fps, 3), "windows": len(per)}
+    return per, total, 1, coverage, info

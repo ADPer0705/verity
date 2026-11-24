@@ -56,7 +56,6 @@ def main() -> None:
         "README.md": "deploy/README.md",
         "LICENSE": "LICENSE",
         "THIRD_PARTY_NOTICES.md": "THIRD_PARTY_NOTICES.md",
-        "deployment.md": "docs/deployment.md",
     }
     missing = [src for src in files.values() if not (ROOT / src).exists()]
     if missing:

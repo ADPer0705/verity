@@ -1,0 +1,21 @@
+# Managed with uv (source of truth for this detector's environment).
+# Python 3.12: newest version with wheels for every pinned dependency.
+# Frozen CLIP ViT-L/14 via transformers (HF hub cache shared with univfd/effort).
+[project]
+name = "verity-d3"
+version = "1.0.0"
+description = "Verity detector environment: d3 (D3 discrepancy detector)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.8.0",
+    "numpy<2",
+    "opencv-python==4.10.0.84",
+    "pillow==10.2.0",
+    "matplotlib==3.9.2",
+    "pyyaml",
+    "transformers>=4.36",
+    "safetensors"
+]
+
+[tool.uv]
+package = false

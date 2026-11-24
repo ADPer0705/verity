@@ -1,0 +1,50 @@
+detector_id: prodet
+version: 1.0.0
+name: ProDet
+description: ProDet deepfake detector (Cheng et al., NeurIPS 2024, arXiv 2408.17052) - EfficientNet-B4 trained on
+  FaceForensics++ with progressive real -> blend -> identity-inconsistency -> deepfake supervision and a
+  feature-attention fusion of the three auxiliary classifiers.
+architecture: EfficientNet-B4 (DeepfakeBench) -> 1x1 conv 512 + 3 auxiliary heads + FeatureAttentionBlock + final Linear head
+parameters: 96000000
+pretrained: Official ProDet_best.pth (beautyremain/ProDet, Google Drive), trained on FF++ c23.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+video_mode: false
+clip_size: null
+cam: true
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+weights:
+  file: ProDet_best.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/drive/folders/16IDcKVqziJ-Qv_IfZOAcYGwdeZAM-x5s
+  size: 385663781
+  sha256: 1de84318fa703978493a4c4bd7e337e2597e8e3e36fc9d144c42842456cb3017
+  license: none stated
+  note: 'Official "overall-best" ProDet checkpoint (flat state dict, 782 tensors; the training-only real2sbi /
+    bi2fake generators are dropped, everything else loads strictly). The repository ships no LICENSE file, so the file is
+    fetched from the authors'' Google Drive folder only and never mirrored. The model returns its learned
+    feature-attention mask as the attention map and reports the three auxiliary (deepfake / blend / identity)
+    probabilities per face.'
+targets:
+- face_swap
+- face_reenactment

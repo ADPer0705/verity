@@ -128,3 +128,18 @@ class TestRegistry:
             assert definition.min_face == 30
             assert definition.video_mode is False
             assert definition.cam is True
+
+
+class TestAudioVisualMode:
+    def test_av_clip_needs_faces_and_audio(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _write_detector(Path(tmp), "avey", ["video"], clip_size=5, video_mode=True)
+            path = Path(tmp) / "avey" / "detector.yaml"
+            data = yaml.safe_load(path.read_text())
+            data["input_mode"] = "av_clip"
+            path.write_text(yaml.safe_dump(data))
+            caps = DetectorRegistry(Path(tmp)).get("avey").capabilities
+            assert caps.media_types == ["video"]
+            assert caps.faces_required is True
+            assert caps.audio_required is True
+            assert not caps.accepts("audio") and not caps.accepts("image")

@@ -16,6 +16,7 @@ from verity_api.schemas import (
     AnalyzeRequest,
     CompileRequest,
     ExtractRequest,
+    ForensicsRequest,
     ReportRequest,
     RunRequest,
 )
@@ -26,6 +27,7 @@ from verity_api.service import (
     run_analyze,
     run_compile,
     run_extract,
+    run_forensics,
     run_full_pipeline,
     run_report,
     run_select,
@@ -175,6 +177,33 @@ def post_extract(request: ExtractRequest) -> Dict[str, Any]:
         label=f"Extract artifacts from {name}",
         worker=worker,
         params={"extractors": extractors},
+        media_ids=[request.media_id],
+    )
+    return job.to_dict()
+
+
+@router.post("/forensics", status_code=202)
+def post_forensics(request: ForensicsRequest) -> Dict[str, Any]:
+    """``verity forensics`` — run model-free forensic analyzers."""
+    settings, info = _case(request.media_id)
+    name = _file_label(settings, request.media_id)
+
+    def worker(ctx: JobContext) -> Dict[str, Any]:
+        ctx.declare_steps([("forensics", "Forensic analyses")])
+        ctx.start_step("forensics")
+        result = run_forensics(ctx, settings, request.media_id, info.media_type)
+        counts = result.get("counts") or {}
+        ctx.finish_step(
+            "forensics",
+            f"{len(result.get('analyzers') or [])} analyzer(s) · "
+            f"{counts.get('warning', 0)} warning(s), {counts.get('notice', 0)} notice(s)",
+        )
+        return result
+
+    job = manager.submit(
+        kind="forensics",
+        label=f"Forensic analyses for {name}",
+        worker=worker,
         media_ids=[request.media_id],
     )
     return job.to_dict()

@@ -1,9 +1,11 @@
-# Publishes the slim container image and the lab deploy bundle on a version tag.
+# Publishes the standalone Linux binary, installer, slim container image, and
+# lab deploy bundle on a version tag.
 #
 # Only the slim image is built on GitHub's hosted runners: the pre-baked
 # `full` images are 10-20 GB and exceed the hosted runner disk. Build those
-# on a machine with enough disk and push them by hand (see docs/publishing.md),
-# or point `runs-on` at a self-hosted runner.
+# on a machine with enough disk and push them by hand (see
+# openwiki/operations/releasing-and-publishing.md), or point `runs-on` at a
+# self-hosted runner.
 name: Release
 
 on:
@@ -41,6 +43,46 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  binary:
+    # Build on Ubuntu 22.04 (glibc 2.35) so the single binary runs across
+    # Ubuntu 22.04/24.04, Debian 12+, RHEL 9+, Fedora 38+, and newer distros.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/verity_ui/package-lock.json
+      - name: System packages (ffmpeg, OpenCV, WeasyPrint)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libgl1 libglib2.0-0
+      - name: Validate one-line installer
+        run: bash -n install.sh
+      - name: Build Web UI SPA
+        working-directory: src/verity_ui
+        run: npm ci --no-audit --no-fund && npm run build
+      - name: Install build env
+        run: uv sync --frozen --extra api --extra build
+      - name: Build standalone verity binary
+        run: uv run python scripts/build_binary.py --version "$GITHUB_REF_NAME" --out dist-release
+      - name: Verify checksums and smoke-test standalone binary outside repo
+        run: |
+          (cd dist-release && sha256sum -c verity-linux-x86_64.sha256)
+          mkdir -p /tmp/verity-smoke
+          cp dist-release/verity-linux-x86_64 /tmp/verity-smoke/verity
+          VERITY_HOME=/tmp/verity-smoke/home /tmp/verity-smoke/verity --version
+          VERITY_HOME=/tmp/verity-smoke/home /tmp/verity-smoke/verity --help >/dev/null
+          VERITY_HOME=/tmp/verity-smoke/home /tmp/verity-smoke/verity doctor || true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist-release/verity-*
+            install.sh
+          generate_release_notes: true
 
   deploy-bundle:
     runs-on: ubuntu-latest

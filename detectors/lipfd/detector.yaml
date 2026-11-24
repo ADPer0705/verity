@@ -1,0 +1,59 @@
+detector_id: lipfd
+version: 1.0.0
+name: LipFD
+description: LipFD lip-sync deepfake detector (Liu et al., NeurIPS 2024, "Lips Are Lying") - scores 5-frame
+  windows of a talking face together with the mel spectrogram of the same audio span through CLIP ViT-L/14
+  and a region-aware ResNet-50 that weighs lip/head regions; trained on the AVLips dataset (Wav2Lip, TalkLip,
+  MakeItTalk, SadTalker lip-sync generators).
+architecture: Composite (spectrogram + 5 frames) -> conv 5x5/5 + CLIP ViT-L/14 global feature; ResNet-50 region crops at 3 scales with learned gating -> Linear(2816, 1)
+parameters: 451183580
+pretrained: Official ckpt.pth (AaronComo/LipFD, Google Drive), trained on AVLips.
+resolution: 224
+mean:
+- 0.0
+- 0.0
+- 0.0
+std:
+- 1.0
+- 1.0
+- 1.0
+input_mode: av_clip
+video_mode: true
+clip_size: 5
+clip_hop: 5
+max_windows: 10
+audio_sample_rate: 22050
+min_face: 30
+cam: false
+region_analysis: false
+weights:
+  file: ckpt.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1NPAcx0QS8N9v_9qUr-51jBaL9kGDT-cp/view
+  size: 1805064538
+  sha256: 156fc8995a2ff7b50b56a1dbafb490b6936d5aa6c18dee5a6c67018853f2d9af
+  license: none stated
+  note: 'Official LipFD checkpoint ({"model": state dict} with conv1.*, encoder.* = full CLIP ViT-L/14 and
+    backbone.* = region-aware ResNet-50, 770 tensors, loaded strictly). The repository ships no LICENSE file,
+    so the file is fetched from the authors'' Google Drive only and never mirrored. Ten evenly spaced 5-frame
+    windows per video (upstream N_EXTRACT) are composed with the viridis mel spectrogram of the soundtrack at
+    22.05 kHz exactly as preprocess.py / datasets.py (0-255 BGR, no normalisation); the single logit is emitted
+    as [0, logit] so softmax index 1 = sigmoid(logit).'
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+  - type: audio
+    params:
+      sample_rate: 22050
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- lip_sync

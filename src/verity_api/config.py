@@ -19,8 +19,10 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-#: ``src/verity_api/config.py`` -> repository root
-REPO_ROOT = Path(__file__).resolve().parents[2]
+from verity import paths as verity_paths
+
+#: ``src/verity_api/config.py`` -> repository root (or PyInstaller bundle root)
+REPO_ROOT = verity_paths.bundle_root()
 
 #: Extractor keys understood by the pipeline, in pipeline order.
 ALL_EXTRACTORS: List[str] = ["frame", "face", "metadata", "audio"]
@@ -91,36 +93,47 @@ class Settings:
 
 
 def load_settings(config_path: Optional[Path] = None) -> Settings:
-    """Build :class:`Settings` from the config file, then environment overrides."""
-    path = config_path or (DEFAULT_CONFIG_PATH if DEFAULT_CONFIG_PATH.exists() else None)
+    """Build :class:`Settings` from user/repo config files, then environment overrides."""
+    verity_paths.ensure_runtime_path()
+    user_cfg = verity_paths.load_user_config()
+    path = config_path or (
+        verity_paths.config_file()
+        if verity_paths.config_file().is_file()
+        else (DEFAULT_CONFIG_PATH if DEFAULT_CONFIG_PATH.exists() else None)
+    )
 
     raw: Dict[str, Any] = {}
     if path and Path(path).exists():
         loaded = yaml.safe_load(Path(path).read_text()) or {}
         if isinstance(loaded, dict):
             raw = loaded
+    raw = {**raw, **user_cfg}
 
-    detectors_dir = os.environ.get("VERITY_DETECTORS_DIR") or raw.get("detectors_dir") or "detectors"
-    workspace = os.environ.get("VERITY_WORKSPACE") or raw.get("workspace") or "workspace"
-    output_dir = os.environ.get("VERITY_OUTPUT_DIR") or raw.get("output_dir") or ""
-
-    workspace_path = _resolve(workspace)
-    output_path = _resolve(output_dir) if output_dir else workspace_path / "output"
+    if verity_paths.is_standalone_mode():
+        detectors_path = verity_paths.detectors_dir()
+        workspace_path = verity_paths.workspace_dir()
+        output_path = verity_paths.output_dir(workspace_path)
+    else:
+        detectors_dir = os.environ.get("VERITY_DETECTORS_DIR") or raw.get("detectors_dir") or "detectors"
+        workspace = os.environ.get("VERITY_WORKSPACE") or raw.get("workspace") or "workspace"
+        output_dir = os.environ.get("VERITY_OUTPUT_DIR") or raw.get("output_dir") or ""
+        detectors_path = _resolve(detectors_dir)
+        workspace_path = _resolve(workspace)
+        output_path = _resolve(output_dir) if output_dir else workspace_path / "output"
 
     extractors = raw.get("extractors") or ALL_EXTRACTORS
     extractors = [e for e in extractors if e in ALL_EXTRACTORS] or list(ALL_EXTRACTORS)
 
-    ui_dist_env = os.environ.get("VERITY_UI_DIST")
-    ui_dist = _resolve(ui_dist_env) if ui_dist_env else REPO_ROOT / "src" / "verity_ui" / "dist"
+    ui_dist = verity_paths.ui_dist_dir()
 
     return Settings(
-        detectors_dir=_resolve(detectors_dir),
+        detectors_dir=detectors_path,
         workspace=workspace_path,
         output_dir=output_path,
         extractors=extractors,
-        offline=_as_bool(os.environ.get("VERITY_OFFLINE")),
+        offline=verity_paths.is_offline(),
         config_path=Path(path) if path else None,
-        ui_dist=ui_dist if ui_dist.exists() else None,
+        ui_dist=ui_dist,
     )
 
 
@@ -201,6 +214,7 @@ def probe_environment(settings: Settings) -> Dict[str, Any]:
     The UI uses this to explain *why* a capability is unavailable instead of
     failing with an opaque error deep inside a job.
     """
+    verity_paths.ensure_runtime_path()
     detectors_present = settings.detectors_dir.exists()
     detector_count = 0
     if detectors_present:
@@ -208,9 +222,11 @@ def probe_environment(settings: Settings) -> Dict[str, Any]:
             1 for d in settings.detectors_dir.iterdir() if (d / "detector.yaml").exists()
         )
 
+    from verity.runtime.env_manager import find_uv
+
     runner_script = REPO_ROOT / "scripts" / "verity.py"
     runner = os.environ.get("VERITY_RUNNER") or (
-        str(runner_script) if runner_script.exists() else shutil.which("verity-run")
+        str(runner_script) if runner_script.exists() else "builtin (verity.runtime.env_manager)"
     )
 
     weasyprint_ok, weasyprint_error = _weasyprint_status()
@@ -221,7 +237,7 @@ def probe_environment(settings: Settings) -> Dict[str, Any]:
         "detector_runner": runner,
         "ffprobe": shutil.which("ffprobe"),
         "ffmpeg": shutil.which("ffmpeg"),
-        "uv": shutil.which("uv"),
+        "uv": find_uv(),
         "weasyprint": weasyprint_ok,
         "weasyprint_error": weasyprint_error,
         "opencv": _module_available("cv2"),

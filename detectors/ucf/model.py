@@ -93,12 +93,12 @@ class UCFDetector(nn.Module):
         feats = self.features(x)
         forgery = feats["forgery"]
         f_spe, f_share = self.classifier(forgery)
-        out_sha, sha_feat = self.head_sha(f_share)
+        out_sha, _sha_feat = self.head_sha(f_share)
         return {
             "logits": out_sha,
             "probs": torch.softmax(out_sha, dim=1),
-            "feat": sha_feat,
-            "attention_map": f_share,
+            "feat": f_share,
+            "attention_map": torch.relu(f_share).mean(dim=1),
         }
 
     def forward(self, x):

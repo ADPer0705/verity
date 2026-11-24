@@ -42,14 +42,47 @@ class GenDDetector:
         import torch
 
         model = self.model
-        hidden = model.feature_extractor.vision_model(x)
+        vision_model = model.feature_extractor.vision_model
+        captured = {}
+
+        def _pre_hook(_module, args):
+            if not args or not isinstance(args[0], torch.Tensor):
+                return None
+            hs = args[0]
+            if hs.ndim != 3 or hs.shape[1] <= 1:
+                return None
+            cls_tok = hs[:, :1]
+            patches = hs[:, 1:]
+            side = int(round(patches.shape[1] ** 0.5))
+            if side * side != patches.shape[1]:
+                return None
+            feat_map = patches.permute(0, 2, 1).reshape(
+                patches.shape[0], patches.shape[2], side, side
+            )
+            captured["feat"] = feat_map
+            hs_new = torch.cat(
+                [cls_tok, feat_map.flatten(2).permute(0, 2, 1)], dim=1
+            )
+            return (hs_new,) + args[1:]
+
+        handle = None
+        if hasattr(vision_model, "encoder") and hasattr(vision_model.encoder, "layers"):
+            handle = vision_model.encoder.layers[-1].register_forward_pre_hook(_pre_hook)
+        try:
+            hidden = vision_model(x)
+        finally:
+            if handle is not None:
+                handle.remove()
+
         pooled = hidden.pooler_output
         logits = model.model(pooled)
-        patches = hidden.last_hidden_state[:, 1:]
-        side = round(patches.shape[1] ** 0.5)
-        feat = patches.permute(0, 2, 1).reshape(
-            patches.shape[0], patches.shape[2], side, side
-        )
+        feat = captured.get("feat")
+        if feat is None:
+            patches = hidden.last_hidden_state[:, 1:]
+            side = round(patches.shape[1] ** 0.5)
+            feat = patches.permute(0, 2, 1).reshape(
+                patches.shape[0], patches.shape[2], side, side
+            )
         return {
             "logits": logits,
             "probs": torch.softmax(logits, dim=1),

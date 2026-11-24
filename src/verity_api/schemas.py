@@ -49,6 +49,12 @@ class ExtractRequest(BaseModel):
     extractors: Optional[List[str]] = None
 
 
+class ForensicsRequest(BaseModel):
+    """``verity forensics``."""
+
+    media_id: str
+
+
 class CompileRequest(BaseModel):
     """``verity compile``."""
 

@@ -92,6 +92,8 @@ def detector_catalog(settings: Settings) -> List[Dict[str, Any]]:
                 "description": definition.description,
                 "media_types": caps.media_types,
                 "faces_required": caps.faces_required,
+                "audio_required": caps.audio_required,
+                "input_mode": definition.effective_input_mode,
                 "video_mode": definition.video_mode,
                 "clip_size": definition.clip_size,
                 "min_face": definition.min_face,
@@ -238,6 +240,8 @@ def finding_to_dict(
         "confidence": finding.confidence,
         "mean_fake_probability": mean_fake_probability(finding),
         "faces_analyzed": faces_analyzed(finding),
+        "unit": raw.get("unit") or "face",
+        "input_mode": raw.get("input_mode") or "face_crop",
         "reasoning": {
             "summary": finding.reasoning.summary,
             "confidence_factors": list(finding.reasoning.confidence_factors),
@@ -246,6 +250,14 @@ def finding_to_dict(
         "stats": (raw.get("stats") or {}),
         "sampling": (raw.get("sampling") or {}),
         "region_aggregate": (raw.get("region_aggregate") or {}),
+        "aux_aggregate": (raw.get("aux_aggregate") or {}),
+        "audio": raw.get("audio"),
+        "model": (raw.get("model") or {}),
+        "weights": (raw.get("weights") or {}),
+        "device": raw.get("device"),
+        "timing_seconds": (raw.get("timing_seconds") or {}),
+        "total_video_frames": raw.get("total_video_frames"),
+        "reconstruction": raw.get("reconstruction"),
         "per_face": (raw.get("per_face") or []),
         "timestamp": finding.timestamp.isoformat(),
         "output_dir": str(out_dir) if out_dir.exists() else None,
@@ -335,6 +347,7 @@ def case_summary(settings: Settings, media_id: str) -> Optional[Dict[str, Any]]:
     findings = load_findings(settings, media_id)
     selection = load_selection(settings, media_id)
     analysis = load_analysis(settings, media_id)
+    forensics = load_forensics(settings, media_id)
     reports = report_files(settings, media_id)
 
     selected = len(selection.selected) if selection else 0
@@ -352,6 +365,8 @@ def case_summary(settings: Settings, media_id: str) -> Optional[Dict[str, Any]]:
         "ingested_at": info.metadata.get("ingested_at"),
         "has_analysis": analysis is not None,
         "has_selection": selection is not None,
+        "has_forensics": forensics is not None,
+        "forensics_counts": (forensics or {}).get("counts"),
         "detectors_selected": selected,
         "detectors_excluded": excluded,
         "findings_count": len(findings.findings),
@@ -398,7 +413,10 @@ def artifact_tree(settings: Settings, media_id: str) -> List[Dict[str, Any]]:
     for path in sorted(root.rglob("*")):
         if not path.is_file():
             continue
-        group = str(path.parent.relative_to(root)) or "."
+        rel_parent = path.parent.relative_to(root)
+        if rel_parent.parts and rel_parent.parts[0] == "forensics":
+            continue
+        group = str(rel_parent) or "."
         groups.setdefault(group, []).append(_file_entry(path))
 
     return [
@@ -415,7 +433,15 @@ def detector_assets(settings: Settings, media_id: str, detector_id: str) -> Dict
     """
     out_dir = settings.detector_output_dir / f"{media_id}_{detector_id}"
     if not out_dir.exists():
-        return {"exists": False, "timeline": None, "faces": [], "attention_maps": [], "reconstructions": []}
+        return {
+            "exists": False,
+            "timeline": None,
+            "full_frames": [],
+            "faces": [],
+            "frames": [],
+            "attention_maps": [],
+            "reconstructions": [],
+        }
 
     def images(directory: Path, pattern: str) -> List[Dict[str, Any]]:
         if not directory.exists():
@@ -427,7 +453,9 @@ def detector_assets(settings: Settings, media_id: str, detector_id: str) -> Dict
         "exists": True,
         "output_dir": str(out_dir),
         "timeline": _file_entry(timeline) if timeline.exists() else None,
+        "full_frames": images(out_dir / "full_frames", "*_frame.png"),
         "faces": images(out_dir / "faces", "*.png"),
+        "frames": images(out_dir / "frames", "*.png"),
         "attention_maps": images(out_dir / "attention_maps", "*_attention.png"),
         "reconstructions": images(out_dir / "reconstructions", "*_recon.png"),
     }
@@ -458,6 +486,21 @@ def detector_raw(settings: Settings, media_id: str, detector_id: str) -> Dict[st
 # --------------------------------------------------------------------- #
 #  Integrity verification                                                #
 # --------------------------------------------------------------------- #
+
+
+def export_case_evidence(settings: Settings, media_id: str) -> Dict[str, Any]:
+    """Assemble a self-contained chain-of-custody zip bundle with SHA256SUMS.txt."""
+    from verity.export import export_evidence_bundle
+
+    info = load_media_info(settings, media_id)
+    if info is None:
+        raise PipelineError(f"No ingested media with id {media_id}")
+    return export_evidence_bundle(
+        workspace=settings.workspace,
+        output_dir=settings.output_dir,
+        detectors_dir=settings.detectors_dir,
+        media_id=media_id,
+    )
 
 
 def verify_integrity(settings: Settings, media_id: str) -> Dict[str, Any]:

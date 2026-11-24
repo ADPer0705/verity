@@ -26,9 +26,43 @@ class CLIPDetector(nn.Module):
         return self.head(feats)
 
     def forward_detailed(self, x):
-        feats = self.features(x)
+        captured = {}
+
+        def _pre_hook(_module, args):
+            if not args or not isinstance(args[0], torch.Tensor):
+                return None
+            hs = args[0]
+            if hs.ndim != 3 or hs.shape[1] <= 1:
+                return None
+            cls_tok = hs[:, :1]
+            patches = hs[:, 1:]
+            side = int(round(patches.shape[1] ** 0.5))
+            if side * side != patches.shape[1]:
+                return None
+            feat_map = patches.permute(0, 2, 1).reshape(
+                patches.shape[0], patches.shape[2], side, side
+            )
+            captured["feat"] = feat_map
+            hs_new = torch.cat(
+                [cls_tok, feat_map.flatten(2).permute(0, 2, 1)], dim=1
+            )
+            return (hs_new,) + args[1:]
+
+        handle = None
+        if hasattr(self.backbone, "encoder") and hasattr(self.backbone.encoder, "layers"):
+            handle = self.backbone.encoder.layers[-1].register_forward_pre_hook(_pre_hook)
+        try:
+            feats = self.features(x)
+        finally:
+            if handle is not None:
+                handle.remove()
+
         logits = self.classifier(feats)
-        return {"logits": logits, "probs": torch.softmax(logits, dim=1), "feat": feats}
+        return {
+            "logits": logits,
+            "probs": torch.softmax(logits, dim=1),
+            "feat": captured.get("feat", feats),
+        }
 
 
 def build_model(weights_path, device):

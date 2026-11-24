@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:e3febd64be4339c2e5a1e4b62d330fea5aeccd6fae7f8b3e6332433a6da546fa",
+  "claims": [
+    {
+      "id": "claim_3b4fdaf3319f457bae7b81bd138a6299",
+      "statement": "Root install.sh targets Linux x86_64 workstations, verifies the standalone binary's SHA-256 checksum from GitHub Releases before installing to INSTALL_DIR, and optionally executes verity setup or setup --airgap-ready.",
+      "evidence": [
+        {
+          "resource": "repo://install.sh#L57-L145",
+          "version": "repo-lines-v1:sha256:2a5e64b403aa78aee30402726648fb0d4d0ef4c336e9eab818aec7576c8781b3:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlYjYxNTk4YTVmMjVmNzczYWU3MjgwYTZlYTRmNmQ1YmMzOTczYmM4Y2EwZWY3ZGI0YjlhNWVjZTMwZmJiMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3NjlkMjM3Y2Q0MjBiOWQzOGI5ODFhMGE0ZjY3NzAxOTBhNGE4M2RjYTFmZTU2YzRmNWJhMWUyY2JjMGVmNzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjZTk1ZjgyOWUyMmY2NzJhOWJiODY2NDUyZTc1ZTA2ZTEyNmNhMzUwYzk3MTExNDFlMzMwZjM1ZmNkMzJjMzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY5OGFhY2I2MDVlYWRmZGYzZjQ5MGZiODQ5NzQxODU3ZDMzODI3NzgwYWRhZTg2MDEyZWYxYjFmNmQ0ZDUxMmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d35f84751ce944509e6b3eb6a4e25856",
+      "statement": "verity setup extracts bundled detector definitions in standalone mode, bootstraps uv and optional static ffmpeg/ffprobe, provisions detector environments, pulls and verifies checkpoints, warms runtime HF/Torch caches, and seals offline=true when --airgap-ready is passed.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/cli.py#L290-L419",
+          "version": "repo-lines-v1:sha256:8896fd1fb89f77f9d04ad3c60b018b4d1d3598d636d5635401f4643818a75b23:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkZDQ3YjZmYWU2MGE1MzA2MjQxNTU1ZTk2ODE3MGNmZTE0MGZmZWMzMmI5MjI5ZDc2MzVlMmVjNzFjMmQ1ZDA3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjNTZhZmFjYmQzNzE4Y2E3MzlhZjQyMGU5YTBiYWE2OWRiYTVlYzNjYzE5YzJkYjQ2NzQyM2QyYWEyOTBmMDAzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJjZDEzMmYxNzZhNDc2NzNjM2EwMDNlMzU1NzVhMDAzODViOTY0ZWE1OGNmNjFlNjc5Y2ExYjA1NzU4MGY5ZmMwIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_d7919525862e48f4954231606a865c31",
+      "statement": "export_airgap_kit packages binary, bin tools, managed Python runtimes, weights, detector lockfiles, uv wheel cache, and HF/Torch caches with SHA256SUMS, while import_airgap_kit verifies hashes, seals offline mode, and rebuilds detector virtualenvs offline via hardlinks.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/export.py#L214-L468",
+          "version": "repo-lines-v1:sha256:fb037fcb9735897603e64e0ef4a0f01d733e742479696c84ffa4368ab73a965c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjU1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJhN2FjYWIxMDQ3MWM1NWFiN2JlYmIzNzgwNGU4N2JlNzgwNWQxMDVmNmIzYmQxY2JkNGUwOWQzZDA3MzVjYjdhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0ODkzZjQwZTM3ODFlYjg5NmM4MmQwNDZhMDgwNjdhMTFlMzVjZGYyZjFkZmFmMjZmZWE5MGI4ZGI2Njc2NDEzIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkZTc1NzVjM2I3Nzc2Y2YyZjljMmJmYmNhNDRmMjE0ODEzYTc4MjdlYWE5YzM4NDU0YzcwM2I2ODlhNzQ0Mzg2IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_8bf2140d2ca24408beb8bc1c0ee7a6f4",
+      "statement": "Containerized deployment via deploy/install.sh and docker-compose.yml defaults to loopback 127.0.0.1:8000, auto-selects CUDA or CPU Compose overlays, and persists weights, environments, caches, and workspaces across four Docker volumes.",
+      "evidence": [
+        {
+          "resource": "repo://deploy/install.sh#L84-L248",
+          "version": "repo-lines-v1:sha256:d6fd2523f618afc3874020bb306b60c7344f1c634a46175fe46c4b6ec236c2f3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTY1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1NTgwNTg2YmY3Y2I2YzEyNWFlMzQ2N2FmZDlhZWQzMzlmNTE3YTM3YzhlNjFhZDkwYjc0ZDlhNzg4MTM0NDBjIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI2ZDcyYmQ5MTQ0MDMwOGU4M2I4NWVhNDJkYjExMmIzZDU4ZGNiMmY4NTRmYWEwYzQyMDhmMmQ5MGVmOWI1ZmRlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0MDI2YTEwODlhNWFlNDJjYjU2YTU0NzM0NzZiNGU3NmRlNjU3ZTkzMmZmYzdiNzgwMzBiNDM4N2I4YWU4MWM2In0"
+        },
+        {
+          "resource": "repo://docker-compose.yml#L17-L60",
+          "version": "repo-lines-v1:sha256:3563843f099d73a33fc2bcc461b7ce22f3b1b91d1e1fd224fb9b0ff8f63a578c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5MDAxNjRjNmNjMDg5ODhjYjg2NDU4YmMwOTIyMDY4NmYyOGMzZDgwZThhZjFmMTMwYTBjNTBjMmE2NDFhZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQxMGY4ODAxYTZkZjhjYjQ0NGZhZmI3ZmUzNDAyYzQxZWYxNzg4Y2FlNmFmMDRhMjYwYTAyNGI2MWU1ZjkyYjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

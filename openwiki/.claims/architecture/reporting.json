@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:75970987065feeaccb9a50f0cdde338016b662bd506b91f122ee627bd1eea8fb",
+  "claims": [
+    {
+      "id": "claim_aa2de62b5ea7416eb9d48eb1facb00d2",
+      "statement": "ReportGenerator.generate compiles findings and, when a selection is supplied, filters findings to detectors the selection included, so the report describes the current run rather than every historical output.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L37-L58",
+          "version": "repo-lines-v1:sha256:6eae33c067774dd5fbc639aaafe45d4754c945db59a7e062aa7ca86cc67dc668:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyZGY4M2U2OGRhZWQ2NjgzODkwZTcxZGE0NmQ1YmJkYzY0NmNjZDBmMTI2MjZhYzY1M2FlMmE3YWQ1NTI4ZDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmMGEwYzhlMWM4YmQ0NjRjZjg5YWY0NTEwMThhODRkNTdmNjQ5NWNlOGM3MTBiNzk0OGFlMDMzZDI3YmY2ZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdjYTcwM2NhYzhiYmE4NTIxNzViMzY1NWVmNjk2OWJhOTAxNTVjZTk1YWZhOTlkNmQxYzg0ZTgzM2NjZWQ0ZjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_05ccad7d87974c51ba4237c813326996",
+      "statement": "ReportGenerator.save writes HTML and then renders a PDF beside it with WeasyPrint, while save_html writes only HTML; the API always writes report.html and adds report.pdf when PDF is requested.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L60-L71",
+          "version": "repo-lines-v1:sha256:e4778c1549599fce3fcdd7f020df02be36a81aac41de8dd884bf09805d7547e1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjczMjYzZDk2NTY2OTE5MWMzMTg3ZWNkZGFhODY5OTEwNDhhMmE0ZWExNGZkOTAyMmMxYWI0MjhjYjQzNmRiY2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxMDM3YzhlYTdhMTFmOWM0YzllMjc4ODQ4ZTFhNWU2ZTMxZmM1ZTExYjRhYTQ2MWRlMzZhZDlkNTk2NzMwYmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhNmU5NTljOWRjY2YyYTZkZDQ4MzAyZTA4NDU3MTAzMGVhMGIyYzJhMmU2ZmUwM2FlNmRlZGFkMDhhN2ZiODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA1YTY0MDhjYWUwMGM2NzBjOWNiNDQ4N2FlNzg3ZTMwZWU3ZGEzNGZkZWEwYmQ2MjI4ZDg1MjJmMTMyZjJlNmUifQ"
+        },
+        {
+          "resource": "repo://src/verity_api/service.py#L750-L774",
+          "version": "repo-lines-v1:sha256:ecc53370d9c13df1d4bc8bab387e34b6d8c52cb30a272602a4b2e7757009d769:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjN2QwNmY4NWM2OTNiZGFhOWVjZDM3NmNjNmVlMWZkMDk2YjU4NzIyMjFmMmFkZmFmZmZhZjlhOTEzOGM2ODQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0OGE0YzY4MGRjYjRlM2ViZDE3ZmEwYWJhNzExZTU4NjgwYTkyZjI0MTRmMWIwYWMyNThmNmYzNTgyMDE2NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI4MmRlY2Q1N2FkNGNhY2E4OWRkZGI0MDM4NDhmNzcyZjFkMjc0YjAyY2E5YjA5YTRhZGI5YTI5ZmEzNzk2YzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1ZjM0NmY2NjM2M2MzODZlNzA3YmFiODYyZDQ4MDgyZGVkYjU1NDI5ZWM2MGFiOGZkNTQyOWI5ZTFiODYzYzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_92237cfd75724528922a21f65e484361",
+      "statement": "The report header records file name, media type, byte size, full SHA-256, and analysis-derived duration, resolution, FPS and face statistics plus a UTC generation timestamp.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L154-L184",
+          "version": "repo-lines-v1:sha256:649467eb6ef080ab4e9dfad1d2894cc291027c63a10362b641b1e1f634580ac5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3ZGE4M2Y1ZDM4ZDEyZmQ2ZWZhYWE1Zjc5ZjJhMzEwNzI4NTFjNDQyOWY2MjI0YzhjMjNkYjIxYTQ0ZmQ3YjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzMDNlY2RkNGE0ZDEwZjE5YzczZmQ0MmZkMTI0MzdmZDMzNTRhODI2ODE2MDVkYTUyNTVhOTdhMzkwNjhkYmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4ZWRlZmYzNTBhNDI0MTM4NzI1Y2JkYWExNWI5NWFiZGE3M2MyZjQxMmYyYjEzNTMzMzlmZGQ0YTM1OTk2MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlmZjRmZTc1ZmM3OWNkNjEwZTE0NzQzN2U0YWYxMWFmMzVjY2I3ZDBiYzlmNzdiZTg3YjFlYTg0NTM2YWJhMDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9854280a2af2413f9a9842db1b5b1a66",
+      "statement": "The Coverage table reports per manipulation family whether it was examined by N evidence-grade detectors, or not examined because no evidence-grade detector exists or none ran, with a note that absence of a finding is not evidence of authenticity.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L188-L229",
+          "version": "repo-lines-v1:sha256:169791c0cc5428bf10a1b351aecb670f465628a702140d3f9455a2f1bbc68ef6:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjMDY4YjE5ZTE4YjNkYWQ2ZWI3ZmQ3YTIwZDAxNjZlNDQ4NmQyZmJiNjA4MWE0NmI2ZGVhM2RjOTc0MTZmMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzMDNlY2RkNGE0ZDEwZjE5YzczZmQ0MmZkMTI0MzdmZDMzNTRhODI2ODE2MDVkYTUyNTVhOTdhMzkwNjhkYmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmZjRmZTc1ZmM3OWNkNjEwZTE0NzQzN2U0YWYxMWFmMzVjY2I3ZDBiYzlmNzdiZTg3YjFlYTg0NTM2YWJhMDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI0OTJlNDAwZTBiNDgxYzA4ZGM0NDZmNzkyMzY3ZDc3YzA3ODc4NWNlZjE0NWQ3OGY4ZWIwNDJhMjJiYTY0YTAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_443b8517d4fa4b76bc1f353a24b58002",
+      "statement": "The findings summary lists every included detector with tier badge, faces analyzed, mean fake probability and confidence, warns when untrained heads are present, and collapses excluded detectors with their reasons.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L231-L298",
+          "version": "repo-lines-v1:sha256:d62fae13a48d32415698612aaabd126b9f226636672251cc402f9cfcaf41e8f2:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmNDkxMTRlNjM2Y2ZlMzU4ZGIyODk2YmNjYzVkNjhkYzJmZjY0ZjI2NzY2ZTI1ZTk2NWI0Mjk2MDdiNzQ0MmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlZWZkNDBkZTcxZTZjMWM1MzVlZTY5ZmVjMjdlNTY2NDBjNGRjZmJiMGUxZGRlYmI4NTlmNmQ3ZjdmMWU3ODkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjMTNjZTc1MzlhYTQwMDI5YTExOTUxMjliYzBmMzU1MjAxNDQ5YmFiMDhlNTI3NjUzOGZhMmFlZmM0ZmM5ZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNmZDI3NTdjNWM0YzZjYWY4ODM2Yzc0MmQwNGZiYmQzNmM3MTk4NGRiOTIwMTI3YTVkYThhNDhkOTkwZDAwZDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_028d14b9d57f43d28dc90fcf06537994",
+      "statement": "Per-finding sections render reasoning, confidence factors, optional face-region energy, key figures (including aux_aggregate), timeline.png, top full_frames/faces/frames, attention maps, reconstructions, and a modality-aware per-face or per-window table from workspace/output/<media_id>_<detector_id>.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L302-L527",
+          "version": "repo-lines-v1:sha256:1aeeb81bd1b6a54987557b100b82aa15fec226fa2ba7350380f8ae3170a3f044:eyJzZWxlY3RlZExpbmVDb3VudCI6MjI2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2N2E3MDRlNzRmZmU0OWJmODhkYTlhZWExNGU1MTUzZDljY2RmYjc3MjhkNDg3MGM0NGYyNmJmMmI1ODI1YTJhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlZWVmZDQwZGU3MWU2YzFjNTM1ZWU2OWZlYzI3ZTU2NjQwYzRkY2ZiYjBlMWRkZWJiODU5ZjZkN2Y3ZjFlNzg5IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjZmQyNzU3YzVjNGM2Y2FmODgzNmM3NDJkMDRmYmJkMzZjNzE5ODRkYjkyMDEyN2E1ZGE4YTQ4ZDk5MGQwMGQ0IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJmZjRjMzI4ZWI4MTk3MjE4YjM3MmViYjQ5MjM0OWQ2ZDQ5OGE4YTllMGQzNjBjZTM5MGVhNjZhNWQyNzQ2ODBlIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_dd66a99fdb544b6b9596b546bb86c081",
+      "statement": "The forensic section renders severity counts, each analyzer's method note and severity-sorted observations, and captioned images from the analyzer artifacts.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L538-L628",
+          "version": "repo-lines-v1:sha256:033a9cff67ee5c2de3a8f3ce4890fc455e5bef7b6309bc77c29735f23d057e56:eyJzZWxlY3RlZExpbmVDb3VudCI6OTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiZWYxMDExNjVmZjlhOTc2NjE2YWYyYjAyOTY1Y2IyNTI2NjM2ZWE4YTk4ZmFlYWZhZTVkNGNjNGQzMGQ0MjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlZWZkNDBkZTcxZTZjMWM1MzVlZTY5ZmVjMjdlNTY2NDBjNGRjZmJiMGUxZGRlYmI4NTlmNmQ3ZjdmMWU3ODkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhZWM2NTEwNzM0MjRiMTQ3NGM5Y2Q5OGE3MTJiODcwNWIxMTQzN2NkOTdhMmRlODdhYTA2MjE3OWY5YWUzYzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2MWRmZjNkNGFmZTIzZGY1ZjY3MTU1NGVlN2U3M2FmYjAxNjgwNDBkYjEyMWYzZTg2OGM4YzIwMDMzODQ0MzkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4284aace088645d7b94646ab4310ea1f",
+      "statement": "Report images are embedded as base64 data URIs, making the HTML self-contained.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/report/report_generator.py#L684-L691",
+          "version": "repo-lines-v1:sha256:67b5fda4ccb7a7e753340482566de136f2b75e3ecc793ffc4d73bbf22d506682:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2FkZjQ5ZDE1Y2FmZjEzMGJjNGMwYWVhZDBhNzQ4M2U3YjQzYzZmZjY5OWU5MGI2MjUzZTU4YjljZGJlN2YyMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2RlODIyZDk0YWRhNzI4NGQ3NDc2NTUzYjc3Y2RkNTMxNWZlZGYwYTljZTAyODI5ZWUxNWFjYzUwNjUxNjhmYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDVmNWE4M2YxYjc2ZDFkYzI5ZWFkMTk2NTkzMGU4ODljYTRmNmFiZDc1MTAwNDVkNjU5ZDdhNjc1MjI4ZDlhNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWE0MDlhYTA1OWI5MmMyYTIzZmI5MDUzMjBjZWExYTczOWE4MDQ1YjEwZWY2ODY5OGU0YjY1M2JmODk1ODg2MyJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:a2be78a8f15cd2f3df99e0e43b22fa971898d0bdcdc10d887e40dfd5de913cec",
+  "claims": [
+    {
+      "id": "claim_741d557b49a7403a961256ce6ce55f96",
+      "statement": "load_manifest enforces version 2 of detectors/weights_manifest.yaml, resolves hub URLs only for redistributable files with hub_path, and allows overriding hub_repo via VERITY_WEIGHTS_HUB.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/weights_manifest.yaml#L16-L23",
+          "version": "repo-lines-v1:sha256:1d639bda9287855fd48bec27021955b04ca5ec0baa6c92e3c090998c5e461d1c:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTZlMGQxYWZkNmU5NjAzNmI3NzZhYjIwNjg0ZGEzNWYwNzVjNTBkNmYzYzBmZDU5OWRkYzgyMThlYmJkZmI1NiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzNkNzYwNzEyNmJhOTM1NzgwNTFlMTFjYTkxMWNjMmFiM2NkMTMyODI5NGM2YTg4YmI5ZjA1YWI5NzVmYTY0MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2RkNTc1ZjNkOWI5MTk3Zjc3NjhkODg3MThjMDI4MDlmNTMwMTE3OTcwYWJlOTdjZmI4YTJjMzllNjM4MjM1NiJ9"
+        },
+        {
+          "resource": "repo://src/verity/weights/manifest.py#L61-L127",
+          "version": "repo-lines-v1:sha256:77f3855d738b134525a13c205ec65a86c48649250e0cd3057e8b78ca860ad687:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjYjg0OTc1ZDhiMWEzYTQzYWI0NjFhM2RlYzNhMjA1ZWY0NTNiMzY1YzU2Yjk3ZDAyMDM5NWFhNTY4YzJmMjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyMzdmMTRjZmRkMTYxMzhlZmYwZDcyMjVkMTk4OWZjZTE1MTcwY2YzZDJmODg3N2RmN2JjOThjZmZiZjM0NWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3806f583956048809f52ad1519f5e3f4",
+      "statement": "pull verifies exact byte size and SHA-256 checksums before accepting downloaded checkpoints or extracted zip members, deleting corrupt files and hard-linking duplicate files across detectors.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/weights/fetch.py#L135-L232",
+          "version": "repo-lines-v1:sha256:8de7910a96c9919fabeaf8742e8803fd2d250aaef55b8220ee29a7fe30f1950d:eyJzZWxlY3RlZExpbmVDb3VudCI6OTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzMWQ1NTgwYjgyNmJmNGRjODlmYmUyNTljNjVhMTQ4ZjhhOTQxNWY5NmU1YmExMjJkZWExZmE3MjBlODQ4ODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhMTFjMDU2N2QwYTVmOWU5YjEzNWY2NWNkMjUzNzJkZmQ2Mjg3NzVmN2MxZWQyNTNmOGJhZDQyZGQyZDY2NjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE2ZGQwYzE0YmMzZWMxYTEwMDY4YjJlNjU2NDFkOWI4NTM1ZTQ4N2M3MzlkMDM4NGJkMzI1ODY1NTg1Y2M4MmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f8047b5c952d4f5d9823ea8b1a0bd32f",
+      "statement": "In standalone binary and VERITY_WEIGHTS_ROOT modes, detectors/<id>/weights is symlinked to persistent <weights_root>/<id> so refreshing detector definitions never disturbs verified checkpoints.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/paths.py#L293-L315",
+          "version": "repo-lines-v1:sha256:6a57f64da58014d781fe128eef28d032e14c5b03712ad961097fb2ef188f7776:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MTUxNGQzNTU4NjkwODYxZWJhY2VhNTA1OTMyM2ZhMzhhMGRmOGY1ODI2OGY5NThjMmYyYzZiNGE2MTBjZDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjNWI3ZjkzNmM4NjI5MDNiZjRlYzUxMTA2NGQ0ZWY4YzVkZGJkNDkxNzMwNTg5YjI1NWU5MWYwNTNmMWFjOGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0MDBiZGMxZTUzNGJkMmE4YTdkNGJmZWRjODE0MzAyZTVhNjdhYjNhODg2MTFkNDZmMWEyOGZlNTMzNzVmM2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity/weights/fetch.py#L39-L54",
+          "version": "repo-lines-v1:sha256:5d34af3e4830772f44eb33a0347a8482a36579397da8d566b029c0942090bd9f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MTg3NDYwNjQ3NDcyZDM2ODU3NjE4MWRkMTQ5N2QxN2NkM2YzYjJmM2M1MTUzZjI1YzhkYjUwOWQ2MjNlY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2Yzg3NmQxZDE3NmE1YzMzN2RjMGY1MDJiZTZjMjZhYjE1MWEyOGY1YTRkOTJhYTQ2NDkxYjE0MjhjNGFjNjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyMTZjOWYyNDdkZDZlNTNjMjJjNmRjNjdhNWE0YTQxMDEwMzRmMmJkYTg0NmRjMmY3NDdmYjQwZGMyMGFlZTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_15b12c92be7c4d3c9fa2209a502bc85d",
+      "statement": "build_bundle packages only locally verified redistributable checkpoints alongside an attributed model card, NOTICE.md, LICENSE, manifest.json, sha256sums.txt, and LFS .gitattributes rules.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/weights/bundle.py#L42-L191",
+          "version": "repo-lines-v1:sha256:3d89311a34c1f38907a8a9fa01e0e0c666a0c8c9f2decdd34a25aa60caff655c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI0ZTU2ZTNlYmJhZGI2MWQ5ZjVjNjVkY2U4MWQ3ZThkNGRmM2ZmYmEwYjZjMGY5MmYwZDkxNTg1ZTQ1YzUxMDcyIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwNmM3YzAwOTNlZjUxY2MwYjgwZDdlY2U0YjYzMjczZjJiMjkzN2UyMGVjNmE0OGFiMDliMGI4NzhkZjdkNzdhIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkNzAxNDllMDY5YWQ2N2VjY2Y0NzM2NDZmZjFjNzUwMDUwZDMyOWQxMTAwMThkYzU3NjY4NzhlYWZhMWQ2MDdkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://tests/test_packaging_and_export.py#L120-L132",
+          "version": "repo-lines-v1:sha256:fe4086237fb8ce14698028c5e5bc94a9facb43de92bf7b31eca92b7ca522fc9f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkYWIxNWMzM2YxYmQ2ZWZmZTQ3MzZhYmRjZmU3ODMyZDZhMmFlYTlkMzJlYmUyNDhlOWIxN2EzNTg1YmRlYzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViMjRkYmZkMzhmNTk0NTA3NDliNmZhYmNjZjIzNGQyNzkxYzgxNDY5ZmRkNzdlYWE1ZjkyMzE2YzZiMWRkNjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRmOTQwZGI3ZTY2YmJmOWYzNzhkMzk0YjJmNDAxY2MzNmI4MGRiNTM4Yzg1MmE3YmRhNGYxYjNmNTI4M2VmNTkifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:41e6d093df808bd314491b8ff61d963fba83d9d70b19ad096296bed14c56fd9b",
+  "claims": [
+    {
+      "id": "claim_7dc6ec2433fb47d4bf37bcaa85282ad7",
+      "statement": "run_detector is the shared engine entry point: a detector package supplies build_model(weights_path, device) and its detector.yaml, and the engine handles media decoding, scoring, aggregation and artifact writing.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/engine.py#L59-L90",
+          "version": "repo-lines-v1:sha256:b91c4bdcf7712ba81b57a7dd036126abf142826a1f37fc99db33f86c74407f6c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmYzM4MjYwMWI3OTdmOWVlNTJkYTUzNjQ5ZWIxZTY2YTk0ZmFiMGFkZGY5YjRjZTg4MzlkZDgzZDNmMTg0ZWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjNGZkYjM2MWE1YjBlZmJmMTA3NmM5NTI4NjdkNzRkMDIxYjAxMmU1OWY1OWMzZGVmMjFiZDE2OGIzMzBmMTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhNDE1NjdiYWFkYjY2MDE1Yjk5MWEwYjcxM2QxMGU4OWNiNDU2MjNmNjYzZmIzZmI4YTUxYTkxYzU0ZWMyMDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg5NDI5YmU1ZGQ5Yzg3MDI2NWU1NTY2MGZhMmQ0NGY1OWZjNjZmYzNjMjlmNjY2ZTE1OGQwYTgyYjQ0YTRjN2UifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8d5e92b818e34a9194af6169162fb80f",
+      "statement": "The engine pins determinism with SEED 0xC0FFEE, torch/numpy manual seeding, and cudnn deterministic=true with benchmark disabled.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/engine.py#L23-L31",
+          "version": "repo-lines-v1:sha256:80bfeec12d0b40735118425dbea4927521a224e477a332c25e7577b4ee7c075a:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGUwNDYyOGQwMmQ1MzQ3NzUxZTRiOWQ0ZmE1MzQzNGMyMmMzMmM4NTNmZDYxZjU1ZTcyYjljMjZmMzEwZWMxMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjhlNzM1YWRiZWZhNDFkN2VhM2ZmZmVhMDdlNzkzZGFjNDBhZTlmMWEyZjE2YjNmZDgyYWEwOTc0ZTBhM2MwMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWM5OTJiNDk5Y2NlODZiMGNkZTNiMjhjNmMxOGU0NmJmMzgwOTA1OTcyOTNhZGU3NDJjOGRiZjlkOGE0Y2E5MSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzJmMDFhMWU3ZTYzNDg1NDBhMzkyYmMyZDE2MDM1OGMwYzI3OTllN2Q1YWM2MDMwYjliNDkzYTBkYjg3Yjg0OCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_2c6ac6f4003c41fa9f3d65064cc44e23",
+      "statement": "Input mode selects the scored unit: face_crop/face_clip score faces, full_frame/full_clip score frames or clips, audio scores waveform windows, and av_clip scores synchronised frame+audio windows.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/engine.py#L85-L157",
+          "version": "repo-lines-v1:sha256:2a6800ec82610664625819e1e4599e869c3a06880cf69a5e6092c6061a28079b:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2OWIxMDhlMjZkOWIzZDYxNzlkMDE5M2I1OWFiNjZlOWM2OWViMWMwYWQ5N2YzNjlmYzAwZjdhMTlmOWE5YWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNmNiYjNkOTY0NGU1NmY3N2FhZGQ2MmU4YjU2MjYzMmY5MTZkZjVkZjgxMzIyMjA1YWI1NjhkZTVlN2Y4OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVhN2ZmYTVhNzliMjQ3ODQ1MDYxN2YzMWJmZTIwY2E4Y2I4NDhkOGVhY2FiOGM3ZmUyMWVhY2M5MGJiNDlmZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkzNDk3YWU0ZjVhMmVmN2U3NTkzYzNjNjY3YzBhYzNkMWNmZmNhNzhlOWU4ZGNjNTRjOWU5ZDZhNDNhZmQ4N2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7e72186003b040cfa5d2f78114f691b3",
+      "statement": "VideoReader decodes a video once and keeps at most max_frames evenly spaced samples plus clip neighbours, with VERITY_MAX_FRAMES overriding the budget, bounding memory use for long videos.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/sampling.py#L10-L93",
+          "version": "repo-lines-v1:sha256:0f13e7cf7ed97b7e414a68842191473ed45e3bcaa8c89899c794b6e0e64531dd:eyJzZWxlY3RlZExpbmVDb3VudCI6ODQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhMDZmMzA4NDY3ODJlODQ1NzVkMzM3OTk4NWQ0OWFiMTdlYzFjYTc4OTRhNThkOTU5MDQyMGIwNjg1ZTZhYTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4ZjAzYWJiYjJlMmM0NzA4OTE4NGNhODJiYzgzMDJkMjRmMmZhNWQzNzkyZjhmYjdhNzMyODAyMzAwYjVhYzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1ODI1MzliN2FjMDg3ZDhkMDY3NGEzMzNjOWZkNGZkMDUzMjIyNWE3N2NiNjRkYTViZGUwYzZhMTkwZTg2ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjczMjUwOGI1MzkzODQyMmQ5M2MyMGI5MmI3YzIxZGE5YTQ5OWVjMTgzNjdlZTUwYzY3NDE1NmUyOTQzZTAyOTAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ac68f5a6d9c44764b6865ca8f4f440ef",
+      "statement": "FaceDetector wraps facenet_pytorch MTCNN with keep_all=False and discards boxes smaller than the spec's min_face threshold.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/face_utils.py#L6-L31",
+          "version": "repo-lines-v1:sha256:e6ae755068e69f9ac60167a8916d8eaf564b9144489cd65d855302bda4d30ed8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwNmFiNmQzMjNkNmJhOGRiYTBjOTE2ZGQ2MGJhODRkYzc2YzVkYWNmZmVmOTUxNjk1OGQ3MTQwZjBiZjliOTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiYjU0MmE5MDcwY2FhNGM5OTg5ZmQxN2U0NGE5NmIwMmViNTBmY2JjZWQ2N2VhMGU0N2FjODgzZTg5NjgwZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjljYjg2OTc2YTE2YjY0NTA5MzBjOTU3NDJhYjI1ZWRiNWRmZTI0Zjk2MTQ0YjJhZGJlMTBiOGI4MGZhYWNlNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c33c5d6dfd1c423f964c2358e4b68374",
+      "statement": "aggregate computes mean_p and confidence = 1.0 - min(std * 2.0, 0.9), recording count, min, max, median, threshold, above_threshold, below_threshold, high_confidence_fake, and high_confidence_real in stats.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/reasoning.py#L6-L26",
+          "version": "repo-lines-v1:sha256:253ed9a092e9c877e3df36df628ad16cc6ca8463907292652707ee15c07b3065:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3OGEwYWQxOGJhMGViNDljMTc2MDQyYWRhNDZiNzhlYzc0NDY1NDUxZmZjMDg2NjRhODUwMjc4NjNiNDA5ZmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwZWU3ZThjMThkOTQ5YmZjODlmNjM5NWMyMDQ1MzgzM2ViMWIzMGEyZDlkOGNlZDA0Njk2ZWUzYzI0ZTAxNzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1ODI1MzliN2FjMDg3ZDhkMDY3NGEzMzNjOWZkNGZkMDUzMjIyNWE3N2NiNjRkYTViZGUwYzZhMTkwZTg2ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlNjNmNjU0Njc1ZTE5ZGM2OTkyZWU3M2I1NDNkYTExMzUzZDA5NTJkYTkyY2I4ODMzYmU1NDM5ZTBjNjM3YmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_108f53d4751740ac8a7e885c68550b7c",
+      "statement": "Attention maps prefer a detector's native attention_map and otherwise fall back to Grad-CAM over forward_detailed's logits and spatial feat tensor, returning None when gradients or spatial variation are unavailable.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/cam.py#L7-L49",
+          "version": "repo-lines-v1:sha256:a2b11ba8ea6ae699eb425d303dd20dbf065eb2aeed75365097ead8829dedd5b3:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0OWE1OWVmYjgxZTcxNjI4NTJmZjQxYjcxN2JkYWVkZDY1MGY2YTBiMjI2MGY5ODI1MWE4N2Q1NmZhN2EyNmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlN2M5NTdiY2I0NGZiNjczYzk4YjAwNTBhNzVkMzgwODJkYjgxZDkxOGRlMzEzYTNmMDdjMTIzNTMwNmQ3ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3OTJjNjc5Yzc5MDFiNjlkMzM3NGU1YTRmOGY5YmM5NjRiZTM2M2NiNjEwYWNkOGE0MDk0YWU5YmZlNWZlNzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2MWI2YzVlODgzZTZhYTBhYThhNmYxMDExYmFlYTIzYzQ2NDFhYTA0ZTdlNDI5YzQ4NTM2MDNhOTE0MWMwNDYifQ"
+        },
+        {
+          "resource": "repo://detectors/common/engine.py#L272-L288",
+          "version": "repo-lines-v1:sha256:0338a505efd956ee76d5e6038a4d34a7b4ba3d2e27fb3c5fdf66447c57880ec4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwZmNhZTNmNWU2ZmQyMzIzOTVhNzg0NTNmNWM3NDMxODkzYWQzOTQxMGUwYzU2ZjMyNGUxOTg4MjY5YjA5NDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNGMyZjIxOTk3MjIyYjk0ODJiN2RkYWQ3NjhkODNkMTAwOGNlN2RmNTliZDZlNzIyODFhYjg3ZmU5YmUxMzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgzZGMyZjY2OGUwNGYwYTcwN2M4OTBjMzY4ODNiOGQ1MzczMjk5YzljMGNmZWUwOGQzNDg0YmU1OTJhZDQ0MjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhMGUyYTY3MzJiY2Y5NzY2MGQ5YTIyN2M4OGM2ZDhjZGYzZWRjZmYzMDZhMTE0YzhiZDQ2OTg0MzUzNWNkMmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a6fd90b90da84d179be9f2dd1b8dcaf6",
+      "statement": "Each detector run writes result.json with prediction, confidence, reasoning, confidence_factors, stats, weights status, timing_seconds, device, model metadata, unit/input_mode, per_face records, sampling coverage, region_aggregate, and aux_aggregate, plus per_face_results.json and explainability images.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/engine.py#L173-L219",
+          "version": "repo-lines-v1:sha256:f3eeab7c2bcc35bd2b959a344956a23fa21589faf696164ddd37985aa94471b2:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhYjdjNjJlYzNmZWI5MjQyYWU3ZWFjNzJhMzg0NzAyMzgyMjdmYTExOWMxNGJlNjA1NWE0NjVmYTVlZDc5NTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlNTg4MjlhMGM3N2E4ZWQ4NGJjNmJhMWY1YzU1ZDQ0MzAxZjk0ZjMwNTcxMTQ2MWE3MmRkZDQ3NWE1ZTVkMjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMwNjA4ODA4MjY5NmUwYjNhZWJjMWZjZjBiMjNlNzBiN2ZiZjg2MjA5NjIxNzRjMDE4YzY0NjE0NTYxNWJiMjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ4ZTY3M2IwNTQ2MmJlNDg4MmE1ODI1OGE5Yjg4M2VhOGQzZWZmNWI5MjM1NTU4N2NlM2FiNTNiYzEwZjc2MzcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d91c584ecf2f4a52a6abc71ae573103d",
+      "statement": "The engine writes face crops, frame thumbnails, attention-map overlays, top full frames, timelines and audio spectrogram timelines into the detector output directory as explainability artifacts.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/viz.py#L12-L191",
+          "version": "repo-lines-v1:sha256:5106d2e8aa77b79bcc83780faf7f459b88306978331cb82e610c39d1b5d2f1b9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI3NzI0YWU4MmQ2MTJlZmRiZjA4NDFlMjJjYTYzNTAzNmNhZDU4ZTNkM2VlNzlhNzlkYmZkMTFkODhhNjFlZGE3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlODFjYmQwZjY5ZjU2ZjA3ZDdiYmJkNGY5YTFiZmEzZWU5M2NjZjUzMTk1NzdlNTM5NzRiZDUxYzI5YjcxNmVlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjZjFmYjk0ZGVmYTY5YTFlOGE2M2Q5N2I4N2I3MmE2ZWM0ODljYTBlZjhmYjRkZDI0NWRiNjhiOWFiZWUzNDUwIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_a02aaedd5f374c05bc542bd4374ce4d7",
+      "statement": "_cam_for prefers a spatially varying native attention_map before falling back to Grad-CAM when spec.cam is true, while _extract_aux and aggregate_aux preserve secondary model branch measurements in aux_aggregate and confidence_factors.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/common/engine.py#L248-L289",
+          "version": "repo-lines-v1:sha256:3502d77085cf1d3dbc492f50e40030238a8647565a4d78da7789bd4408c6f2d1:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyM2RmOGI1MzkxNzhlNDQ1NWYxZjBkOWYwYmU2MTYxMTg1YmM5MDk1YzJjZjdhMmQ5YjQ1MzBjZWM2YTBiNzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU2YWE2ZTBkZmQ4ODJmMTMyZWI3ZDgwN2Q1NzliZmQyZDRmZjFmM2UxZWE4OTFkZTU4ZmNiNWI5NTE1ZGUyYTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg1YzUyNDc2NjFkOTU5MGIzZjUzNzg1NWVmNTdlNjQ2ZjY1NGE2ZGU3MTM2ZWRjM2NmZDZkZTdjODYzYmJiNDMifQ"
+        },
+        {
+          "resource": "repo://detectors/common/reasoning.py#L175-L177",
+          "version": "repo-lines-v1:sha256:2ba2c8d50808f05fd45dedab7e6500ea3330b90cb2b7c650c323282a610326e5:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNkMmY5ZjAyMmM4ZWMwNzlkNGFiZDllNGQyMDVmZWE0MGQ0NjFkZDRjMDlmNzZmYjRhNDExZDk2M2I4YTUwNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzcwZjdjZWVkMTQ0Njk2M2Q3MjgwZjBlZDVhNmRjOWYyY2U5MThiNjIxNmFlNTk1ZjMwMGMwMzIyZWMzZmQ2ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDNhY2ZmZGIwNWJlNjY0MjBhNzk5YTUzOWM2OWU3ZDU4ODQ5MGMzNWY1YzJlNTI3YmJlMTBiYzlmNmQ3ZmNiNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzE4ZWJmMGY2NjNjZTJjYjM3MjYwZjkxODEyMTliNGFkNjFkOWRiZGRiNTYxZjAxNWVlZGY0MTc5YmVkNDk2MiJ9"
+        },
+        {
+          "resource": "repo://detectors/common/reasoning.py#L29-L46",
+          "version": "repo-lines-v1:sha256:1ed202e40669f85dd622ce0d66344199a431c8c3fc0b75dd8cf226e2d6ab8547:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0YTNmNmViMTM0YjllM2RjZTIwMjNkMGRlODA5MmNjYjBlMDJhYjc3NzNiYzhjNDliMjE4YzQyNzgxZDhiMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3OWVjNmU0MTgzNTAyZjdkZWY5NmQ1MTllYTk4ZmJiM2I3ODA0Mjg2MDlmZmI5MDQ5ZmY0NDRjYjhhODUyMmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0ZmY2ZGQ4NjUwNTdjZTRjYmVlYTMwMGZlYjQzYjc5NTBjODIyYjY5MDBjODVkN2U0ODFiNDQ4ZGQzMDdkNzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b850b2eb4878438f93a61c077074bbf3",
+      "statement": "RECCE probes decoder liveness at load time via audit_reconstruction and omits reconstruction residual images and residual region-energy claims whenever the decoder output std does not exceed 1e-4.",
+      "evidence": [
+        {
+          "resource": "repo://detectors/recce/inference.py#L324-L416",
+          "version": "repo-lines-v1:sha256:7f73be1c2cadfb4ee5c92e005605487ac8d62c9f596d28a49aba6b7854ef0222:eyJzZWxlY3RlZExpbmVDb3VudCI6OTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3N2RlZTJiZDhlYjY0NmZhNmM3YjkwZDdjMjEyNTU4ZDZjMWY4ZDgwYTE5MTY4MWM3YjFhMzc4Y2U4ZmFhMDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5YzM2ODFmOTI4OWNiNGFlMTFlMmJkNzEwMTY3ODgzZTczZjA3YjI1YTQ3ZGM5MmEzOTM0OTVmZGMyMjg3MmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ3MjIzMTA2ZmQ4NzQyYjcwZWEyMzNmOWRjMzU5ZjRiMDJiYmIwNjliNzI4M2VlZjc2MjQ5OTUxNmJkN2I5YzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVhZDU1YmQ3NWMxODhhZjljYjU5Nzg5NThlMTY0YTc5NTY3NmI4MDNkMjA0MWMxNTAzMjEyZGVmZThkMjAwYWMifQ"
+        },
+        {
+          "resource": "repo://detectors/recce/inference.py#L56-L100",
+          "version": "repo-lines-v1:sha256:fce04a549fb7201e73d2f8371b2fa499d2784f8aeafbe3e7c60b3f5fe7e3b3ec:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3MjA1YWEyNzE5MTQxNDYzN2U0ZTQ2NmRjYjhlNWQ4MDdkNDY5NWU2OTE0NTI3ZWMzNmQ1YTQ0MTk2YjZhODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiZjgxMWJlZTE4MDU0YzM3MGUzYTBkMGE1M2VmMzY0ODBhODU3MWRjZDExOTMyZmM0ODcwMTUzZmFmNzY1MTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU1YmM3ZjkxYTA5YjVlODFlOWNkMjBlYzc1NWFmMjA1OWVlMWYyNjg1MTAwY2ExMDRmNDY2ZTUxMTZhYTczMWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3YjI0ZDI1YzRjMjNkN2UxNWViZWFlZDZkY2FkZmU5YzA1NDYxNDNlYWFmOTI0NmUyNDQ0NDQyZDE1NjEzN2UifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}

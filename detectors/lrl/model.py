@@ -224,7 +224,7 @@ class LRLDetector(nn.Module):
         logits = self.overall_classifier(features_processed)
         mask = torch.sigmoid(self.final(self.decoder([features])))
         return {"logits": logits, "probs": torch.softmax(logits, dim=1),
-                "feat": features, "mask": mask}
+                "feat": features, "mask": mask, "attention_map": mask[:, 0]}
 
 
 def build_model(weights_path, device):

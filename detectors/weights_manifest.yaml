@@ -24,6 +24,8 @@ hub:
 licenses:
   CC-BY-NC-4.0: https://creativecommons.org/licenses/by-nc/4.0/
   CC-BY-NC-SA-4.0: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  SBI-academic: https://github.com/mapooon/SelfBlendedImages/blob/master/LICENSE
+  SnT-academic: https://github.com/10Ring/LAA-Net/blob/main/LICENSE
   MIT: https://opensource.org/license/mit
   BSD-3-Clause: https://opensource.org/license/bsd-3-clause
   Apache-2.0: https://www.apache.org/licenses/LICENSE-2.0
@@ -149,6 +151,117 @@ sources:
       Detection." ASRU 2025. arXiv:2506.21090
     note: Checkpoint CC BY-NC-SA 4.0 (nii-yamagishilab/mms-300m-anti-deepfake on HF);
       detector code BSD-3-Clause. The detector fetches the model itself via huggingface_hub.
+
+  sbi:
+    name: Self-Blended Images (mapooon/SelfBlendedImages)
+    url: https://github.com/mapooon/SelfBlendedImages
+    license: SBI-academic
+    copyright: "(c) Yamasaki Lab, The University of Tokyo"
+    citation: >-
+      Shiohara, K., Yamasaki, T. "Detecting Deepfakes with Self-Blended Images." CVPR 2022.
+      arXiv:2204.08376
+    note: Code and weights are free for research use only; the license forbids redistribution,
+      so the checkpoint is fetched from the authors' Google Drive only.
+  ftcn:
+    name: FTCN (yinglinzheng/FTCN)
+    url: https://github.com/yinglinzheng/FTCN
+    license: none-stated
+    citation: >-
+      Zheng, Y., Bao, J., Chen, D., Zeng, M., Wen, F. "Exploring Temporal Coherence for More General
+      Video Face Forgery Detection." ICCV 2021. arXiv:2108.06693
+    note: No license file in the repository; all rights reserved by default. Fetched from the authors' GitHub release only.
+  rawboost:
+    name: RawBoost anti-spoofing (TakHemlata/RawBoost-antispoofing)
+    url: https://github.com/TakHemlata/RawBoost-antispoofing
+    license: MIT
+    copyright: "(c) Hemlata Tak, Massimiliano Todisco (EURECOM)"
+    citation: >-
+      Tak, H., Kamble, M., Patino, J., Todisco, M., Evans, N. "RawBoost: A Raw Data Boosting and Augmentation
+      Method applied to Automatic Speaker Verification Anti-Spoofing." ICASSP 2022. Model: Tak, H. et al.
+      "End-to-End anti-spoofing with RawNet2." ICASSP 2021.
+  d3:
+    name: D3 (BigAandSmallq/D3)
+    url: https://github.com/BigAandSmallq/D3
+    license: none-stated
+    citation: >-
+      Yang, Y., Qian, Z., Zhu, Y., Russakovsky, O., Wu, Y. "D3: Scaling Up Deepfake Detection by Learning
+      from Discrepancy." CVPR 2025. arXiv:2404.04584
+    note: No license file in the repository; all rights reserved by default. Fetched from the authors' repo only.
+  prodet:
+    name: ProDet (beautyremain/ProDet)
+    url: https://github.com/beautyremain/ProDet
+    license: none-stated
+    citation: >-
+      Cheng, J., Yan, Z., Zhang, Y., Luo, Y., Wang, Z., Li, C. "Can We Leave Deepfake Data Behind in
+      Training Deepfake Detector?" NeurIPS 2024. arXiv:2408.17052
+    note: No license file in the repository; all rights reserved by default. Fetched from the authors' Google Drive only.
+  realforensics:
+    name: RealForensics (ahaliassos/RealForensics)
+    url: https://github.com/ahaliassos/RealForensics
+    license: MIT
+    copyright: "Copyright (c) 2022 Alexandros Haliassos"
+    citation: >-
+      Haliassos, A., Mira, R., Petridis, S., Pantic, M. "Leveraging Real Talking Faces via Self-Supervision
+      for Robust Forgery Detection." CVPR 2022.
+    note: The checkpoints are linked from the README (Google Drive); the MIT license covers the repository.
+  syncnet:
+    name: SyncNet (joonson/syncnet_python)
+    url: https://github.com/joonson/syncnet_python
+    license: MIT
+    copyright: "(c) Joon Son Chung, VGG Oxford"
+    citation: >-
+      Chung, J. S., Zisserman, A. "Out of time: automated lip sync in the wild." Workshop on Multi-view
+      Lip-reading, ACCV 2016.
+  vlaforge:
+    name: VLAForge (mala-lab/VLAForge)
+    url: https://github.com/mala-lab/VLAForge
+    license: MIT
+    citation: >-
+      Zhu, J., Miao, Y., Zhang, X., Deng, J., Pang, G. "Unleashing Vision-Language Semantics for Deepfake
+      Video Detection." CVPR 2026.
+    note: The checkpoint embeds the frozen OpenAI CLIP ViT-L/14 (MIT).
+  forensics_adapter:
+    name: Forensics Adapter (OUC-VAS/ForensicsAdapter)
+    url: https://github.com/OUC-VAS/ForensicsAdapter
+    license: CC-BY-NC-4.0
+    citation: >-
+      Cui, X., Li, Y., Luo, A., Zhou, J., Dong, J. "Forensics Adapter: Adapting CLIP for Generalizable Face
+      Forgery Detection." CVPR 2025. arXiv:2411.19715
+    note: CC BY-NC 4.0 (academic research only); the checkpoint embeds the frozen OpenAI CLIP ViT-L/14 (MIT).
+  laa_net:
+    name: LAA-Net (10Ring/LAA-Net)
+    url: https://github.com/10Ring/LAA-Net
+    license: SnT-academic
+    copyright: "Copyright 2023 University of Luxembourg"
+    citation: >-
+      Nguyen, D., Mejri, N., Singh, I. P., Kuleshova, P., Astrid, M., Kacem, A., Ghorbel, E., Aouada, D.
+      "LAA-Net: Localized Artifact Attention Network for Quality-Agnostic and Generalizable Deepfake
+      Detection." CVPR 2024. arXiv:2401.13856
+    note: SnT academic license (academic research use only, no redistribution outside that scope); the
+      checkpoints are inside a Dropbox folder zip linked from the README and are fetched from there only.
+  lipfd:
+    name: LipFD (AaronComo/LipFD)
+    url: https://github.com/AaronComo/LipFD
+    license: none-stated
+    citation: >-
+      Liu, W., She, T., Liu, J., Li, B., Yao, D., Liang, Z., Wang, R. "Lips Are Lying: Spotting the Temporal
+      Inconsistency between Audio and Visual in Lip-Syncing DeepFakes." NeurIPS 2024. arXiv:2401.15668
+    note: No license file in the repository; all rights reserved by default. Fetched from the authors' Google Drive only.
+  m2tr:
+    name: M2TR (wdrink/M2TR-Multi-modal-Multi-scale-Transformers-for-Deepfake-Detection)
+    url: https://github.com/wdrink/M2TR-Multi-modal-Multi-scale-Transformers-for-Deepfake-Detection
+    license: MIT
+    citation: >-
+      Wang, J., Wu, Z., Chen, J., Jiang, Y.-G. "M2TR: Multi-modal Multi-scale Transformers for Deepfake
+      Detection." ICMR 2022. arXiv:2104.09770
+  m2f2_det:
+    name: M2F2-Det (CHELSEA234/M2F2_Det)
+    url: https://github.com/CHELSEA234/M2F2_Det
+    license: MIT
+    citation: >-
+      Guo, X., Song, X., Zhang, Y., Liu, X., Liu, X. "Rethinking Vision-Language Model in Face Forensics:
+      Multi-Modal Interpretable Forged Face Detector." CVPR 2025. arXiv:2503.20188
+    note: The stage-1 detector checkpoint embeds the frozen OpenAI CLIP ViT-L/14-336 towers (MIT).
 
 files:
   xception_best.pth:
@@ -366,6 +479,121 @@ files:
     origin: https://drive.usercontent.google.com/download?id=1MzvaQSE-SpH9a5mgCXxan_J_PTZbNaPa&export=download&confirm=t
     redistributable: false
 
+  FFc23.tar:
+    sha256: 2b05c2ba36ccb9e9f4f9e1aae9acd443ae2e6400ce725f56104fdb175d3c3267
+    size: 141290933
+    source: sbi
+    description: SBI EfficientNet-B4 trained on FF++ c23 self-blended images (CVPR 2022)
+    origin: https://drive.usercontent.google.com/download?id=1X0-NYT8KPursLZZdxduRQju6E52hauV0&export=download&confirm=t
+    redistributable: false
+  ftcn_tt.pth:
+    sha256: 3d08fc78174bbfdb3fbede317b95dcac9095202ed7113649eecf6e2ef5ee77d8
+    size: 59248500
+    source: ftcn
+    description: FTCN+TT official checkpoint, FF++ c23 (ICCV 2021)
+    origin: https://github.com/yinglinzheng/FTCN/releases/download/weights/ftcn_tt.pth
+    redistributable: false
+  rawnet2_Best_model.pth:
+    sha256: d8afc379456876c78fa08e61d5fcc66bba6f459b30bbbf3dcb7a7f0731e701aa
+    size: 70515422
+    source: rawboost
+    description: RawNet2 anti-spoofing trained with RawBoost on ASVspoof2019 LA (ICASSP 2021/2022)
+    origin: https://raw.githubusercontent.com/TakHemlata/RawBoost-antispoofing/main/pre_trained_model/Best_model.pth
+    redistributable: true
+    hub_path: rawnet2/Best_model.pth
+  d3_classifier.pth:
+    sha256: c0bb66e0de538b0330613da1865da025756c1dc7a7290990d5343c35290ab63b
+    size: 12606728
+    source: d3
+    description: D3 attention head over frozen CLIP ViT-L/14 features (CVPR 2025)
+    origin: https://raw.githubusercontent.com/BigAandSmallq/D3/main/ckpt/classifier.pth
+    redistributable: false
+  ProDet_best.pth:
+    sha256: 1de84318fa703978493a4c4bd7e337e2597e8e3e36fc9d144c42842456cb3017
+    size: 385663781
+    source: prodet
+    description: ProDet EfficientNet-B4 progressive detector, FF++ c23 (NeurIPS 2024)
+    origin: https://drive.usercontent.google.com/download?id=18cqHkDdAxXDnbyZZ5KiZG5gD5gkh6A1v&export=download&confirm=t
+    redistributable: false
+  realforensics_ff.pth:
+    sha256: 843b86f29fc98c67132a6f98180a35bfc617882a32642b8b80d571944c2e032d
+    size: 86220575
+    source: realforensics
+    description: RealForensics CSN-R101 stage-2 detector, FF++ c23 (CVPR 2022)
+    origin: https://drive.usercontent.google.com/download?id=1nqEVlRN51WyzMWSeB7x9okcaegFgA-BQ&export=download&confirm=t
+    redistributable: true
+    hub_path: realforensics/realforensics_ff.pth
+  syncnet_v2.model:
+    sha256: 961e8696f888fce4f3f3a6c3d5b3267cf5b343100b238e79b2659bff2c605442
+    size: 54573114
+    source: syncnet
+    description: SyncNet v2 audio-visual synchronisation network (ACCV 2016 workshop)
+    origin: https://www.robots.ox.ac.uk/~vgg/software/lipsync/data/syncnet_v2.model
+    redistributable: true
+    hub_path: syncnet/syncnet_v2.model
+  vlaforge.pth:
+    sha256: 2bc0c1e33d08a241386f88e3a9bc0ee4a504def129be0b4a9197b33f6feaff1f
+    size: 965834563
+    source: vlaforge
+    description: VLAForge detector incl. frozen CLIP ViT-L/14, FF++ c23 (CVPR 2026)
+    origin: https://drive.usercontent.google.com/download?id=1_PhtirGA_vMZWqnpZHGHHinT6QKF1d4L&export=download&confirm=t
+    redistributable: true
+    hub_path: vlaforge/vlaforge.pth
+  forensics_adapter.pth:
+    sha256: 3d87f9bfabb2a4ab3ad5fa0c2bf43bd0b41377b7546fdad0a9b61a1d4adfbddb
+    size: 962621690
+    source: forensics_adapter
+    description: Forensics Adapter detector incl. frozen CLIP ViT-L/14, FF++ c23 (CVPR 2025)
+    origin: https://drive.usercontent.google.com/download?id=1UlaAUTtsX87ofIibf38TtfAKIsnA7WVm&export=download&confirm=t
+    redistributable: true
+    hub_path: forensics_adapter/forensics_adapter.pth
+  laa_net_sbi.pth:
+    sha256: fde726610e778045f65c3fbe839bc463c4d3a9970f72ca109d5911917305c991
+    size: 435494267
+    source: laa_net
+    description: LAA-Net PoseEfficientNet-B4 trained with self-blended images, FF++ c23 (CVPR 2024)
+    origin: https://www.dropbox.com/scl/fo/dzmldaytujdeuky69d5x1/AIJrH2mit1hxnl1qzavM3vk?rlkey=nzzliincrfwejw2yr0ovldru1&dl=1
+    archive:
+      # Dropbox builds the folder zip on the fly; its checksum is advisory, the member is verified.
+      sha256: 069546afdf36a9e42ba3bdf7dc99097377d381b9d5ace42136594f8c0c4195ba
+      size: 870989302
+      member: PoseEfficientNet_EFN_hm10_EFPN_NoBasedCLS_Focal_C3_256Cst100_8SBI_SAM(Adam)_ADV_Era1_OutSigmoid_1e7_boost500_UnFZ_model_best.pth
+    redistributable: false
+  laa_net_bi.pth:
+    sha256: b1279335e0c5ad87e1bbf87de20deb9310621ae99bb88a9e974527b0d786d26b
+    size: 435494203
+    source: laa_net
+    description: LAA-Net PoseEfficientNet-B4 trained with blended images (BI), FF++ c23 (CVPR 2024)
+    origin: https://www.dropbox.com/scl/fo/dzmldaytujdeuky69d5x1/AIJrH2mit1hxnl1qzavM3vk?rlkey=nzzliincrfwejw2yr0ovldru1&dl=1
+    archive:
+      sha256: 069546afdf36a9e42ba3bdf7dc99097377d381b9d5ace42136594f8c0c4195ba
+      size: 870989302
+      member: PoseEfficientNet_EFN_hm100_EFPN_NoBasedCLS_Focal_C3_256Cstency100_32BI_SAM(Adam)_ADV_Erasing1_OutSigmoid_model_best.pth
+    redistributable: false
+  lipfd_ckpt.pth:
+    sha256: 156fc8995a2ff7b50b56a1dbafb490b6936d5aa6c18dee5a6c67018853f2d9af
+    size: 1805064538
+    source: lipfd
+    description: LipFD audio-visual lip-sync detector incl. CLIP ViT-L/14, AVLips (NeurIPS 2024)
+    origin: https://drive.usercontent.google.com/download?id=1NPAcx0QS8N9v_9qUr-51jBaL9kGDT-cp&export=download&confirm=t
+    redistributable: false
+  m2tr_ff_c23.pth:
+    sha256: 4700e0392884fdeeb24689935bd66de4ae52b8cbeae955cb98766f784d8bd061
+    size: 224488781
+    source: m2tr
+    description: M2TR EfficientNet-B4 multi-modal multi-scale Transformer, FF++ c23 (ICMR 2022)
+    origin: https://drive.usercontent.google.com/download?id=1XRIllA6p5YnITztl1burwcr5l7LAcpqv&export=download&confirm=t
+    redistributable: true
+    hub_path: m2tr/m2tr_ff_c23.pth
+  m2f2_det_stage1.pth:
+    sha256: ac1cdb94fe341d1193c573d71d683d5786fc2f0dc27a7494bb0e27cd1cdab208
+    size: 1990597085
+    source: m2f2_det
+    description: M2F2-Det stage-1 detector incl. CLIP ViT-L/14-336 towers, FF++ (CVPR 2025)
+    origin: https://drive.usercontent.google.com/download?id=1X1ZUZkCwqg9mrsqoOS0EoO3v5WABNBAw&export=download&confirm=t
+    redistributable: true
+    hub_path: m2f2_det/m2f2_det_stage1.pth
+
 # Which manifest files each detector needs, and where they land under
 # detectors/<id>/weights/ (string = same name; mapping = {file, dest}).
 detectors:
@@ -398,7 +626,7 @@ detectors:
   i3d:
   - I3D_8x8_R50.pth
   ftcn:
-  - I3D_8x8_R50.pth
+  - ftcn_tt.pth
   altfreezing:
   - I3D_8x8_R50.pth
   facexray:
@@ -427,6 +655,33 @@ detectors:
   - effort_clip_L14_trainOn_FaceForensic.pth
   df40_clip:
   - df40_train_on_df40_clip_large.pth
+  sbi:
+  - FFc23.tar
+  rawnet2:
+  - file: rawnet2_Best_model.pth
+    dest: Best_model.pth
+  d3:
+  - file: d3_classifier.pth
+    dest: classifier.pth
+  prodet:
+  - ProDet_best.pth
+  realforensics:
+  - realforensics_ff.pth
+  syncnet:
+  - syncnet_v2.model
+  vlaforge:
+  - vlaforge.pth
+  forensics_adapter:
+  - forensics_adapter.pth
+  laa_net:
+  - laa_net_sbi.pth
+  lipfd:
+  - file: lipfd_ckpt.pth
+    dest: ckpt.pth
+  m2tr:
+  - m2tr_ff_c23.pth
+  m2f2_det:
+  - m2f2_det_stage1.pth
 
 # Weights fetched by the detector itself at first run (HF hub / torch hub);
 # listed for license tracking only, never re-hosted by Verity.
@@ -446,13 +701,16 @@ runtime_fetched:
   timesformer: facebook/timesformer-base-finetuned-k400 (HF, CC BY-NC 4.0)
   uia_vit: nothing is fetched today (random init); upstream uses timm jx_vit_base_p16_224 (Apache-2.0)
   stil: nothing is fetched today (random init); upstream uses SCNet50-v1d ImageNet (backseason/SCNet, MIT)
+  d3: openai/clip-vit-large-patch14 (HF, MIT) frozen backbone; only the attention head comes from the manifest
+  vlaforge: openai/clip-vit-large-patch14 (HF, MIT) tokenizer files only; the CLIP weights are inside the manifest checkpoint
+  m2f2_det: openai/clip-vit-large-patch14-336 (HF, MIT) config/weights used to instantiate the tower, then overwritten by the manifest checkpoint
+  lipforensics: face-alignment FAN 2D landmark model (BSD-3-Clause), downloaded by the library at first run
+  realforensics: face-alignment FAN 2D landmark model (BSD-3-Clause), downloaded by the library at first run
   aeroblade: "CompVis/stable-diffusion-v1-1 (OpenRAIL-M), stabilityai/stable-diffusion-2-1-base (OpenRAIL++;\
     \ gated on HF), kandinsky-community/kandinsky-2-1 (Apache-2.0), LPIPS VGG (BSD-2) \u2014 training-free"
 
 # Detectors with no trained checkpoint anywhere Verity may use.
 no_checkpoint:
-  sbi: No released trained checkpoint; random initialisation. Upstream SBI weights exist but their license
-    forbids redistribution.
   sladd: No released trained checkpoint; random initialisation.
   pcl_xception: No released trained checkpoint; random initialisation.
   lrl: No released trained checkpoint; random initialisation.

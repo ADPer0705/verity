@@ -61,8 +61,12 @@ def build_model(weights_path, device):
         # cnnaug_best.pth is the DeepfakeBench detector state dict, whose
         # modules live under ``backbone.``; strip it so the keys match
         # ``resnet.*`` / ``fc.*`` here (otherwise strict=False loads nothing).
-        if all(k.startswith("backbone.") for k in state.keys()):
-            state = {k[len("backbone."):]: v for k, v in state.items()}
+        if any(k.startswith("backbone.") for k in state.keys()):
+            state = {
+                k[len("backbone."):]: v
+                for k, v in state.items()
+                if k.startswith("backbone.")
+            }
         missing, unexpected = model.load_state_dict(state, strict=False)
         if missing or unexpected:
             print(f"[resnet34] state dict mismatch: {len(missing)} missing, "

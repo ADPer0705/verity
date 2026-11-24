@@ -4,8 +4,8 @@
 For each detector it executes ``verity run --detector <id>`` (the full
 orchestration path: ingest -> analyze -> select -> detect -> compile ->
 report) while sampling the process tree's RSS and the GPU's VRAM every second.
-When a detector finishes, one result row is appended to docs/matrix_runs.md
-and docs/matrix_runs.jsonl.
+When a detector finishes, one result row is appended to output/matrix_runs.md
+and output/matrix_runs.jsonl.
 
 If the machine runs out of memory and this script itself is killed mid-matrix,
 the log shows exactly which detectors finished; re-run with --resume to
@@ -37,16 +37,22 @@ WORKSPACE = ROOT / "workspace"
 DEFAULT_MEDIA = None  # pass --media; there is no bundled sample
 
 TIERS: dict[str, list[str]] = {
-    "L": ["meso4", "meso4Inception", "capsule_net", "npr", "mlep"],
+    "L": [
+        "meso4", "meso4Inception", "capsule_net", "npr", "mlep", "safe",
+        "rawnet2", "aasist",
+    ],
     "M": [
         "xception", "core", "ffd", "spsl", "f3net", "fwa", "rfm", "sladd",
         "pcl_xception", "resnet34", "efficientnetb4", "sbi", "sia", "lsda",
         "multi_attention", "lrl", "iid", "ucf", "srm", "recce", "facexray",
         "clip", "uia_vit", "tall", "stil", "timesformer", "lipforensics",
+        "prodet", "laa_net", "m2tr", "d3", "syncnet", "community_forensics",
     ],
     "H": [
         "i3d", "altfreezing", "ftcn", "videomae", "xclip", "effort",
-        "gend", "univfd", "aeroblade",
+        "gend", "univfd", "df40_clip", "aeroblade", "realforensics",
+        "vlaforge", "forensics_adapter", "lipfd", "m2f2_det",
+        "antideepfake_mms", "xlsr_sls",
     ],
 }
 TIER_ORDER = ["L", "M", "H"]
@@ -347,8 +353,8 @@ def main() -> int:
     parser.add_argument("--detectors", default=None,
                         help="explicit comma-separated detector ids (overrides --tiers)")
     parser.add_argument("--format", default="html", choices=["html", "pdf"])
-    parser.add_argument("--log-md", type=Path, default=ROOT / "docs" / "matrix_runs.md")
-    parser.add_argument("--log-jsonl", type=Path, default=ROOT / "docs" / "matrix_runs.jsonl")
+    parser.add_argument("--log-md", type=Path, default=ROOT / "output" / "matrix_runs.md")
+    parser.add_argument("--log-jsonl", type=Path, default=ROOT / "output" / "matrix_runs.jsonl")
     parser.add_argument("--timeout", type=int, default=3900,
                         help="per-detector hard timeout in seconds (default 3900)")
     parser.add_argument("--resume", action="store_true",

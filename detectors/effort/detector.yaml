@@ -21,8 +21,8 @@ video_mode: false
 clip_size: null
 input_mode: face_crop
 min_face: 30
-# No Grad-CAM through the ViT; the model returns the last-layer CLS attention over the 16x16 patch grid as attention_map.
-cam: false
+# Returns the last-layer CLS attention over the 16x16 patch grid as attention_map.
+cam: true
 artifacts:
   required:
   - type: face_crop

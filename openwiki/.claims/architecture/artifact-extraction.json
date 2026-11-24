@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:dfe5b9b9b2def5366630d23941f1c819c4a3b39d95084ed8dd6ee5f7c2a2f82a",
+  "claims": [
+    {
+      "id": "claim_a646406bdeb9433da3a41624d8d2ee09",
+      "statement": "FrameExtractor and FaceExtractor extract sorted PNG video frames and Haar-detected face crops (>=20x20px) into workspace/artifacts/<media_id>/ while returning empty collections on non-video or missing-frames cases.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/extract/base_extractor.py#L7-L14",
+          "version": "repo-lines-v1:sha256:a4b8a11c3411af5751672fccd5ae4a657af8711ccbf2f0cec491c5876932e0bf:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWRlNGM0ZmQ3ODk1Y2Y1NTZkM2ViZmE3NDI4ZDFmMWI5OTUwZTcwZjllZTMzMGVkYTE5ZDA0ZThiNzUyOGQ5ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTI1NTQ1MzU4OGQwZjNkM2Q1OTBhYzViMGI5MThmNDczZTJmNjY4YjhmZTMyMTYwZTUyNmYzYjVjYzkzZTJkNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzE4Nzc2ZjY3MjkyZjcwNjNjZWJjZTg1YTAwZGQxZTNjYjc2ZWY1YzBjYTFjYjExZDU0MTgxMmI2YThjN2E1ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://src/verity/extract/face_extractor.py#L28-L60",
+          "version": "repo-lines-v1:sha256:224186dfad797eadc25875ae1285c0d4dd20d14b32571851ffff30f0358339d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImViNjFiYjQ5YmRiNTgzYmU2YjdmN2M1MzM5NjlkOTdjYzQ4OTM3MDI3ZjAwMWQ4ZDhlYWUwMDZjYjNlNjVkN2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5YTgwNTNmNTdmMTAyMTFiZGY5NWI2NzM1MGM4YTU5YWM1YjgyMDQzMThhNDY5Yzk1NTIxN2YzNzU5OThjMTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhOTg1NDk1MTdhM2ZjY2IzYTA5ZjA1ZDIxYzBjNTAwOGRmZGM0YzQ5MDFiZWZlNzI5NTdiZWFjYTllMDIwZmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity/extract/frame_extractor.py#L9-L57",
+          "version": "repo-lines-v1:sha256:37d6f39f47e269fd69d526844045d48575af9c8d934538c70ab03a033bcaa13f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlMjQwMGE5NTg2MzdjNjg5OWQ0OTk2ODEyMTY2MjM4NmMyNjIzNzZhMTk1MzNkNmQ1YTM5M2Q4ZTlmZGZiMDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5YTgwNTNmNTdmMTAyMTFiZGY5NWI2NzM1MGM4YTU5YWM1YjgyMDQzMThhNDY5Yzk1NTIxN2YzNzU5OThjMTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjExNjBjOTliOWJhMzU1YWI1NDk3MmIyMmQzMzYwOTRkNTBlOGVmNGE2NDRiMjI3OTA0NjQ2ZDkxMGVjNDk3NTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg1NWI2NGVkZTljOWJiYTdkNGJhNjQ1Yzk4MWNjNDQxY2IwY2E5N2I1YTU1MjM2ZDM2MjgzMGQyZWQ3MTRjODIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a18d1aa6dc4445b59359e812ca0dc204",
+      "statement": "MetadataExtractor records ffprobe descriptors with graceful null fallback, while AudioExtractor writes 16 kHz mono PCM WAV and degrades to an empty collection if the soundtrack or ffmpeg is unavailable.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/extract/audio_extractor.py#L9-L53",
+          "version": "repo-lines-v1:sha256:a1a0891f54e528804d66cfbd0e778d48c0c10cea87e22e77238219e6f1488e42:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzNTQ4Mzk2YWZiYWMzNDcxYmRlYmUxZGUwZTJiOTI2OTlmNTI3YzdkNTAxNzQwM2ExOTkwZDcxOWMzMzVkM2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjZWY1YjEzODhmMDViNzFiMWRhNjQzNmNlYzgzODdhNjZkYmRhYjZiZDJhOTdkZjJmODRlZjE1NTdiYzRkNDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjExNjBjOTliOWJhMzU1YWI1NDk3MmIyMmQzMzYwOTRkNTBlOGVmNGE2NDRiMjI3OTA0NjQ2ZDkxMGVjNDk3NTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity/extract/metadata_extractor.py#L9-L47",
+          "version": "repo-lines-v1:sha256:1290a2c1e26ca66f89926e92cf5ba41ccfefed575b2ceddc4976b1aa93239643:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5MGNlMmNiZGFlZmNhNTA5YTc2ZTdhNTc4YzA1N2M4MjExZTA0ZmFkYzc1MmZkNDU2ZmEyYzMyMDBjYzJkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjZWY1YjEzODhmMDViNzFiMWRhNjQzNmNlYzgzODdhNjZkYmRhYjZiZDJhOTdkZjJmODRlZjE1NTdiYzRkNDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjExNjBjOTliOWJhMzU1YWI1NDk3MmIyMmQzMzYwOTRkNTBlOGVmNGE2NDRiMjI3OTA0NjQ2ZDkxMGVjNDk3NTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_72200a9168154c56ad61281ee8b38606",
+      "statement": "DetectorRunner._prepare_input_dir copies media and extracted artifacts into a clean temporary directory before launching each detector subprocess and removes the staging directory immediately afterward.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L178-L192",
+          "version": "repo-lines-v1:sha256:21f6b79f856f63f513e21844f9df830210497b2ea420375357cfd1d3de1bc0dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3YTgxZWU0ZWU4OTY0YjllY2MzZjRjOGVhNWE0NjZmZDVkNzE2ZDM2NGUyYTk3MzYyNzNlYTgzYTRjZWI3NDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmMGU3NmE1NTlkZTI4ZjBlZDZmNmViMDcxN2YyOGFkYzc1MmYzOTEyN2NiNmJkMzNiMTQzMjE3YTZkNjE5YzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY0ZjI4YzJlNWM2OGFhYTUzZjNmY2QxMWQyZGQ1N2JjNzk3OGIyMWI2MGI4NmQwZDRmOTYyZjA1Yjc1N2UzMzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzZDQ0YTJjOTRhOGY1NDM3ODM3ZDE3ZTk0NDViNzQ4MjMxMzY3OTdhYzg5M2VlNjFkNTdkODk4YWZkYzJhNWMifQ"
+        },
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L49-L54",
+          "version": "repo-lines-v1:sha256:026b3589509a008f3f676ce9f2f1daeb524425165b72cf9185ca98ce34044292:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWExMDMwOWJkZDEzM2E5YTFiN2Q0OWE5OTk1M2Y2NTgzYWZhZDRhMWUxMmJjODcxNTc2ZTY4YTJjY2E4ODg3OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjNhMmI0OTFiMzkzM2FkNTIxYjlmNzEzNDY0YzliM2FmOTViMWI2MTI5ZGI3YzBjYzA1MjFkMzU0ZTBiYmM1MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjJjODY5NDY1MjE5ZmQwNzUxZjYwYzkwZTRlMDhhZjk3ZDY0MDAzMTc3NzZkM2JjZWVlM2JjMmFhNzc0YTIxNSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-24T11:23:46.564Z"
+  }
+}

@@ -6,7 +6,7 @@
  * hashes and paths use the platform monospace stack.
  */
 
-import { Badge, Code, Table, createTheme } from '@mantine/core'
+import { Badge, Code, Paper, Table, Tabs, createTheme } from '@mantine/core'
 
 export const MONO = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace'
 
@@ -15,9 +15,9 @@ export const theme = createTheme({
   fontFamilyMonospace: MONO,
   headings: {
     fontFamily: 'Inter, system-ui, sans-serif',
-    fontWeight: '500',
+    fontWeight: '600',
     sizes: {
-      h1: { fontSize: '1.75rem', lineHeight: '1.25' },
+      h1: { fontSize: '1.625rem', lineHeight: '1.25' },
       h2: { fontSize: '1.25rem', lineHeight: '1.3' },
       h3: { fontSize: '1rem', lineHeight: '1.4' },
       h4: { fontSize: '0.9375rem', lineHeight: '1.4' },
@@ -29,13 +29,19 @@ export const theme = createTheme({
   cursorType: 'pointer',
   components: {
     Table: Table.extend({
-      defaultProps: { verticalSpacing: 6, horizontalSpacing: 'sm', fz: 'sm' },
+      defaultProps: { verticalSpacing: 8, horizontalSpacing: 'sm', fz: 'sm' },
     }),
     Badge: Badge.extend({
-      defaultProps: { variant: 'light', radius: 'sm', tt: 'none', fw: 500 },
+      defaultProps: { variant: 'light', radius: 'sm', tt: 'none', fw: 600 },
     }),
     Code: Code.extend({
       defaultProps: { fz: 'xs' },
+    }),
+    Paper: Paper.extend({
+      defaultProps: { radius: 'md' },
+    }),
+    Tabs: Tabs.extend({
+      defaultProps: { radius: 'sm' },
     }),
   },
 })

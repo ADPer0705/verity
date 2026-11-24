@@ -36,9 +36,11 @@ detectors/*/weights/*
 dist-bundle/
 dist-weights/
 dist-deploy/
+dist-release/
 
 # --- non-project reference material (vendored DeepfakeBench checkout, sample media)
 misc/
+note.txt
 
 # --- editors / OS
 .idea/

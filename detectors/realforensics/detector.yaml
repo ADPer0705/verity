@@ -1,0 +1,50 @@
+detector_id: realforensics
+version: 1.0.0
+name: RealForensics
+description: RealForensics deepfake detector (Haliassos et al., CVPR 2022) - channel-separated 3D ResNet-101 pre-trained
+  self-supervised on real talking faces (BYOL-AV on LRW) and fine-tuned on FaceForensics++ c23 25-frame aligned face
+  clips; robust to unseen manipulations and corruptions.
+architecture: CSN-R101 (ir-CSN, temporal stride 1) + temporal mean + cosine linear head (scale 64)
+parameters: 21501672
+pretrained: Official realforensics_ff.pth (ahaliassos/RealForensics, Google Drive), FF++ c23 stage-2 model.
+resolution: 256
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+face_margin: 0.25
+video_mode: true
+clip_size: 25
+sample_interval: 1
+cam: false
+weights:
+  file: realforensics_ff.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1nqEVlRN51WyzMWSeB7x9okcaegFgA-BQ/view
+  size: 86220575
+  sha256: 843b86f29fc98c67132a6f98180a35bfc617882a32642b8b80d571944c2e032d
+  license: MIT
+  note: 'Official RealForensics FF++ checkpoint (backbone.* CSN-R101 + df_head.weight, 625 tensors, loaded
+    strictly). Face clips are FAN-aligned to the LRW mean face and cropped to 150x150 around the inner
+    face as in preprocessing/extract_faces.py, then centre-cropped to 140 and resized to 112 with ImageNet
+    normalisation. The single cosine logit is emitted as [0, logit] so softmax index 1 = sigmoid(logit).'
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- face_swap
+- face_reenactment

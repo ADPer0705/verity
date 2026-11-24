@@ -1,0 +1,57 @@
+detector_id: syncnet
+version: 1.0.0
+name: SyncNet (lip-sync)
+description: SyncNet audio-visual synchronisation network (Chung & Zisserman, ACCV 2016 workshop) used as a
+  lip-sync forensic measurement - per window it reports the audio-video offset and the sync confidence
+  (LSE-C) and maps low confidence to a fake probability with a fixed, documented rule.
+architecture: 3D-conv lip tower (5 frames x 224x224) + 2D-conv MFCC tower (13 x 20) -> joint 1024-d embedding; offset search +-15 frames
+parameters: 13640256
+pretrained: Official syncnet_v2.model (VGG, Oxford; trained on LRS/BBC footage).
+resolution: 224
+mean:
+- 0.0
+- 0.0
+- 0.0
+std:
+- 1.0
+- 1.0
+- 1.0
+input_mode: av_clip
+video_mode: true
+clip_size: 75
+clip_hop: 75
+max_windows: 8
+audio_sample_rate: 16000
+min_face: 40
+cam: false
+region_analysis: false
+weights:
+  file: syncnet_v2.model
+  kind: official
+  trained: true
+  url: https://www.robots.ox.ac.uk/~vgg/software/lipsync/data/syncnet_v2.model
+  size: 54573114
+  sha256: 961e8696f888fce4f3f3a6c3d5b3267cf5b343100b238e79b2659bff2c605442
+  license: MIT
+  note: 'Official SyncNet v2 checkpoint (joonson/syncnet_python, MIT). SyncNet is a synchronisation
+    model, not a real/fake classifier: the fake probability is a fixed logistic calibration of the
+    per-window sync confidence (p = sigmoid(4 - confidence)); the raw offset, minimum distance and
+    confidence are stored per window and should be read as the primary evidence. Windows are 75 native
+    frames (3 s at 25 fps), re-sampled to 25 fps, with MTCNN face crops every 5th frame.'
+artifacts:
+  required:
+  - type: video
+    params:
+      resolution: 224
+  - type: audio
+    params:
+      sample_rate: 16000
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+targets:
+- lip_sync

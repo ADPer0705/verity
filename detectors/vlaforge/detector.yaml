@@ -1,0 +1,52 @@
+detector_id: vlaforge
+version: 1.0.0
+name: VLAForge
+description: VLAForge deepfake detector (Zhu et al., CVPR 2026) - frozen CLIP ViT-L/14 with a ForgePerceiver
+  adapter (query tokens + blending-boundary decoder) and an identity-aware vision-language score that matches
+  patch tokens against "real/fake photo of <this identity>" prompts; trained on FaceForensics++ c23.
+architecture: CLIP ViT-L/14 (frozen, OpenAI layout) + ViT-tiny ForgePerceiver (128 queries) + RecAttn CLIP re-read + identity-prompt VLA head
+parameters: 442000000
+pretrained: Official VLAForge checkpoint (mala-lab/VLAForge, Google Drive) incl. the frozen CLIP tower; trained on FF++ c23.
+resolution: 256
+mean:
+- 0.48145466
+- 0.4578275
+- 0.40821073
+std:
+- 0.26862954
+- 0.26130258
+- 0.27577711
+input_mode: face_crop
+video_mode: false
+clip_size: null
+cam: true
+weights:
+  file: vlaforge.pth
+  kind: official
+  trained: true
+  url: https://drive.google.com/file/d/1_PhtirGA_vMZWqnpZHGHHinT6QKF1d4L/view
+  size: 965834563
+  sha256: 2bc0c1e33d08a241386f88e3a9bc0ee4a504def129be0b4a9197b33f6feaff1f
+  license: MIT
+  note: 'Official VLAForge state dict (1,258 tensors incl. the fp16 CLIP ViT-L/14 tower, loaded strictly and
+    run in fp32). Face crops are 256x256 with CLIP mean/std as in config/test.yaml; the CLIP branch sees a
+    224 bilinear resize. P(fake) is the upstream 0.5/0.5 average of the CLIP-query head and the
+    identity-aware vision-language head; the predicted blending-boundary map is the attention map.
+    The prompt tokenizer (openai/clip-vit-large-patch14) is fetched from HuggingFace at first run.'
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 256
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+targets:
+- face_swap
+- face_reenactment
+- face_synthesis

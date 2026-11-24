@@ -1,0 +1,53 @@
+detector_id: laa_net
+version: 1.0.0
+name: LAA-Net
+description: LAA-Net (Nguyen et al., CVPR 2024) - EfficientNet-B4 with an enhanced feature pyramid decoder and explicit
+  localized-artifact attention (heatmap on blending boundaries), trained on FaceForensics++ real faces with
+  self-blended images only; quality-agnostic and generalisable face-swap detection.
+architecture: EfficientNet-B4 + E-FPN decoder (gated C5'/C4/C3 skips, Inception block) + heatmap / cls / consistency heads
+parameters: 27286761
+pretrained: Official SBI-trained PoseEfficientNet checkpoint (10Ring/LAA-Net Dropbox release), FF++ c23 real faces + SBI.
+resolution: 384
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+face_margin: 0.5
+video_mode: false
+clip_size: null
+cam: true
+artifacts:
+  required:
+  - type: face_crop
+    params:
+      resolution: 384
+output:
+  format: json
+  schema:
+    prediction: float
+    confidence: float
+    reasoning: str
+    confidence_factors: list
+    attention_maps: str
+weights:
+  # Alternate (same layout, drop-in via this field): laa_net_bi.pth, the BI (blended-image) trained model.
+  file: laa_net_sbi.pth
+  kind: official
+  trained: true
+  url: https://www.dropbox.com/scl/fo/dzmldaytujdeuky69d5x1/AIJrH2mit1hxnl1qzavM3vk?rlkey=nzzliincrfwejw2yr0ovldru1&dl=0
+  size: 435494267
+  sha256: fde726610e778045f65c3fbe839bc463c4d3a9970f72ca109d5911917305c991
+  license: SnT academic license (University of Luxembourg; academic research use only, no redistribution)
+  note: 'Official LAA-Net checkpoint trained with self-blended images (file
+    PoseEfficientNet_EFN_hm10_EFPN_NoBasedCLS_Focal_C3_256Cst100_8SBI_SAM(Adam)_ADV_Era1_OutSigmoid_1e7_boost500_UnFZ_model_best.pth
+    in the authors'' Dropbox folder, renamed). Academic-use license: fetched from the authors'' Dropbox only, never
+    mirrored. Face crops use a 25 % per-side margin (upstream PADDING 0.25) resized to 384, mean/std 0.5; the
+    image and its horizontal flip are averaged (flip_test). The sigmoid artifact heatmap (96x96) is the
+    attention map.'
+targets:
+- face_swap
+- face_reenactment

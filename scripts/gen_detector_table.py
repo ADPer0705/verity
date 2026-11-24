@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Regenerate docs/detectors.md from detector.yaml files and the weights manifest.
+"""Render a Markdown table of all detectors from detector.yaml and weights_manifest.yaml.
 
     uv run python scripts/gen_detector_table.py
+    uv run python scripts/gen_detector_table.py --out /tmp/detectors.md
 """
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -16,6 +18,10 @@ from verity.weights import load_manifest  # noqa: E402
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", type=Path, default=None, help="Write Markdown table to path (default: stdout)")
+    args = parser.parse_args()
+
     registry = DetectorRegistry(ROOT / "detectors")
     manifest = load_manifest(ROOT / "detectors" / "weights_manifest.yaml")
     rows = []
@@ -50,8 +56,12 @@ from `detectors/*/detector.yaml` and `detectors/weights_manifest.yaml`.
 |---|---|---|---|---|---|---|
 {chr(10).join(rows)}
 """
-    (ROOT / "docs" / "detectors.md").write_text(text)
-    print(f"wrote docs/detectors.md ({len(rows)} detectors: {summary})")
+    if args.out:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(text)
+        print(f"wrote {args.out} ({len(rows)} detectors: {summary})")
+    else:
+        print(text)
 
 
 if __name__ == "__main__":

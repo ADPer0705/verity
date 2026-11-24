@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ada975f86fcc1f3cc4a3416c2b33042a7564b1f11771811a3b7c382c5f5d2ad2",
+  "claims": [
+    {
+      "id": "claim_d9266a78a1614f86ac30d742098cb5e1",
+      "statement": "DetectorRegistry scans the detectors directory in sorted order and loads every subdirectory containing detector.yaml into a DetectorDefinition indexed by detector_id, with weights_available checking for the configured local checkpoint file.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_registry.py#L8-L45",
+          "version": "repo-lines-v1:sha256:3fcb7b1aa1f9a912bebab503a31c993686ba1b88fe07ab0d0e3c68e52a4570eb:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhNTEwOTdkNjExYjgzNzdiNTFmNzY4MWVmNTFlMTY5OWQ1NjY3MDc3MWE3OTE2M2Y3MzhkZjBhYWFkZDMzNzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiNDA2OGRmZjY0NGM3MTJlNDAzZmM3Y2JhZGE4YTVmYjNiMGQxOTFjNWIwYzAzYTUzZmQ4YWZjOGNiY2M2MDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA2OTFkYjgzNmI5ZjJmZmRhZWJkY2RhYTFlMGE2ODhkMDUwMzU4MjNlMjg4YTllN2FiODY4MzQzYWQyMmE1YmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_41782280fc1649eaa8e3e6b6e3f374b9",
+      "statement": "DetectorRunner.run resolves the media working copy, creates workspace/output/<media_id>_<detector_id>, stages media and artifacts into a temporary input directory, invokes the detector runtime, parses result.json into a Finding, stamps its tier, and writes finding.json.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L178-L192",
+          "version": "repo-lines-v1:sha256:21f6b79f856f63f513e21844f9df830210497b2ea420375357cfd1d3de1bc0dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3YTgxZWU0ZWU4OTY0YjllY2MzZjRjOGVhNWE0NjZmZDVkNzE2ZDM2NGUyYTk3MzYyNzNlYTgzYTRjZWI3NDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmMGU3NmE1NTlkZTI4ZjBlZDZmNmViMDcxN2YyOGFkYzc1MmYzOTEyN2NiNmJkMzNiMTQzMjE3YTZkNjE5YzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY0ZjI4YzJlNWM2OGFhYTUzZjNmY2QxMWQyZGQ1N2JjNzk3OGIyMWI2MGI4NmQwZDRmOTYyZjA1Yjc1N2UzMzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzZDQ0YTJjOTRhOGY1NDM3ODM3ZDE3ZTk0NDViNzQ4MjMxMzY3OTdhYzg5M2VlNjFkNTdkODk4YWZkYzJhNWMifQ"
+        },
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L39-L59",
+          "version": "repo-lines-v1:sha256:0aeabefd71a883312b3a0a1f24835fecad40b6f3da2a62459a48cef1d37c3b2b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0ZmYxZTY1ZmE4ZjVhMzk1MTEyM2NjNDRjOTZkYjM3NTRmMmMwODU3NjNlOTNkZWI2OTVlMTk2YjljYTFiY2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5NWRjZTc1MWE2NTYyMGJlMzUwOWRkM2UwZmZlMjMwOWFlOGU1YjYyMjc1NjZlZTZkMWYxNjE4MmU2MGQ0NGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNmYzU4MDRhNzMyNzk2NTI4Y2YwNjk4YTE3ZjY0MzhjYzk0YzczNTg1OTM4NDMyZmQzYjdlM2MxNGM3N2RlMWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY5MGU5ZThlNDVkMTNlNDBiNWE1YWU2ODQ5MmZiYTJhMjlhNTI4NThmNjNjYTYzNTU5YjNhZWJiYWE1NWZhNjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c60d8da4a1b5486f95b17f1e3afce681",
+      "statement": "A detector that produces no result.json yields a neutral fallback finding (prediction 0.5, confidence 0.0) whose reasoning carries the exit code and stderr tail, rather than aborting the run.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L120-L133",
+          "version": "repo-lines-v1:sha256:38302562896c3ea781519b1b803844031a4e0dc2e3a9178872bce46db7e0f7d3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg5ZjA3NWUxODBjZTAwMzk1OTcxNDNkZWQwMDAwM2I4MzlkYzQxNDQ1ZmJlN2UwMWE5YWQ5MjBjMzQ1NzdlZTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE2NWI1MDViMmRjZThlN2RhYjE1YzYwNDE1MWU0ZDQwMTg1NDk1ZTZiZmUwNzk2NjU3ZjkyZjhhM2MyYTY3MTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI2M2RiNGIzNzhkZTQyMWNmYjZkZjQ5ZTYxYjUzMmE1NzQ1NTVjNDRjOTI3NTY3ZmY3ZDliYzFkODYzMjQ5ZjMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ae409a8362f74b529253f3f5e3e73d7f",
+      "statement": "The launcher is resolved from VERITY_RUNNER, then the repository's scripts/verity.py, then verity-run on PATH, and each detector subprocess is bounded by VERITY_DETECTOR_TIMEOUT (default 3600 seconds).",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L134-L165",
+          "version": "repo-lines-v1:sha256:21652a6371a3d67ad3b8c024d79ab4c8ae84883fc665eecaff5af68420fd403d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmNjA0ZDg3ODFmZTdhMzgyOGQ2NzY0YjU1NzRjMTQ2MmFlOWMwOTI4ODg5ZDJkZDcwMGYzZjU5ZTEzZmE0ZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxYWQ1NGMyZTM2NjcyNjRjM2UwMjA1YThlZGJhODUwNGJhZGM0YzJlMWYxN2Y2ZWIxZjVkNjUwODk4YTc3ODYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI4MDUxMzMzNWUxN2Q3Y2EyMmI5NTMwMjJlM2M3NjU1NzEwMGQ5OWNiYWYyMjQyMDQ1ZTA5NTRjMjg0OTE2ODIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b0bf898f5a42492cbffd94265c145ce2",
+      "statement": "Output parsing prefers a detector's own output_parser.parse(raw, output_path, version) and otherwise uses the default parser, which classifies above 0.7 as FAKE, below 0.3 as REAL, and the remainder as UNCERTAIN while discovering explainability artifacts on disk.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L194-L212",
+          "version": "repo-lines-v1:sha256:89dbe1723d87327c4a3daaa0c2c4f78d934dc034636d8a07d474206bbca30e05:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA5YmQwMzY3YjZiNzI5ZWM5NjhhMmYwZjkwMzVkOGYyOWUxOTYyMDJlYzg3ZDdkMWVjMzY0N2YyYjgzNTFhM2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5YjAyYjg1MTFkYTY1MjNkMDBhY2U3NTI3ZTU1Zjk4NjI1Mzg4MWM2MDVmMjBiNmYwMWQ4ZGE5NmJhNDk5N2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMyNmRjNmEzZTc1ODFlZWNjMWE0Y2Q0N2NhMDcyYTNjMjNmY2VkN2MzZjA1OTAyMTg2MDQzY2JmMzhiNjA2ODAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity/detect/output_parser.py#L7-L67",
+          "version": "repo-lines-v1:sha256:6cedefb7cfc67bfe320a08c18a2d8caf14749c30e7d31b4eb281ac7cf96a71ed:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NTQ0NDIzOTJkMGVmOWYwMjRmMWRiMjE0NzdlYTcyODZmMzY5OGQzMmI4YzA2NGRhOTQzMTlkMjg1ZTNjZjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg5OWM1MzI1YzczN2IyZTkyZDQ3NWQ0NmFiZDRlNThhNDY0ZmQ0N2RhZThlYTdhODhjN2VkNmY2YzkwODA0NjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0c170385a5504f918a52107593d6b146",
+      "statement": "verity.runtime.env_manager (with scripts/verity.py delegating as a thin shim) selects a cuda/cpu/auto hardware profile, stores per-profile uv projects under paths.envs_root(), and reuses up-to-date baked environments under VERITY_DETECTOR_ENVS_BAKED.",
+      "evidence": [
+        {
+          "resource": "repo://scripts/verity.py#L1-L20",
+          "version": "repo-lines-v1:sha256:aec30c959f5af6cdd7ff62609804657fe3fa79c058aba21f9f2692ea04014bd9:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2ODJjYmRiNGM4YjA3NTE4YmY0ODZjNTg5OTBmYzM5MTc4M2FhMjBhOTE2YmZiMjdhZDIxMWViMWQ1YzM2NDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2MzcyNmIwNWQzODllYjA5NzM5NTBhMDk0OWMzZTA4YjA5YWNmZjRiNjg4NzExYzA1YzIyMjMyMDg0YjJjNGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L170-L188",
+          "version": "repo-lines-v1:sha256:0d1dc28a17f628078cd2df452b2b960a7abfa4ac1f9a2005c65843b33582e241:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlOTA5ZDBjZWY4Y2Q4NmQ1NzY3Y2ViNjk1YzU4MjZiZGQzOTEzNmY3N2RiZTk2NGIwNmM0NGQwMWFjYjU2ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTYwMGE3M2QyZTAyZjM1MmI5MGZlZjFkOGQ2MzgxMWJhNGE4ZWUwYzFiZWFhN2FlNDY1OGYzNmFhMmUxOTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3YTNlMjQwNzZkZWQ0OTc3ODRhNzdkNGQ5ZjYyYTY4ZWE0ZTA4YTViNjFjOWIxYzAwZWU1MzMxYjk4YjJlYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAxNDE4ODJkMGEzYjczNWE0ZmM2OGVlN2JkYWQzZGM2ZTIxNTc1NDU0MGU0ZTIyMWZhMDlmMGVjMzdhM2Q2NmUifQ"
+        },
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L248-L256",
+          "version": "repo-lines-v1:sha256:754dd701b4019b4461e6207d57bbbeb387a0c27843a7fffff8f3a8f79d741344:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDkwMTI5YjQzMzVmNmY4ZTM0N2FmODBhYjc1MzU0ZTRiZDQ2MTMxYjc5OTBmNjNmMGU0ODY1MWM3YjIxYTdkZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODBhNjEzMzEwY2E3MTM2Y2ExNDM1MDUwY2Q5ZDQ3NWE5MmNmNTI5ZDY1NmJjNjA5OTZmYzY5NzQxYmQ1Y2JkYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjE1ZjVmZWZjNmIwZDNiNjA0MGY5ZDYzMzAwZWM0NzAwODg1MWRmNDViY2M5MTJlYWIwNzRhZTIyZGIxMzViYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhhZjNjZmUwZjJhM2JhNWNhNzI4OWU4NGY2NjE5ZGU4NmM3NzJhNTE2NzU1MWMwYzMyYTA1OWVjNTVlMjViNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_833a966e028a4e30b20434d7031ef2a0",
+      "statement": "The cpu hardware profile generates a detector pyproject copy that maps torch/torchvision pins to +cpu builds via uv override-dependencies and adds the PyTorch CPU index, so plain uv sync works.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L215-L245",
+          "version": "repo-lines-v1:sha256:2e857c60f73233af3d831b077f20023558fc2263aa9c08a0559e3d08b18b78b4:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2Zjc5ODZjMzdjZWI3YWFjZWExZGQxNmM5OGQ0ZTcyNTdlNGRjMWVlN2FhM2EyNzc2Y2NjYTVhMDBlMDExNDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwMGMwZTU0OGRlNDExMjZmODg4N2ZiM2Y4OWI5ODk4MjBjODExNDRhNDY0MGQyYjcxYzQ1ZDljOTNiZjIwYTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhOGNlYTdlM2RhYjA2NTM1NDQzZjc0NTlmMmMzZjlkODhmMzlhMGVmOTQyMjA1Mjg0MTA4ZTU0N2EzZWQxNzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJmMGY4MzUyMjk4N2JlNTBkYWQzZDVjYWIxNTcxZjRjN2IyNDUwZTFhMWJlZWNhY2Y3MzA4Y2ExOTVmMTMyOWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a9de34ac4551452ba6d6c9bb2b4457fb",
+      "statement": "Detector environments are synced with uv only when the desired pyproject hash differs from the .verity-synced marker, and runs execute uv run --no-sync with absolute INPUT_DIR/OUTPUT_DIR paths and weights symlinks ensured.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L306-L358",
+          "version": "repo-lines-v1:sha256:dda31974e2f182a2c345fbb7968c3608d465a2cc07b4ae3903c49350368c4c78:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhYmViNzJlYTEyMjgzNzJmY2Q5ODk0ZGI2MGZkZThhODZhYWM5NTNiNzI0ODY2YjJhOTBmYTg1ZDNkYmM5YjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwZTJhNDY1MDA5NWZhOTVkMGUyYmI0MWIyZGIyOTA5NGQzNDA0ZDI4Y2UxMjMzOWVjODhiYjRiNWM1YmU4ZjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlYzIzZTJjMTE3YTU5Y2M2NzEwNzBiZDcwY2E0NzY1OWJkNzE4YTA1NTJkNDJlNWQ1ODlmOWQwNTBiMmE5ZGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc3ZDRhY2RiMDNjZjlmNGNkODlkY2IxNjk3NzUzN2NiYTAwZjU1YzdjMzNhYWEwMzVlY2M3NWZkMzRlNzQ4NmYifQ"
+        },
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L418-L464",
+          "version": "repo-lines-v1:sha256:2e49aedbc367745a0ee2b08545d1fbe5922545ba9a41918ce89371218fc80d6c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxZmM0ODA5MzFmMTUxMmJkN2ZhOGI3OTU0MWM4YWQ3NzZhZGQxZjYwYzYwMjdkNjE5ZGRjNmQ2YjM3NGExYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1NzIyYjhjNGYyODMxYTA4YTZmZjE2OGQxNjUxMTRiNmZkYmFjZjk4NDIxNTM2NjI3NzY5M2JkY2IzYmQwMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0NTIwM2UyY2JlN2U0YmVjYzJkNGI5MjQxMGEwZjA5MzdiMjg3ZWI3OTk0YTZjNDY3NTFkY2M1OGRlYTY2NjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0c7e4054323b462a84691b1c73a2338d",
+      "statement": "DetectorRunner invokes env_manager in-process unless VERITY_RUNNER is set, and env_manager self-bootstraps uv and managed Pythons while enforcing offline env vars and --offline --no-python-downloads in air-gap mode.",
+      "evidence": [
+        {
+          "resource": "repo://src/verity/detect/detector_runner.py#L90-L115",
+          "version": "repo-lines-v1:sha256:462e28c0840e02b6b6720d37d7d4da2253183a18e259b1ae2b398abff87568bc:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhNjdkNjc0NmUyNmZiNWE0ZjU3OWU4MzE2OTg4NTRkZTVkNTY2M2U1NjExZjAyYzJiNTg0ZGE2ZjU3ZWMwODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxMDM0ODFjNTdkMGYwZGMwZjc2Y2QyY2M4YjM2MDRjNGU4Mjk2ZGE0MTIyYWRkMTllODE3NDVkYzdlMzMxYTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdkMTE5MzNjZWVjZmY0YmU0YjJkNjllZDE5M2JkY2YwOGI3MzQ1MTNiMTBjNjQ0NmQ5NTg2MjAxMTNmZWQzNzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVlYjc1MWFiMzZlNmJkMzY4MmNmZWY4YWVkNWM1NWRjYWQ5ZDk1MWI4OTNiNjUyNTc0ZTE4NmFmNTdjZmFkMmEifQ"
+        },
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L259-L358",
+          "version": "repo-lines-v1:sha256:3185072f24ea01976364552f737931c718675ce709d9810c37e75734e61940c7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjYjliNGY2ZTY1ZmVkNTNkODdkYThkYjc4OWY1Njk1NWVlYzIxY2M3ZjJhOWFhNDNkMTFjNmI5ZWViNzQ5NTY5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzMGUyYTQ2NTAwOTVmYTk1ZDBlMmJiNDFiMmRiMjkwOTRkMzQwNGQyOGNlMTIzMzllYzg4YmI0YjVjNWJlOGY2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIwYjk3MmEzOWEzZDBjZjdiZTViYzNlMjc3ZjY1NjQ4ZDM3NmU0Y2Q5YThmZmYwMzNhMmFmZmI5NjY2MTZmNTU5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3N2Q0YWNkYjAzY2Y5ZjRjZDg5ZGNiMTY5Nzc1MzdjYmEwMGY1NWM3YzMzYWFhMDM1ZWNjNzVmZDM0ZTc0ODZmIn0"
+        },
+        {
+          "resource": "repo://src/verity/runtime/env_manager.py#L80-L115",
+          "version": "repo-lines-v1:sha256:1b4c4f425244d9e3e703c7ee58fbee04db295b2e36381eab61c31b5db6037bec:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3NGJlMjc5YTMzMjFlODYxOTkxYWZmZjIyYWVkMDE1Y2Y3M2NkYTdhMjEyYTBjMmI2MGUxOWMwMmExYWViYmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1NzU3NGNmYzVjZTgxNGExYzM4NjdmMGE2NTNmZmUzMGJiZDU1ODI1YjVkOTc4OGJhY2QxNjViODhmNjUwOTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFhMmNiZGFmODQ1N2VkNjQzZWU4ZDBmOWEyMGYxNTc1ODEzOTc2N2Y1OWNiYzVjNTE1NDE3NGE1OTAxODEzYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlNTk1NjEwZjY4YWQ1ODYwN2ZjYzM5YzIyMWY3YWRmZjMwNDIwZjg4MjJkNzEyZGNiMzY1Mzk5ZDM2ZDBiMTEifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-21T06:14:40.994Z"
+  }
+}
