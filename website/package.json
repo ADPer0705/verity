@@ -1,0 +1,16 @@
+{
+  "name": "verity-wiki",
+  "private": true,
+  "version": "0.6.0",
+  "type": "module",
+  "description": "Verity forensic documentation site built with VitePress from openwiki/.",
+  "scripts": {
+    "stage": "node scripts/stage_wiki.mjs",
+    "dev": "node scripts/stage_wiki.mjs && vitepress dev --host",
+    "build": "node scripts/stage_wiki.mjs && vitepress build",
+    "preview": "vitepress preview --host"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}

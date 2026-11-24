@@ -1,0 +1,321 @@
+:root {
+  --vp-font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --vp-c-brand-1: #4263eb;
+  --vp-c-brand-2: #4c6ef5;
+  --vp-c-brand-3: #3b5bdb;
+  --vp-c-brand-soft: rgba(76, 110, 245, 0.12);
+
+  --vy-cyan: #0ca678;
+  --vy-accent-cyan: #15aabf;
+  --vy-surface: #f8fafc;
+  --vy-surface-card: #ffffff;
+  --vy-border: rgba(15, 23, 42, 0.09);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #1e293b 10%, #4263eb 65%, #15aabf 100%);
+  --vp-home-hero-image-background-image: radial-gradient(
+    circle at 50% 50%,
+    rgba(76, 110, 245, 0.24) 0%,
+    rgba(21, 170, 191, 0.14) 45%,
+    transparent 74%
+  );
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+.dark {
+  --vp-c-bg: #090c12;
+  --vp-c-bg-alt: #0d121b;
+  --vp-c-bg-elv: #111827;
+  --vp-c-bg-soft: #111622;
+
+  --vp-c-brand-1: #748ffc;
+  --vp-c-brand-2: #5c7cfa;
+  --vp-c-brand-3: #4c6ef5;
+  --vp-c-brand-soft: rgba(92, 124, 250, 0.14);
+
+  --vy-cyan: #22b8cf;
+  --vy-accent-cyan: #38d9a9;
+  --vy-surface: #0d131f;
+  --vy-surface-card: rgba(17, 24, 39, 0.72);
+  --vy-border: rgba(148, 163, 184, 0.14);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #f8fafc 15%, #91a7ff 60%, #22b8cf 100%);
+  --vp-home-hero-image-background-image: radial-gradient(
+    circle at 50% 50%,
+    rgba(92, 124, 250, 0.34) 0%,
+    rgba(34, 184, 207, 0.2) 45%,
+    transparent 75%
+  );
+  --vp-home-hero-image-filter: blur(52px);
+}
+
+/* Crisp backdrop header */
+.VPNavBar {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.VPNavBar .title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Home hero polish */
+.VPHero .name {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.VPHero .text {
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+.VPHero .tagline {
+  max-width: 38rem;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+/* Feature cards */
+.VPFeatures .VPFeature {
+  border: 1px solid var(--vy-border);
+  background: var(--vy-surface-card);
+  border-radius: 14px;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.VPFeatures .VPFeature:hover {
+  transform: translateY(-2px);
+  border-color: var(--vp-c-brand-2);
+  box-shadow: 0 10px 30px -12px rgba(76, 110, 245, 0.22);
+}
+
+/* Custom Landing Page Bands */
+.vy-home-wrap {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 4rem;
+}
+
+.vy-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2.5rem;
+}
+
+@media (max-width: 860px) {
+  .vy-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .vy-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vy-metric-card {
+  background: var(--vy-surface-card);
+  border: 1px solid var(--vy-border);
+  border-radius: 14px;
+  padding: 1.25rem 1.35rem;
+}
+
+.vy-metric-val {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(120deg, var(--vp-c-brand-1), var(--vy-cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.vy-metric-label {
+  margin-top: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.vy-metric-sub {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--vp-c-text-2);
+}
+
+.vy-install-card {
+  border: 1px solid var(--vy-border);
+  border-radius: 16px;
+  background: var(--vy-surface);
+  overflow: hidden;
+  margin: 2rem 0 2.75rem;
+}
+
+.vy-install-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--vy-border);
+  background: rgba(92, 124, 250, 0.06);
+}
+
+.vy-install-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.vy-install-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--vy-border);
+}
+
+.vy-install-badge {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.vy-install-body {
+  padding: 1.25rem 1.35rem;
+}
+
+.vy-install-body div[class*='language-'] {
+  margin: 0.75rem 0 0 !important;
+  border-radius: 10px !important;
+}
+
+.vy-pathways {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.15rem;
+  margin: 1.5rem 0 2.5rem;
+}
+
+@media (max-width: 900px) {
+  .vy-pathways {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vy-pathway-card {
+  background: var(--vy-surface-card);
+  border: 1px solid var(--vy-border);
+  border-radius: 14px;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.vy-pathway-tag {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vy-cyan);
+}
+
+.vy-pathway-card h3 {
+  margin: 0;
+  font-size: 1.075rem;
+  font-weight: 650;
+  border: none;
+  padding: 0;
+}
+
+.vy-pathway-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.55;
+}
+
+.vy-pathway-links {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-top: 1px solid var(--vy-border);
+}
+
+.vy-pathway-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--vp-c-brand-1);
+}
+
+.vy-pathway-links a:hover {
+  text-decoration: underline;
+}
+
+.vy-principle-banner {
+  border: 1px solid var(--vy-border);
+  border-left: 4px solid var(--vp-c-brand-2);
+  border-radius: 12px;
+  padding: 1.15rem 1.35rem;
+  background: var(--vp-c-brand-soft);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--vp-c-text-1);
+}
+
+/* Documentation typography & tables */
+.vp-doc h1 {
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+.vp-doc h2 {
+  letter-spacing: -0.02em;
+  border-top: 1px solid var(--vy-border);
+}
+
+.vp-doc table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.vp-doc th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc blockquote {
+  border-left: 3px solid var(--vp-c-brand-2);
+  background: var(--vp-c-brand-soft);
+  border-radius: 0 8px 8px 0;
+  padding: 0.65rem 1rem;
+  color: var(--vp-c-text-1);
+}
+
+.vp-doc div[class*='language-'] {
+  border: 1px solid var(--vy-border);
+}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="vy-bg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4c6ef5" />
+      <stop offset="100%" stop-color="#22b8cf" />
+    </linearGradient>
+    <linearGradient id="vy-inner" x1="16" y1="14" x2="48" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#172033" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#vy-bg)" />
+  <rect x="7.5" y="7.5" width="49" height="49" rx="11" fill="url(#vy-inner)" />
+  <path d="M19 21L32 45L45 21" stroke="#f8fafc" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M25.5 21L32 33L38.5 21" stroke="#38d9a9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="32" cy="15.5" r="2.2" fill="#22b8cf" />
+</svg>

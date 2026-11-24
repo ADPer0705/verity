@@ -6,6 +6,7 @@
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Release](https://img.shields.io/github/v/release/ADPer0705/verity?label=release)](https://github.com/ADPer0705/verity/releases/latest)
+[![Wiki](https://img.shields.io/badge/wiki-verity.dearanayji.rocks-4c6ef5)](https://verity.dearanayji.rocks)
 [![Container](https://img.shields.io/badge/container-ghcr.io%2Fadper0705%2Fverity-blue)](https://github.com/ADPer0705/verity/pkgs/container/verity)
 [![Weights](https://img.shields.io/badge/weights-Hugging%20Face-yellow)](https://huggingface.co/ADPer/verity-weights)
 
@@ -193,7 +194,8 @@ uv run pytest -q
 
 Verity's complete architecture, engineering rationale, detector catalog,
 forensics reference, explainability catalog, deployment/air-gap guide, and
-release runbook live in **`openwiki/`**:
+release runbook are published at **[verity.dearanayji.rocks](https://verity.dearanayji.rocks)**
+and grounded directly in **`openwiki/`**:
 
 - **[Quickstart & documentation map](openwiki/quickstart.md)** — start here
 - **[Architecture & design rationale](openwiki/architecture/overview.md)** — package boundaries, determinism, isolation, no-verdict principle

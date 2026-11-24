@@ -42,6 +42,12 @@ dist-release/
 misc/
 note.txt
 
+# --- documentation website build artifacts
+website/node_modules/
+website/docs/
+website/.vitepress/cache/
+website/.vitepress/dist/
+
 # --- editors / OS
 .idea/
 .vscode/
