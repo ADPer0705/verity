@@ -59,16 +59,18 @@ jobs:
           cache: npm
           cache-dependency-path: src/verity_ui/package-lock.json
       - name: System packages (ffmpeg, OpenCV, WeasyPrint)
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libgl1 libglib2.0-0
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libgdk-pixbuf-2.0-0 libgl1 libglib2.0-0
       - name: Validate one-line installer
         run: bash -n install.sh
       - name: Build Web UI SPA
         working-directory: src/verity_ui
         run: npm ci --no-audit --no-fund && npm run build
       - name: Install build env
-        run: uv sync --frozen --extra api --extra build
+        run: |
+          uv python install 3.12
+          uv sync --frozen --python 3.12 --extra api --extra build
       - name: Build standalone verity binary
-        run: uv run python scripts/build_binary.py --version "$GITHUB_REF_NAME" --out dist-release
+        run: uv run --python 3.12 python scripts/build_binary.py --version "$GITHUB_REF_NAME" --out dist-release
       - name: Verify checksums and smoke-test standalone binary outside repo
         run: |
           (cd dist-release && sha256sum -c verity-linux-x86_64.sha256)
@@ -76,6 +78,7 @@ jobs:
           cp dist-release/verity-linux-x86_64 /tmp/verity-smoke/verity
           VERITY_HOME=/tmp/verity-smoke/home /tmp/verity-smoke/verity --version
           VERITY_HOME=/tmp/verity-smoke/home /tmp/verity-smoke/verity --help >/dev/null
+          VERITY_HOME=/tmp/verity-smoke/home /tmp/verity-smoke/verity weights status >/dev/null
           VERITY_HOME=/tmp/verity-smoke/home /tmp/verity-smoke/verity doctor || true
       - uses: softprops/action-gh-release@v2
         with:
